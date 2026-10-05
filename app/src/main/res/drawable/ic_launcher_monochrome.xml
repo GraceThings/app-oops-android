@@ -1,0 +1,59 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="960"
+    android:viewportHeight="960"
+    android:tint="#000000">
+
+    <group
+        android:pivotX="480"
+        android:pivotY="480"
+        android:scaleX="0.5"
+        android:scaleY="0.5">
+
+        <!-- Shield / Permission protection -->
+        <path
+            android:fillColor="@android:color/white"
+            android:pathData="
+                M 480,120
+                C 480,120 735,205 790,235
+                L 790,450
+                C 790,650 665,785 480,845
+                C 295,785 170,650 170,450
+                L 170,235
+                C 225,205 480,120 480,120
+                Z" />
+
+        <!-- OOPS / Permission hole -->
+        <path
+            android:fillColor="#000000"
+            android:pathData="
+                M 480,300
+                C 395,300 330,365 330,450
+                C 330,535 395,600 480,600
+                C 565,600 630,535 630,450
+                C 630,365 565,300 480,300
+                Z
+                M 480,365
+                C 530,365 565,400 565,450
+                C 565,500 530,535 480,535
+                C 430,535 395,500 395,450
+                C 395,400 430,365 480,365
+                Z" />
+
+        <!-- Permission keyhole -->
+        <path
+            android:fillColor="@android:color/white"
+            android:pathData="
+                M 480,405
+                C 450,405 425,430 425,460
+                C 425,480 436,497 452,507
+                L 452,555
+                L 508,555
+                L 508,507
+                C 524,497 535,480 535,460
+                C 535,430 510,405 480,405
+                Z" />
+
+    </group>
+</vector>

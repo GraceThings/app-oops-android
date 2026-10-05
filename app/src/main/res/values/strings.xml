@@ -1,0 +1,186 @@
+<resources>
+    <string name="app_name">App Oops</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="apps">Applications</string>
+    <string name="batch_rules">Batch Shield</string>
+    <string name="audit_log">Audit Log</string>
+    <string name="settings">Settings</string>
+
+    <!-- Shizuku Status -->
+    <string name="shizuku_authorized">Shizuku Connected</string>
+    <string name="shizuku_authorized_desc">Privileged Shell UID: 2000 active</string>
+    <string name="shizuku_needs_permission">Permission Required</string>
+    <string name="shizuku_needs_permission_desc">Click to grant Shizuku permission</string>
+    <string name="shizuku_not_running">Shizuku Not Running</string>
+    <string name="shizuku_not_running_desc">Please start Shizuku service via Wireless Debugging or Root</string>
+    <string name="shizuku_btn_grant">Authorize</string>
+    <string name="shizuku_btn_refresh">Refresh</string>
+
+    <!-- Monitor Service & Notifications -->
+    <string name="monitor_service_title">Real-time Interception Guard</string>
+    <string name="monitor_service_running">Guard active in background</string>
+    <string name="monitor_service_stopped">Guard inactive</string>
+    <string name="monitor_notif_channel">App Oops Monitor Service</string>
+    <string name="monitor_notif_channel_desc">Background monitor for AppOps sensitive permissions</string>
+    <string name="monitor_notif_toast_channel">Interception Alerts</string>
+    <string name="monitor_notif_live_channel">Live Updates Alerts</string>
+    <string name="monitor_notif_initial_title">App Oops Guard Active</string>
+    <string name="monitor_notif_initial_text">Monitoring and blocking shake ads and clipboard snooping</string>
+    <string name="monitor_notif_live_title">App Oops Live Updates</string>
+    <string name="monitor_notif_toast_mode_title">Interception Alert</string>
+    <string name="monitor_notif_blocked_single">Blocked [%1$s] %2$s</string>
+    <string name="monitor_notif_blocked_multi">Blocked [%1$s] %2$s (%3$d times total)</string>
+    <string name="monitor_notif_action_inspect">Inspect Permissions</string>
+    <string name="toast_blocked_single">🛡️ App Oops: Blocked [%1$s] %2$s</string>
+    <string name="toast_blocked_multi">🛡️ App Oops: Blocked [%1$s] %2$s (%3$d times total)</string>
+
+    <!-- Categories -->
+    <string name="category_sensor">Sensors &amp; Movement</string>
+    <string name="category_privacy">Clipboard &amp; Privacy</string>
+    <string name="category_background">Background &amp; WakeLock</string>
+    <string name="category_system">System Alert &amp; Security</string>
+
+    <!-- Modes -->
+    <string name="mode_allow">Allow</string>
+    <string name="mode_ignore">Ignore (Safe)</string>
+    <string name="mode_deny">Deny</string>
+    <string name="mode_default">Default</string>
+
+    <!-- Dashboard -->
+    <string name="latest_intercept_title">Latest Interception</string>
+    <string name="latest_intercept_format">Blocked [%1$s] %2$s (%3$d times)</string>
+    <string name="view_log">View Log</string>
+    <string name="metric_shake_blocked">Sensors Restricted</string>
+    <string name="metric_clipboard_protected">Clipboard Protected</string>
+    <string name="metric_bg_frozen">Background Restricted</string>
+    <string name="metric_intercept_count">Total Interceptions</string>
+
+    <!-- Application List Filters & Badges -->
+    <string name="search_placeholder">Search app or package name...</string>
+    <string name="filter_all">All (%1$d)</string>
+    <string name="filter_user">User Apps</string>
+    <string name="filter_sensor_disabled">Gyroscope/Accelerometer Disabled</string>
+    <string name="filter_clipboard_protected">Clipboard Protected</string>
+    <string name="filter_background_restricted">Background Restricted</string>
+    <string name="filter_system">System Apps</string>
+    <string name="no_apps_found">No matching applications found</string>
+    <string name="badge_sensor_disabled">Gyroscope/Accelerometer Disabled</string>
+    <string name="badge_clipboard_protected">Clipboard Protected</string>
+    <string name="badge_bg_restricted">Background Restricted</string>
+    <string name="badge_system">System</string>
+
+    <!-- Application Detail -->
+    <string name="app_type_user">User App</string>
+    <string name="app_type_system">System App</string>
+    <string name="app_uid_format">UID: %1$d • %2$s</string>
+    <string name="quick_recommendations">Recommended Protections</string>
+    <string name="immunize_shake_btn">Disable Sensors</string>
+    <string name="shield_clipboard_btn">Shield Clipboard</string>
+    <string name="reset_default_btn">Reset Defaults</string>
+    <string name="toast_applied_sensors">Applied "Disable Accelerometer/Gyroscope"</string>
+    <string name="toast_applied_clipboard">Applied "Clipboard Shield"</string>
+    <string name="toast_applied_reset">Restored to system defaults</string>
+    <string name="toast_set_failed">Setting failed: %1$s</string>
+
+    <!-- Batch Shield -->
+    <string name="batch_desc">Choose preset protection suites and apply security rules to selected apps.</string>
+    <string name="suite_sensor_title">Disable Accelerometer/Gyroscope</string>
+    <string name="suite_sensor_desc">Blocks accelerometer and gyroscope sensors (IGNORE) to physically eliminate shake-to-jump splash ads</string>
+    <string name="suite_clipboard_title">Intercept Read/Write Clipboard</string>
+    <string name="suite_clipboard_desc">Intercepts reading and writing clipboard to prevent third-party snooping and modification</string>
+    <string name="suite_query_usage_title">Block App List Reading &amp; Usage Stats</string>
+    <string name="suite_query_usage_desc">Intercepts installed app scanning and usage stats to cut off device profiling</string>
+    <string name="suite_background_title">Background Restriction</string>
+    <string name="suite_background_desc">Restricts background running, wake locks, and boot completion broadcast</string>
+    <string name="btn_apply_to_selected">Apply to Selected Apps</string>
+
+    <!-- Batch Selection Screen -->
+    <string name="select_apps_title">Select Applications</string>
+    <string name="apply_to_selected_fab">Apply to Selected (%1$d)</string>
+    <string name="batch_processing_title">Applying batch rules...</string>
+    <string name="batch_processing_msg">Processing: %1$s (%2$d/%3$d)</string>
+    <string name="batch_success_toast">Successfully applied [%1$s] to %2$d apps</string>
+    <string name="select_at_least_one">Please select at least one application</string>
+    <string name="select_all_current">Select All (%1$d)</string>
+    <string name="deselect_all">Deselect All</string>
+    <string name="select_only_user">Third-party Only</string>
+    <string name="selected_count_hint">%1$d applications selected. Click the button below to apply rules.</string>
+
+    <!-- Audit Log -->
+    <string name="audit_empty">No interception records yet\nProtected operations will be recorded here automatically when triggered</string>
+    <string name="audit_empty_desc">Interception events will be recorded here when apps trigger protected operations</string>
+    <string name="audit_total_intercepts">Total Interceptions: %1$d</string>
+    <string name="audit_total_intercepts_desc">Silently intercepting unauthorized reads and shake-ad sensors set to IGNORE</string>
+    <string name="audit_blocked_badge">Blocked</string>
+    <string name="audit_times_badge">x%1$d times</string>
+    <string name="audit_clear">Clear Logs</string>
+    <string name="audit_clear_confirm">Clear all interception logs?</string>
+    <string name="audit_dialog_confirm">Clear</string>
+    <string name="audit_dialog_cancel">Cancel</string>
+    <string name="audit_permission_format">Permission: %1$s (%2$s)</string>
+    <string name="audit_count_format">%1$d times</string>
+
+    <!-- Target AppOps Details -->
+    <string name="op_body_sensors_title">Body &amp; Motion Sensors</string>
+    <string name="op_body_sensors_desc">Physical defense against shake ads: Set to IGNORE to silently intercept accelerometer</string>
+    <string name="op_high_sampling_sensors_title">High Sampling Rate Sensors</string>
+    <string name="op_high_sampling_sensors_desc">Limits gyroscope &amp; accelerometer refresh rate to prevent inadvertent splash ad triggers</string>
+    <string name="op_body_sensors_bg_title">Background Body Sensors</string>
+    <string name="op_body_sensors_bg_desc">Prevents reading motion state when app is in background</string>
+    <string name="op_activity_rec_title">Activity Recognition</string>
+    <string name="op_activity_rec_desc">Prevents apps from detecting walking, running, or device shaking state</string>
+    <string name="op_read_clipboard_title">Read Clipboard</string>
+    <string name="op_read_clipboard_desc">Returns empty content when set to IGNORE, eliminating clipboard snooping</string>
+    <string name="op_write_clipboard_title">Write Clipboard</string>
+    <string name="op_write_clipboard_desc">Prevents rogue SDKs from overwriting current clipboard content silently</string>
+    <string name="op_query_packages_title">Read Installed Packages</string>
+    <string name="op_query_packages_desc">Cuts off device profiling; prevents scanning banking, gaming, or competitor apps</string>
+    <string name="op_usage_stats_title">Usage Statistics</string>
+    <string name="op_usage_stats_desc">Revokes ability to monitor what other apps you are currently using</string>
+    <string name="op_run_in_bg_title">Run in Background</string>
+    <string name="op_run_in_bg_desc">Suspends app immediately upon backgrounding to prevent battery and network drain</string>
+    <string name="op_wake_lock_title">Hold Wake Lock (WakeLock)</string>
+    <string name="op_wake_lock_desc">Revokes ability to hold CPU wake lock to stop background overheating and battery drain</string>
+    <string name="op_system_alert_title">Display Over Other Apps (Overlay)</string>
+    <string name="op_system_alert_desc">Completely closes rogue popups and protects against clickjacking</string>
+    <string name="op_write_settings_title">Modify System Settings</string>
+    <string name="op_write_settings_desc">Prevents unauthorized changes to system volume, screen brightness, or network</string>
+    <string name="op_access_notif_title">Notification Listener Access</string>
+    <string name="op_access_notif_desc">Inspects and blocks snooping on notification messages and SMS OTP codes</string>
+
+    <!-- Settings -->
+    <string name="setting_alert_title">Interception Success Alert</string>
+    <string name="setting_alert_on_desc">Alert user when sensitive permission is blocked</string>
+    <string name="setting_alert_off_desc">Alerts disabled (logs recorded only)</string>
+    <string name="setting_alert_type_title">Alert Format</string>
+    <string name="setting_alert_toast">Toast Notice</string>
+    <string name="setting_alert_live_notification">Live Updates (Android 16+)</string>
+    <string name="setting_theme_title">Appearance</string>
+    <string name="setting_theme_system">Follow System</string>
+    <string name="setting_theme_light">Light Mode</string>
+    <string name="setting_theme_dark">Dark Mode</string>
+    <string name="setting_color_title">Expressive Palette</string>
+    <string name="setting_color_dynamic">Dynamic (Monet)</string>
+    <string name="setting_color_jade">Emerald Jade</string>
+    <string name="setting_color_cobalt">Deep Cobalt</string>
+    <string name="setting_color_amethyst">Radiant Purple</string>
+    <string name="setting_color_amber">Sunset Amber</string>
+    <string name="setting_shizuku_title">Shizuku Guide &amp; Debug</string>
+    <string name="setting_shizuku_desc">App Oops uses Shizuku to obtain privileged shell (UID: 2000) and IAppOpsService proxy to modify permissions without root.\n\n• Emulator: Run tools/setup_emulator_shizuku.ps1 to start debugging\n• Physical Device: Enable Wireless Debugging in Developer Options and pair with Shizuku.</string>
+    <string name="btn_test_notification">Test Notification</string>
+    <string name="test_notice_app_name">Sample App</string>
+    <string name="loading_apps">Loading applications...</string>
+    <string name="setting_temp_allow_title">Temporary Permission Allow</string>
+    <string name="setting_temp_allow_desc">Provide quick action to temporarily allow permission and automatically re-block when timer expires</string>
+    <string name="setting_temp_duration_title">Temporary Duration</string>
+    <string name="monitor_notif_action_temp_allow">Temp Allow (%1$ds)</string>
+    <string name="monitor_notif_action_close">Dismiss</string>
+    <string name="toast_temp_allow_granted">Temporarily allowed [%1$s] %2$s (%3$ds)</string>
+    <string name="toast_temp_allow_expired">Temporary access expired. Restored block on [%1$s] %2$s</string>
+    <string name="monitor_notif_temp_countdown">Temporarily allowed [%1$s]: %2$ds remaining</string>
+    <string name="toast_need_notification_permission">Please grant notification permission to receive live updates</string>
+    <string name="live_update_subtext">Live Updates</string>
+    <string name="status_bar_chip_blocked">Blocked</string>
+    <string name="setting_about_title">About App Oops</string>
+    <string name="setting_about_version">Version: 1.0.0 (AGP 9.1.0 • Kotlin 2.1.10 • Compose M3E)\nCore Goal: Physically eliminate shake ads, cut off profiling tracking, guard clipboard, and restrict background.</string>
+</resources>

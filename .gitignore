@@ -1,0 +1,98 @@
+# ==========================================
+# Gradle & Build Outputs
+# ==========================================
+.gradle/
+build/
+**/build/
+release/
+bin/
+gen/
+out/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Compiled binaries & package files
+*.apk
+*.aab
+*.aar
+*.ap_
+*.dex
+*.class
+
+# Ensure Gradle Wrapper jar is never ignored
+!gradle/wrapper/gradle-wrapper.jar
+
+# ==========================================
+# Kotlin
+# ==========================================
+.kotlin/
+kotlin-js-store/
+
+# ==========================================
+# Android Studio / IntelliJ IDEA
+# ==========================================
+# 整体忽略 .idea 目录（Android 项目由 Gradle 驱动，重新打开 AS 会自动同步生成，彻底避免多设备/不同 AS 版本配置冲突）
+.idea/
+*.iml
+*.ipr
+*.iws
+.idea_modules/
+
+# ==========================================
+# Local Configurations & Secrets (安全防护)
+# ==========================================
+local.properties
+gradle-local.properties
+
+# 签名证书与秘钥文件（禁止提交）
+*.jks
+*.keystore
+*.p12
+*.bks
+*.key
+signing.properties
+secret.properties
+secrets.properties
+keystore.properties
+key.properties
+google-services.json
+
+# ==========================================
+# Logs & Diagnostics (堆转储与日志)
+# ==========================================
+*.log
+*.hprof
+hs_err_pid*
+replay_pid*
+
+# ==========================================
+# OS & File System Junk
+# ==========================================
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# ==========================================
+# Editors & Temporary Files
+# ==========================================
+.vscode/
+*.swp
+*.swo
+*~
+*.bak
+*.tmp
+*.orig
+*.rej

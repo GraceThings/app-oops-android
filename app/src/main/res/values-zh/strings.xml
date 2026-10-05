@@ -1,0 +1,186 @@
+<resources>
+    <string name="app_name">App Oops</string>
+    <string name="dashboard">仪表盘</string>
+    <string name="apps">应用管理</string>
+    <string name="batch_rules">批量策略</string>
+    <string name="audit_log">拦截日志</string>
+    <string name="settings">设置</string>
+
+    <!-- Shizuku 状态 -->
+    <string name="shizuku_authorized">Shizuku 已连接</string>
+    <string name="shizuku_authorized_desc">特权 Shell UID: 2000 运行中</string>
+    <string name="shizuku_needs_permission">等待 Shizuku 授权</string>
+    <string name="shizuku_needs_permission_desc">点击下方按钮授权特权权限</string>
+    <string name="shizuku_not_running">Shizuku 未运行</string>
+    <string name="shizuku_not_running_desc">请通过无线调试或 Root 启动 Shizuku 服务</string>
+    <string name="shizuku_btn_grant">授权访问</string>
+    <string name="shizuku_btn_refresh">刷新状态</string>
+
+    <!-- 实时监听守护服务与通知 -->
+    <string name="monitor_service_title">实时拦截守护服务</string>
+    <string name="monitor_service_running">正在后台实时监控并拦截敏感行为</string>
+    <string name="monitor_service_stopped">守护服务已停止</string>
+    <string name="monitor_notif_channel">App Oops 守护服务</string>
+    <string name="monitor_notif_channel_desc">后台实时监控 AppOps 敏感权限拦截</string>
+    <string name="monitor_notif_toast_channel">拦截提醒</string>
+    <string name="monitor_notif_live_channel">实时更新拦截提醒</string>
+    <string name="monitor_notif_initial_title">App Oops 实时守护中</string>
+    <string name="monitor_notif_initial_text">正在监控并拦截摇一摇广告与剪贴板探测</string>
+    <string name="monitor_notif_live_title">App Oops 实时更新</string>
+    <string name="monitor_notif_toast_mode_title">App Oops 拦截提醒</string>
+    <string name="monitor_notif_blocked_single">已阻止【%1$s】%2$s</string>
+    <string name="monitor_notif_blocked_multi">已阻止【%1$s】%2$s (累计 %3$d 次)</string>
+    <string name="monitor_notif_action_inspect">检查权限</string>
+    <string name="toast_blocked_single">🛡️ App Oops: 已拦截【%1$s】%2$s</string>
+    <string name="toast_blocked_multi">🛡️ App Oops: 已拦截【%1$s】%2$s (累计 %3$d 次)</string>
+
+    <!-- 分类 -->
+    <string name="category_sensor">传感器与运动识别</string>
+    <string name="category_privacy">剪贴板与隐私防追踪</string>
+    <string name="category_background">后台抑制与保流畅</string>
+    <string name="category_system">系统防护与防骚扰</string>
+
+    <!-- 模式 -->
+    <string name="mode_allow">允许</string>
+    <string name="mode_ignore">忽略(推荐)</string>
+    <string name="mode_deny">拒绝</string>
+    <string name="mode_default">默认</string>
+
+    <!-- 仪表盘 -->
+    <string name="latest_intercept_title">最新实时拦截</string>
+    <string name="latest_intercept_format">已阻止【%1$s】%2$s (%3$d次)</string>
+    <string name="view_log">查看日志</string>
+    <string name="metric_shake_blocked">传感器受限</string>
+    <string name="metric_clipboard_protected">剪贴板已保护</string>
+    <string name="metric_bg_frozen">后台已限制</string>
+    <string name="metric_intercept_count">累计拦截</string>
+
+    <!-- 应用列表筛选与徽章 -->
+    <string name="search_placeholder">搜索应用名或包名...</string>
+    <string name="filter_all">全部 (%1$d)</string>
+    <string name="filter_user">用户应用</string>
+    <string name="filter_sensor_disabled">已禁用加速度计/陀螺仪</string>
+    <string name="filter_clipboard_protected">剪贴板已保护</string>
+    <string name="filter_background_restricted">后台已限制</string>
+    <string name="filter_system">系统应用</string>
+    <string name="no_apps_found">未找到符合条件的应用</string>
+    <string name="badge_sensor_disabled">已禁用加速度计/陀螺仪</string>
+    <string name="badge_clipboard_protected">剪贴板保护</string>
+    <string name="badge_bg_restricted">后台受限</string>
+    <string name="badge_system">系统</string>
+
+    <!-- 应用详情 -->
+    <string name="app_type_user">用户应用</string>
+    <string name="app_type_system">系统应用</string>
+    <string name="app_uid_format">UID: %1$d • %2$s</string>
+    <string name="quick_recommendations">一键防护建议</string>
+    <string name="immunize_shake_btn">禁用传感器</string>
+    <string name="shield_clipboard_btn">保护剪贴板</string>
+    <string name="reset_default_btn">恢复默认</string>
+    <string name="toast_applied_sensors">已应用“禁用加速度计/陀螺仪”</string>
+    <string name="toast_applied_clipboard">已应用“剪贴板防护”</string>
+    <string name="toast_applied_reset">已恢复系统默认</string>
+    <string name="toast_set_failed">设置失败: %1$s</string>
+
+    <!-- 批量策略 -->
+    <string name="batch_desc">选择预设防护套件，自由多选应用并一键应用安全策略。</string>
+    <string name="suite_sensor_title">禁用加速度计/陀螺仪传感器权限</string>
+    <string name="suite_sensor_desc">全机封锁加速度计与陀螺仪传感器（设为IGNORE），从物理层面消灭误触跳转开屏广告</string>
+    <string name="suite_clipboard_title">拦截读/写剪贴板</string>
+    <string name="suite_clipboard_desc">拦截读取与写入剪贴板，防止第三方应用偷窥剪贴板与私自篡改淘口令</string>
+    <string name="suite_query_usage_title">禁止应用列表读取与使用情况统计</string>
+    <string name="suite_query_usage_desc">拦截已安装应用列表扫描与使用情况统计，切断跨App全机画像追踪</string>
+    <string name="suite_background_title">后台限制</string>
+    <string name="suite_background_desc">限制后台运行与CPU唤醒锁，拦截开机广播自启，退到后台即刻彻底挂起</string>
+    <string name="btn_apply_to_selected">一键应用到所选应用</string>
+
+    <!-- 批量多选页 -->
+    <string name="select_apps_title">选择应用</string>
+    <string name="apply_to_selected_fab">应用到所选 (%1$d)</string>
+    <string name="batch_processing_title">正在批量应用策略...</string>
+    <string name="batch_processing_msg">正在处理: %1$s (%2$d/%3$d)</string>
+    <string name="batch_success_toast">已成功为 %2$d 个应用应用【%1$s】</string>
+    <string name="select_at_least_one">请至少勾选一个应用</string>
+    <string name="select_all_current">全选当前 (%1$d)</string>
+    <string name="deselect_all">全不选</string>
+    <string name="select_only_user">仅第三方应用</string>
+    <string name="selected_count_hint">已勾选 %1$d 个应用，点击右下角按钮即可批量应用规则</string>
+
+    <!-- 审计日志 -->
+    <string name="audit_empty">暂无拦截记录\n当管控应用尝试偷读剪贴板或读取传感器时将自动记录</string>
+    <string name="audit_empty_desc">当应用触发被管控权限时，拦截事件将记录在此处</string>
+    <string name="audit_total_intercepts">累计安全拦截 %1$d 次</string>
+    <string name="audit_total_intercepts_desc">底层静默拦截所有被设为 IGNORE 的偷读与摇一摇请求</string>
+    <string name="audit_blocked_badge">已阻止</string>
+    <string name="audit_times_badge">x%1$d次</string>
+    <string name="audit_clear">清空日志</string>
+    <string name="audit_clear_confirm">确认清空所有拦截日志？</string>
+    <string name="audit_dialog_confirm">清空</string>
+    <string name="audit_dialog_cancel">取消</string>
+    <string name="audit_permission_format">权限: %1$s (%2$s)</string>
+    <string name="audit_count_format">%1$d 次</string>
+
+    <!-- 敏感权限详细说明 -->
+    <string name="op_body_sensors_title">运动与身体传感器</string>
+    <string name="op_body_sensors_desc">根除摇一摇广告关键：设为IGNORE从物理层静默拦截加速度计</string>
+    <string name="op_high_sampling_sensors_title">高采样率运动传感器</string>
+    <string name="op_high_sampling_sensors_desc">限制陀螺仪与加速度计超高频刷新，杜绝微小晃动误触开屏广告</string>
+    <string name="op_body_sensors_bg_title">后台运动传感器</string>
+    <string name="op_body_sensors_bg_desc">禁止退到后台后继续读取运动状态</string>
+    <string name="op_activity_rec_title">健身与活动识别</string>
+    <string name="op_activity_rec_desc">防止App探测走路、跑步或手机晃动状态</string>
+    <string name="op_read_clipboard_title">读取剪贴板</string>
+    <string name="op_read_clipboard_desc">设为IGNORE后App读剪贴板将返回空内容，彻底杜绝淘口令偷窥</string>
+    <string name="op_write_clipboard_title">写入剪贴板</string>
+    <string name="op_write_clipboard_desc">禁止流氓SDK后台静默覆盖用户当前剪贴板内容</string>
+    <string name="op_query_packages_title">读取已安装应用列表</string>
+    <string name="op_query_packages_desc">设为IGNORE切断全机画像追踪，禁止扫描安装的银行、游戏或竞品软件</string>
+    <string name="op_usage_stats_title">使用情况统计</string>
+    <string name="op_usage_stats_desc">剥夺App偷窥“你当前正在使用什么其他App”的能力</string>
+    <string name="op_run_in_bg_title">后台运行权限</string>
+    <string name="op_run_in_bg_desc">退到后台即刻挂起冻结，杜绝隐蔽保活消耗电池与流量</string>
+    <string name="op_wake_lock_title">保持唤醒锁 (WakeLock)</string>
+    <string name="op_wake_lock_desc">剥夺持有CPU唤醒锁的能力，防止发热暗耗电</string>
+    <string name="op_system_alert_title">显示在其他应用上层 (悬浮窗)</string>
+    <string name="op_system_alert_desc">彻底关闭流氓弹窗与防范透明点击劫持 (Clickjacking)</string>
+    <string name="op_write_settings_title">修改系统设置</string>
+    <string name="op_write_settings_desc">防止未经允许篡改系统音量、亮度、屏幕常亮或网络</string>
+    <string name="op_access_notif_title">全局通知监听</string>
+    <string name="op_access_notif_desc">审查并阻断偷读全局通知栏消息（防止盗取短信验证码）</string>
+
+    <!-- 设置 -->
+    <string name="setting_alert_title">拦截成功提示</string>
+    <string name="setting_alert_on_desc">敏感权限被拦截时向用户反馈</string>
+    <string name="setting_alert_off_desc">已关闭提示 (仅记录审计日志)</string>
+    <string name="setting_alert_type_title">提示形式</string>
+    <string name="setting_alert_toast">Toast 通知</string>
+    <string name="setting_alert_live_notification">实时更新 (Android 16+)</string>
+    <string name="setting_theme_title">外观主题</string>
+    <string name="setting_theme_system">跟随系统</string>
+    <string name="setting_theme_light">浅色模式</string>
+    <string name="setting_theme_dark">深色模式</string>
+    <string name="setting_color_title">表现力主题色彩</string>
+    <string name="setting_color_dynamic">动态取色 (Monet)</string>
+    <string name="setting_color_jade">翡翠玉绿</string>
+    <string name="setting_color_cobalt">深邃海蓝</string>
+    <string name="setting_color_amethyst">活力幻紫</string>
+    <string name="setting_color_amber">温暖日落</string>
+    <string name="setting_shizuku_title">Shizuku 服务说明与调试</string>
+    <string name="setting_shizuku_desc">App Oops 借助 Shizuku 获得特权 Shell (UID: 2000) 与 IAppOpsService 服务代理，无需 Root 即可安全修改所有 App 的底层权限。\n\n• 模拟器调试：在已启动的模拟器中运行 tools/setup_emulator_shizuku.ps1 即可一键拉起调试\n• 真机使用：在开发者选项中开启“无线调试”，并通过 Shizuku 官方应用配对启动即可。</string>
+    <string name="btn_test_notification">测试通知</string>
+    <string name="test_notice_app_name">测试应用</string>
+    <string name="loading_apps">正在载入应用列表...</string>
+    <string name="setting_temp_allow_title">临时允许权限</string>
+    <string name="setting_temp_allow_desc">拦截后在通知中提供快捷按键，临时放行并在到期后自动恢复拦截</string>
+    <string name="setting_temp_duration_title">放行时长</string>
+    <string name="monitor_notif_action_temp_allow">临时允许 (%1$d秒)</string>
+    <string name="monitor_notif_action_close">关闭</string>
+    <string name="toast_temp_allow_granted">已临时放行【%1$s】%2$s（%3$d秒）</string>
+    <string name="toast_temp_allow_expired">临时允许已到期，已恢复拦截【%1$s】%2$s</string>
+    <string name="monitor_notif_temp_countdown">已临时放行【%1$s】：剩余 %2$d 秒</string>
+    <string name="toast_need_notification_permission">请授予通知权限以接收实时更新</string>
+    <string name="live_update_subtext">实时更新</string>
+    <string name="status_bar_chip_blocked">已拦截</string>
+    <string name="setting_about_title">关于 App Oops</string>
+    <string name="setting_about_version">版本: 1.0.0 (AGP 9.1.0 • Kotlin 2.1.10 • Compose M3E)\n核心目标：彻底根除摇一摇开屏广告、切断全机画像扫描、保护剪贴板与冻结后台。</string>
+</resources>
