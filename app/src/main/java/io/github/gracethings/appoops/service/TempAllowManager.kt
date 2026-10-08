@@ -1,4 +1,4 @@
-﻿package io.github.gracethings.appoops.service
+package io.github.gracethings.appoops.service
 
 import android.content.Context
 import android.widget.Toast
@@ -57,7 +57,7 @@ object TempAllowManager {
 
                 // 2. Countdown loop with live progress updates (Live Updates / ProgressStyle)
                 for (remaining in durationSeconds downTo 1) {
-                    if (io.github.gracethings.appoops.data.preference.AlertPreferences.noticeType.value == io.github.gracethings.appoops.data.preference.AlertNoticeType.LIVE_NOTIFICATION) {
+                    if (io.github.gracethings.appoops.data.preference.AlertPreferences.isLiveUpdatesActive()) {
                         AppOpsMonitorService.updateCountdownNotification(
                             context = context,
                             packageName = packageName,

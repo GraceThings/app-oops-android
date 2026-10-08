@@ -1,9 +1,97 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 包裹着图案的圆形背景：带半透明填充与纯白边框 -->
     <path
-        android:fillColor="#FFFFFFFF"
-        android:pathData="M12,1L3,5v6c0,5.55 3.84,10.74 9,12c5.16,-1.26 9,-6.45 9,-12V5L12,1zM12,11.99h7c-0.53,4.12 -3.28,7.79 -7,8.94V12H5V6.3l7,-3.11v8.8z"/>
+        android:fillColor="#33FFFFFF"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4"
+        android:pathData="M 54, 54 m -44, 0 a 44,44 0 1,0 88,0 a 44,44 0 1,0 -88,0" />
+
+    <!-- 机器人头部整体逆时针旋转 20°，适度放大使其饱满充盈圆形背景 -->
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:scaleX="1.25"
+        android:scaleY="1.25"
+        android:rotation="-20">
+
+        <!-- 左侧独立 ! -->
+        <group
+            android:pivotX="38"
+            android:pivotY="41"
+            android:rotation="-15"
+            android:translateX="3"
+            android:translateY="-3">
+
+            <!-- ! 主体 -->
+            <path
+                android:fillColor="#FFFFFF"
+                android:fillType="nonZero"
+                android:pathData="
+                    M38.2,34.0
+                    C39.0,33.7 39.8,34.1 40.0,34.9
+                    L39.3,42.0
+                    C39.2,42.8 38.7,43.3 38.0,43.3
+                    C37.2,43.3 36.7,42.7 36.8,41.9
+                    L37.0,35.2
+                    C37.0,34.6 37.4,34.1 38.2,34.0
+                    Z" />
+
+            <!-- ! 圆点 -->
+            <path
+                android:fillColor="#FFFFFF"
+                android:pathData="
+                    M36.5,45.5
+                    C36.5,44.5 37.2,43.8 38.1,43.8
+                    C39.1,43.8 39.8,44.5 39.8,45.5
+                    C39.8,46.5 39.1,47.2 38.1,47.2
+                    C37.2,47.2 36.5,46.5 36.5,45.5
+                    Z" />
+
+        </group>
+
+        <!-- 右侧天线 -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:fillType="nonZero"
+            android:pathData="
+                M64.7,45.8
+                L68.6,39.1
+                C68.8,38.7 68.7,38.2 68.3,38.0
+                C67.9,37.8 67.4,37.9 67.2,38.3
+                L63.3,45.0
+                Z" />
+
+        <!-- 机器人头部与镂空眼睛 (evenOdd 眼睛自动镂空) -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:fillType="evenOdd"
+            android:pathData="
+                M65.3,45.828
+                C59,43.028 51.9,43.028 45.6,45.828
+                C37.7,49.428 32.2,56.028 31.5,63.928
+                L77.5,63.928
+                C76.8,56.028 71.3,49.428 65.3,45.828
+                Z
+                M42.0,52.2
+                L44.0,52.2
+                L49.0,55.5
+                L44.0,58.8
+                L42.0,58.8
+                L47.0,55.5
+                Z
+                M67.0,52.2
+                L65.0,52.2
+                L60.0,55.5
+                L65.0,58.8
+                L67.0,58.8
+                L62.0,55.5
+                Z" />
+
+    </group>
+
 </vector>

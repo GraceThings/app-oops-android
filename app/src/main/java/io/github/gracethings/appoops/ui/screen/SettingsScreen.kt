@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.Feedback
 import androidx.compose.material.icons.filled.HourglassTop
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
@@ -51,6 +52,8 @@ fun SettingsScreen(
         if (granted) {
             val testApp = context.getString(R.string.test_notice_app_name)
             val testOp = context.getString(R.string.op_read_clipboard_title)
+            val isLive = io.github.gracethings.appoops.data.preference.AlertPreferences.isLiveUpdatesEnabled.value &&
+                    io.github.gracethings.appoops.data.preference.AlertPreferences.isAndroid16Supported()
             AppOpsMonitorService.updateNotification(
                 context,
                 "io.github.gracethings.appoops.test",
@@ -58,7 +61,8 @@ fun SettingsScreen(
                 testOp,
                 1,
                 io.github.gracethings.appoops.util.AppOpsConstants.OP_READ_CLIPBOARD,
-                0
+                0,
+                forceLive = isLive
             )
         }
     }
@@ -80,7 +84,10 @@ fun SettingsScreen(
 
         // Interception Alert Notification Card
         val isAlertEnabled by io.github.gracethings.appoops.data.preference.AlertPreferences.isAlertEnabled.collectAsState()
-        val noticeType by io.github.gracethings.appoops.data.preference.AlertPreferences.noticeType.collectAsState()
+        val isToastEnabled by io.github.gracethings.appoops.data.preference.AlertPreferences.isToastEnabled.collectAsState()
+        val isNotificationEnabled by io.github.gracethings.appoops.data.preference.AlertPreferences.isNotificationEnabled.collectAsState()
+        val isLiveUpdatesEnabled by io.github.gracethings.appoops.data.preference.AlertPreferences.isLiveUpdatesEnabled.collectAsState()
+        val isAndroid16 = remember { io.github.gracethings.appoops.data.preference.AlertPreferences.isAndroid16Supported() }
 
         Card(
             shape = RoundedCornerShape(22.dp),
@@ -94,12 +101,13 @@ fun SettingsScreen(
                     .fillMaxWidth()
                     .padding(18.dp)
             ) {
+                // 主开关：拦截成功提示 (默认关闭)
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Notifications,
+                        imageVector = if (isAlertEnabled) Icons.Default.NotificationsActive else Icons.Default.Notifications,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary
                     )
@@ -122,39 +130,134 @@ fun SettingsScreen(
                     )
                 }
 
+                // 关闭时只显示上述主开关与说明；开启时展开下方选项
                 androidx.compose.animation.AnimatedVisibility(visible = isAlertEnabled) {
                     Column(modifier = Modifier.padding(top = 16.dp)) {
-                        Text(
-                            text = stringResource(R.string.setting_alert_type_title),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.SemiBold
-                        )
+                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        // 子选项 1：toast notice (默认开启)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Feedback,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = stringResource(R.string.setting_alert_toast),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                Text(
+                                    text = stringResource(R.string.setting_alert_toast_desc),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = isToastEnabled,
+                                onCheckedChange = { io.github.gracethings.appoops.data.preference.AlertPreferences.setToastEnabled(context, it) }
+                            )
+                        }
+
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-                            val options = listOf(
-                                io.github.gracethings.appoops.data.preference.AlertNoticeType.TOAST to stringResource(R.string.setting_alert_toast),
-                                io.github.gracethings.appoops.data.preference.AlertNoticeType.LIVE_NOTIFICATION to stringResource(R.string.setting_alert_live_notification)
+                        // 子选项 2：notification (默认开启)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Notifications,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary
                             )
-                            options.forEachIndexed { index, (type, label) ->
-                                SegmentedButton(
-                                    selected = noticeType == type,
-                                    onClick = { io.github.gracethings.appoops.data.preference.AlertPreferences.setNoticeType(context, type) },
-                                    shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size)
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = stringResource(R.string.setting_alert_notification),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                Text(
+                                    text = stringResource(R.string.setting_alert_notification_desc),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = isNotificationEnabled,
+                                onCheckedChange = { enable ->
+                                    io.github.gracethings.appoops.data.preference.AlertPreferences.setNotificationEnabled(context, enable)
+                                    if (enable && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                                        ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                                        notifPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                                    }
+                                }
+                            )
+                        }
+
+                        // notification 开启时，展示子选项：live updates (android16+) (默认关闭，低于 Android 16 不可开启)
+                        androidx.compose.animation.AnimatedVisibility(visible = isNotificationEnabled) {
+                            Surface(
+                                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f),
+                                shape = RoundedCornerShape(14.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 24.dp, top = 6.dp, bottom = 4.dp)
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 14.dp, vertical = 10.dp)
                                 ) {
-                                    Text(
-                                        text = label,
-                                        style = MaterialTheme.typography.labelSmall,
-                                        maxLines = 1,
-                                        softWrap = false,
-                                        modifier = Modifier.basicMarquee()
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        Text(
+                                            text = stringResource(R.string.setting_alert_live_notification),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = if (isAndroid16) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                        )
+                                        Spacer(modifier = Modifier.height(2.dp))
+                                        Text(
+                                            text = if (isAndroid16) {
+                                                stringResource(R.string.setting_alert_live_desc_supported)
+                                            } else {
+                                                stringResource(R.string.setting_alert_live_desc_unsupported)
+                                            },
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = if (isAndroid16) {
+                                                MaterialTheme.colorScheme.onSurfaceVariant
+                                            } else {
+                                                MaterialTheme.colorScheme.error.copy(alpha = 0.85f)
+                                            }
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Switch(
+                                        checked = isAndroid16 && isLiveUpdatesEnabled,
+                                        enabled = isAndroid16,
+                                        onCheckedChange = { enable ->
+                                            if (isAndroid16) {
+                                                io.github.gracethings.appoops.data.preference.AlertPreferences.setLiveUpdatesEnabled(context, enable)
+                                            }
+                                        }
                                     )
                                 }
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(14.dp))
 
                         OutlinedButton(
                             onClick = {
@@ -162,10 +265,11 @@ fun SettingsScreen(
                                 val testOp = context.getString(R.string.op_read_clipboard_title)
                                 val nm = androidx.core.app.NotificationManagerCompat.from(context)
 
-                                val needsNotification = noticeType == io.github.gracethings.appoops.data.preference.AlertNoticeType.LIVE_NOTIFICATION ||
-                                        io.github.gracethings.appoops.data.preference.AlertPreferences.isTempAllowEnabled.value
+                                val isToast = io.github.gracethings.appoops.data.preference.AlertPreferences.isToastEnabled.value
+                                val isNotif = io.github.gracethings.appoops.data.preference.AlertPreferences.isNotificationEnabled.value
+                                val isLive = isNotif && io.github.gracethings.appoops.data.preference.AlertPreferences.isLiveUpdatesEnabled.value && isAndroid16
 
-                                if (needsNotification) {
+                                if (isNotif) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
                                         ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                                         notifPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -189,36 +293,34 @@ fun SettingsScreen(
                                     }
                                 }
 
-                                when (noticeType) {
-                                    io.github.gracethings.appoops.data.preference.AlertNoticeType.TOAST -> {
-                                        android.widget.Toast.makeText(
-                                            context,
-                                            context.getString(R.string.toast_blocked_single, testApp, testOp),
-                                            android.widget.Toast.LENGTH_SHORT
-                                        ).show()
-                                        if (io.github.gracethings.appoops.data.preference.AlertPreferences.isTempAllowEnabled.value) {
-                                            AppOpsMonitorService.updateNotification(
-                                                context,
-                                                "io.github.gracethings.appoops.test",
-                                                testApp,
-                                                testOp,
-                                                1,
-                                                io.github.gracethings.appoops.util.AppOpsConstants.OP_READ_CLIPBOARD,
-                                                0
-                                            )
-                                        }
-                                    }
-                                    io.github.gracethings.appoops.data.preference.AlertNoticeType.LIVE_NOTIFICATION -> {
-                                        AppOpsMonitorService.updateNotification(
-                                            context,
-                                            "io.github.gracethings.appoops.test",
-                                            testApp,
-                                            testOp,
-                                            1,
-                                            io.github.gracethings.appoops.util.AppOpsConstants.OP_READ_CLIPBOARD,
-                                            0
-                                        )
-                                    }
+                                if (!isToast && !isNotif) {
+                                    android.widget.Toast.makeText(
+                                        context,
+                                        context.getString(R.string.test_alert_no_method_enabled),
+                                        android.widget.Toast.LENGTH_SHORT
+                                    ).show()
+                                    return@OutlinedButton
+                                }
+
+                                if (isToast) {
+                                    android.widget.Toast.makeText(
+                                        context,
+                                        context.getString(R.string.toast_blocked_single, testApp, testOp),
+                                        android.widget.Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                if (isNotif) {
+                                    AppOpsMonitorService.updateNotification(
+                                        context,
+                                        "io.github.gracethings.appoops.test",
+                                        testApp,
+                                        testOp,
+                                        1,
+                                        io.github.gracethings.appoops.util.AppOpsConstants.OP_READ_CLIPBOARD,
+                                        0,
+                                        forceLive = isLive
+                                    )
                                 }
                             },
                             modifier = Modifier.fillMaxWidth(),

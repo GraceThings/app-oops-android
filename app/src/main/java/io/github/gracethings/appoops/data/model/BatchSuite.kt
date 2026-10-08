@@ -1,4 +1,4 @@
-﻿package io.github.gracethings.appoops.data.model
+package io.github.gracethings.appoops.data.model
 
 import androidx.annotation.StringRes
 import io.github.gracethings.appoops.R
@@ -11,7 +11,7 @@ enum class BatchSuiteType(
 ) {
     SENSOR(
         title = "Disable Accelerometer/Gyroscope",
-        description = "Blocks accelerometer and gyroscope sensors (IGNORE) to physically eliminate splash ads",
+        description = "Blocks accelerometer and gyroscope sensors (IGNORE) to eliminate unauthorized motion and movement tracking",
         titleRes = R.string.suite_sensor_title,
         descRes = R.string.suite_sensor_desc
     ),

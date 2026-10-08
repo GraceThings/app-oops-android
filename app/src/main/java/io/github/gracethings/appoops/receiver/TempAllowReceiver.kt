@@ -1,4 +1,4 @@
-﻿package io.github.gracethings.appoops.receiver
+package io.github.gracethings.appoops.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -34,7 +34,7 @@ class TempAllowReceiver : BroadcastReceiver() {
                 val notifId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, AppOpsMonitorService.ALERT_NOTIFICATION_ID)
 
                 TempAllowManager.temporaryAllow(context, packageName, uid, op, duration)
-                if (io.github.gracethings.appoops.data.preference.AlertPreferences.noticeType.value != io.github.gracethings.appoops.data.preference.AlertNoticeType.LIVE_NOTIFICATION) {
+                if (!io.github.gracethings.appoops.data.preference.AlertPreferences.isLiveUpdatesActive()) {
                     NotificationManagerCompat.from(context).cancel(notifId)
                 }
             }

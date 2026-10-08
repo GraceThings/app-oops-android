@@ -1,4 +1,4 @@
-﻿package io.github.gracethings.appoops.data.shizuku
+package io.github.gracethings.appoops.data.shizuku
 
 import io.github.gracethings.appoops.data.model.OpMode
 import io.github.gracethings.appoops.util.AppLogger
@@ -77,7 +77,7 @@ object AppOpsController {
     }
 
     /**
-     * 针对“摇一摇”广告的一键物理级免疫
+     * 一键禁用运动传感器权限
      * 同时封锁运动传感器、后台传感器、高采样率传感器与活动识别
      */
     suspend fun immunizeShakeAds(packageName: String, uid: Int): Result<Unit> = withContext(Dispatchers.IO) {

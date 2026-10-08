@@ -65,7 +65,7 @@ fun AppDetailScreen(
                 opCode = AppOpsConstants.OP_BODY_SENSORS,
                 opName = "BODY_SENSORS",
                 title = "Body & Motion Sensors",
-                description = "Physical defense against shake ads: Set to IGNORE to silently intercept accelerometer",
+                description = "Set to IGNORE to silently intercept accelerometer and motion sensors",
                 category = OpCategory.SENSOR,
                 titleRes = R.string.op_body_sensors_title,
                 descRes = R.string.op_body_sensors_desc
@@ -74,7 +74,7 @@ fun AppDetailScreen(
                 opCode = AppOpsConstants.OP_HIGH_SAMPLING_RATE_SENSORS,
                 opName = "HIGH_SAMPLING_RATE_SENSORS",
                 title = "High Sampling Rate Sensors",
-                description = "Limits gyroscope & accelerometer refresh rate to prevent inadvertent splash ad triggers",
+                description = "Limits gyroscope & accelerometer refresh rate to prevent high-frequency motion tracking",
                 category = OpCategory.SENSOR,
                 titleRes = R.string.op_high_sampling_sensors_title,
                 descRes = R.string.op_high_sampling_sensors_desc

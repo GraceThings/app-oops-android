@@ -7,13 +7,18 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Typeface
+import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import io.github.gracethings.appoops.MainActivity
 import io.github.gracethings.appoops.R
-import io.github.gracethings.appoops.data.preference.AlertNoticeType
 import io.github.gracethings.appoops.data.preference.AlertPreferences
 import io.github.gracethings.appoops.data.shizuku.AppOpsNotedWatcher
 import io.github.gracethings.appoops.data.shizuku.ShizukuManager
@@ -29,8 +34,8 @@ class AppOpsMonitorService : Service {
 
     companion object {
         const val FOREGROUND_CHANNEL_ID = "appops_monitor_channel_v1"
-        const val ALERT_CHANNEL_LIVE_ID = "appops_live_chip_v5"
-        const val ALERT_CHANNEL_TOAST_ID = "appops_standard_alert_v6"
+        const val ALERT_CHANNEL_LIVE_ID = "appops_live_chip_v7"
+        const val ALERT_CHANNEL_TOAST_ID = "appops_standard_alert_v7"
 
         const val FOREGROUND_NOTIFICATION_ID = 2001
         const val ALERT_NOTIFICATION_ID = 2002
@@ -77,33 +82,36 @@ class AppOpsMonitorService : Service {
                     nm.createNotificationChannel(fgChannel)
                 }
 
-                // 2. Live chip alert channel (Android 16+ Promoted Ongoing pill)
-                // IMPORTANCE_LOW prevents heads-up pop-up drops down from top of screen,
-                // while directly displaying the status bar chip (pill).
+                // Clean up obsolete channels
+                nm.deleteNotificationChannel("appops_live_chip_v5")
+                nm.deleteNotificationChannel("appops_standard_alert_v6")
+
+                // 2. Live chip alert channel (Android 16+ Promoted Ongoing pill + pop up on screen, Default importance)
                 if (nm.getNotificationChannel(ALERT_CHANNEL_LIVE_ID) == null) {
                     val liveChannel = NotificationChannel(
                         ALERT_CHANNEL_LIVE_ID,
                         context.getString(R.string.monitor_notif_live_channel),
-                        NotificationManager.IMPORTANCE_LOW
+                        NotificationManager.IMPORTANCE_HIGH
                     ).apply {
                         description = context.getString(R.string.monitor_notif_channel_desc)
-                        enableLights(false)
-                        enableVibration(false)
-                        setShowBadge(false)
+                        enableLights(true)
+                        enableVibration(true)
+                        setShowBadge(true)
                     }
                     nm.createNotificationChannel(liveChannel)
                 }
 
-                // 3. Standard alert channel for Toast mode (no heads-up intrusive banner, placed cleanly in shade)
+                // 3. Standard alert channel (Pop up on screen, Default importance)
                 if (nm.getNotificationChannel(ALERT_CHANNEL_TOAST_ID) == null) {
                     val toastAlertChannel = NotificationChannel(
                         ALERT_CHANNEL_TOAST_ID,
                         context.getString(R.string.monitor_notif_toast_channel),
-                        NotificationManager.IMPORTANCE_DEFAULT
+                        NotificationManager.IMPORTANCE_HIGH
                     ).apply {
                         description = context.getString(R.string.monitor_notif_channel_desc)
-                        enableLights(false)
-                        enableVibration(false)
+                        enableLights(true)
+                        enableVibration(true)
+                        setShowBadge(true)
                     }
                     nm.createNotificationChannel(toastAlertChannel)
                 }
@@ -117,7 +125,8 @@ class AppOpsMonitorService : Service {
             opName: String,
             count: Int,
             op: Int = AppOpsConstants.OP_READ_CLIPBOARD,
-            uid: Int = 0
+            uid: Int = 0,
+            forceLive: Boolean? = null
         ) {
             ensureNotificationChannels(context)
             val nm = NotificationManagerCompat.from(context)
@@ -177,11 +186,11 @@ class AppOpsMonitorService : Service {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
-            val noticeType = AlertPreferences.noticeType.value
+            val useLive = forceLive ?: AlertPreferences.isLiveUpdatesActive()
 
-            if (noticeType == AlertNoticeType.TOAST) {
-                // Toast Mode: post standard notification without "实时更新"
-                postStandardAlertNotification(
+            if (useLive) {
+                // Live Updates Mode: post promoted ongoing notification (status bar pill only)
+                postLiveAlertNotification(
                     context = context,
                     text = text,
                     inspectPending = inspectPendingIntent,
@@ -189,8 +198,8 @@ class AppOpsMonitorService : Service {
                     dismissPending = dismissPending
                 )
             } else {
-                // Live Updates Mode: post promoted ongoing notification (status bar pill only)
-                postLiveAlertNotification(
+                // Standard notification without "实时更新"
+                postStandardAlertNotification(
                     context = context,
                     text = text,
                     inspectPending = inspectPendingIntent,
@@ -216,7 +225,7 @@ class AppOpsMonitorService : Service {
                 .setOngoing(false)
                 .setAutoCancel(true)
                 .setOnlyAlertOnce(true)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(inspectPending)
                 .addAction(
                     0,
@@ -256,61 +265,64 @@ class AppOpsMonitorService : Service {
             val nm = NotificationManagerCompat.from(context)
 
             if (Build.VERSION.SDK_INT >= 36) {
-                val progressStyle = Notification.ProgressStyle()
-                    .setProgress(100)
-                    .addProgressSegment(Notification.ProgressStyle.Segment(100))
-                    .setProgressTrackerIcon(
-                        android.graphics.drawable.Icon.createWithResource(context, R.drawable.ic_notification_shield)
-                    )
+                try {
+                    val progressStyle = Notification.ProgressStyle()
+                        .setProgress(100)
+                        .addProgressSegment(Notification.ProgressStyle.Segment(100))
 
-                val shortCritical = context.getString(R.string.status_bar_chip_blocked)
+                    val shortCritical = context.getString(R.string.status_bar_chip_blocked)
 
-                val nativeBuilder = Notification.Builder(context, ALERT_CHANNEL_LIVE_ID)
-                    .setSmallIcon(R.drawable.ic_notification_shield)
-                    .setContentTitle(context.getString(R.string.monitor_notif_live_title))
-                    .setSubText(context.getString(R.string.live_update_subtext))
-                    .setContentText(text)
-                    .setStyle(progressStyle)
-                    .setOngoing(true)
-                    .setRequestPromotedOngoing(true)
-                    .setShortCriticalText(shortCritical)
-                    .setOnlyAlertOnce(true)
-                    .setContentIntent(inspectPending)
-                    .addAction(
-                        Notification.Action.Builder(
-                            null,
-                            context.getString(R.string.monitor_notif_action_inspect),
-                            inspectPending
-                        ).build()
-                    )
+                    val nativeBuilder = Notification.Builder(context, ALERT_CHANNEL_LIVE_ID)
+                        .setSmallIcon(R.drawable.ic_notification_shield)
+                        .setContentTitle(context.getString(R.string.monitor_notif_live_title))
+                        .setSubText(context.getString(R.string.live_update_subtext))
+                        .setContentText(text)
+                        .setStyle(progressStyle)
+                        .setOngoing(true)
+                        .setShortCriticalText(shortCritical)
+                        .setOnlyAlertOnce(true)
+                        .setContentIntent(inspectPending)
+                        .addAction(
+                            Notification.Action.Builder(
+                                null,
+                                context.getString(R.string.monitor_notif_action_inspect),
+                                inspectPending
+                            ).build()
+                        )
 
-                if (tempAllowPending != null) {
-                    val duration = AlertPreferences.tempAllowDuration.value
+                    // setRequestPromotedOngoing was introduced in API 37, invoke safely via reflection if present
+                    runCatching {
+                        nativeBuilder.javaClass.getMethod("setRequestPromotedOngoing", Boolean::class.javaPrimitiveType)
+                            .invoke(nativeBuilder, true)
+                    }
+
+                    if (tempAllowPending != null) {
+                        val duration = AlertPreferences.tempAllowDuration.value
+                        nativeBuilder.addAction(
+                            Notification.Action.Builder(
+                                null,
+                                context.getString(R.string.monitor_notif_action_temp_allow, duration),
+                                tempAllowPending
+                            ).build()
+                        )
+                    }
+
                     nativeBuilder.addAction(
                         Notification.Action.Builder(
                             null,
-                            context.getString(R.string.monitor_notif_action_temp_allow, duration),
-                            tempAllowPending
+                            context.getString(R.string.monitor_notif_action_close),
+                            dismissPending
                         ).build()
                     )
-                }
 
-                nativeBuilder.addAction(
-                    Notification.Action.Builder(
-                        null,
-                        context.getString(R.string.monitor_notif_action_close),
-                        dismissPending
-                    ).build()
-                )
-
-                try {
                     val notif = nativeBuilder.build()
+                    notif.flags = notif.flags or Notification.FLAG_PROMOTED_ONGOING
                     AppLogger.i("postLiveAlertNotification (Android 16): hasPromotableCharacteristics=${notif.hasPromotableCharacteristics()}")
                     nm.notify(ALERT_NOTIFICATION_ID, notif)
+                    return
                 } catch (e: Throwable) {
-                    AppLogger.w("Failed to post live alert notification (Android 16)", e)
+                    AppLogger.w("Failed to post live alert notification (Android 16), falling back to compat", e)
                 }
-                return
             }
 
             // Pre-Android 16 fallback
@@ -319,7 +331,7 @@ class AppOpsMonitorService : Service {
                 .setContentTitle(context.getString(R.string.monitor_notif_live_title))
                 .setSubText(context.getString(R.string.live_update_subtext))
                 .setContentText(text)
-                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setOngoing(true)
                 .setContentIntent(inspectPending)
                 .addAction(0, context.getString(R.string.monitor_notif_action_inspect), inspectPending)
@@ -344,6 +356,47 @@ class AppOpsMonitorService : Service {
             } catch (e: Throwable) {
                 AppLogger.w("Failed to post fallback live notification", e)
             }
+        }
+
+        private fun createCountdownIcon(context: Context, number: Int): Icon {
+            val density = context.resources.displayMetrics.density
+            val size = (24 * density).toInt().coerceAtLeast(64)
+            val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+
+            val strokeWidth = size * 0.08f
+            val radius = (size / 2f) - (strokeWidth / 2f)
+            val cx = size / 2f
+            val cy = size / 2f
+
+            // 半透明圆形背景填充 (与 ic_notification_shield 风格一致)
+            val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = Color.argb(51, 255, 255, 255) // #33FFFFFF
+                style = Paint.Style.FILL
+            }
+            canvas.drawCircle(cx, cy, radius, fillPaint)
+
+            // 纯白圆形边框
+            val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = Color.WHITE
+                style = Paint.Style.STROKE
+                this.strokeWidth = strokeWidth
+            }
+            canvas.drawCircle(cx, cy, radius, strokePaint)
+
+            // 倒计时数字
+            val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = Color.WHITE
+                textAlign = Paint.Align.CENTER
+                typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                textSize = if (number >= 10) size * 0.50f else size * 0.60f
+            }
+
+            val fontMetrics = textPaint.fontMetrics
+            val textY = cy - (fontMetrics.ascent + fontMetrics.descent) / 2f
+            canvas.drawText(number.toString(), cx, textY, textPaint)
+
+            return Icon.createWithBitmap(bitmap)
         }
 
         fun updateCountdownNotification(
@@ -387,52 +440,60 @@ class AppOpsMonitorService : Service {
             )
 
             if (Build.VERSION.SDK_INT >= 36) {
-                val segment = Notification.ProgressStyle.Segment(100)
-                val progressStyle = Notification.ProgressStyle()
-                    .setProgress(progressPercent)
-                    .addProgressSegment(segment)
-                    .setProgressTrackerIcon(android.graphics.drawable.Icon.createWithResource(context, R.drawable.ic_notification_shield))
-
-                val nativeBuilder = Notification.Builder(context, ALERT_CHANNEL_LIVE_ID)
-                    .setSmallIcon(R.drawable.ic_notification_shield)
-                    .setContentTitle(context.getString(R.string.monitor_notif_live_title))
-                    .setSubText(context.getString(R.string.live_update_subtext))
-                    .setContentText(text)
-                    .setStyle(progressStyle)
-                    .setOngoing(true)
-                    .setRequestPromotedOngoing(true)
-                    .setShortCriticalText("${remainingSeconds}s")
-                    .setOnlyAlertOnce(true)
-                    .setContentIntent(inspectPending)
-                    .addAction(
-                        Notification.Action.Builder(
-                            null,
-                            context.getString(R.string.monitor_notif_action_close),
-                            dismissPending
-                        ).build()
-                    )
-
                 try {
-                    nm.notify(ALERT_NOTIFICATION_ID, nativeBuilder.build())
-                } catch (e: Throwable) {
-                    AppLogger.w("Failed to notify countdown (Android 16)", e)
-                }
-            } else {
-                val builder = NotificationCompat.Builder(context, ALERT_CHANNEL_LIVE_ID)
-                    .setSmallIcon(R.drawable.ic_notification_shield)
-                    .setContentTitle(context.getString(R.string.monitor_notif_live_title))
-                    .setContentText(text)
-                    .setProgress(100, progressPercent, false)
-                    .setOngoing(true)
-                    .setPriority(NotificationCompat.PRIORITY_LOW)
-                    .setContentIntent(inspectPending)
-                    .addAction(0, context.getString(R.string.monitor_notif_action_close), dismissPending)
+                    val countdownIcon = createCountdownIcon(context, remainingSeconds)
+                    val segment = Notification.ProgressStyle.Segment(100)
+                    val progressStyle = Notification.ProgressStyle()
+                        .setProgress(progressPercent)
+                        .addProgressSegment(segment)
 
-                try {
-                    nm.notify(ALERT_NOTIFICATION_ID, builder.build())
+                    val nativeBuilder = Notification.Builder(context, ALERT_CHANNEL_LIVE_ID)
+                        .setSmallIcon(countdownIcon)
+                        .setContentTitle(context.getString(R.string.monitor_notif_live_title))
+                        .setSubText(context.getString(R.string.live_update_subtext))
+                        .setContentText(text)
+                        .setStyle(progressStyle)
+                        .setOngoing(true)
+                        .setShortCriticalText("${remainingSeconds}s")
+                        .setOnlyAlertOnce(true)
+                        .setContentIntent(inspectPending)
+                        .addAction(
+                            Notification.Action.Builder(
+                                null,
+                                context.getString(R.string.monitor_notif_action_close),
+                                dismissPending
+                            ).build()
+                        )
+
+                    // setRequestPromotedOngoing was introduced in API 37, invoke safely via reflection if present
+                    runCatching {
+                        nativeBuilder.javaClass.getMethod("setRequestPromotedOngoing", Boolean::class.javaPrimitiveType)
+                            .invoke(nativeBuilder, true)
+                    }
+
+                    val notif = nativeBuilder.build()
+                    notif.flags = notif.flags or Notification.FLAG_PROMOTED_ONGOING
+                    nm.notify(ALERT_NOTIFICATION_ID, notif)
+                    return
                 } catch (e: Throwable) {
-                    AppLogger.w("Failed to notify countdown", e)
+                    AppLogger.w("Failed to notify countdown (Android 16), falling back to compat", e)
                 }
+            }
+
+            val builder = NotificationCompat.Builder(context, ALERT_CHANNEL_LIVE_ID)
+                .setSmallIcon(R.drawable.ic_notification_shield)
+                .setContentTitle(context.getString(R.string.monitor_notif_live_title))
+                .setContentText(text)
+                .setProgress(100, progressPercent, false)
+                .setOngoing(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(inspectPending)
+                .addAction(0, context.getString(R.string.monitor_notif_action_close), dismissPending)
+
+            try {
+                nm.notify(ALERT_NOTIFICATION_ID, builder.build())
+            } catch (e: Throwable) {
+                AppLogger.w("Failed to notify countdown", e)
             }
         }
     }

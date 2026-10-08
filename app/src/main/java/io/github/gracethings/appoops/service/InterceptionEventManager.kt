@@ -50,24 +50,20 @@ object InterceptionEventManager {
         val existing = debounceMap[key]
 
         val alertEnabled = io.github.gracethings.appoops.data.preference.AlertPreferences.isAlertEnabled.value
-        val alertType = io.github.gracethings.appoops.data.preference.AlertPreferences.noticeType.value
+        val isToast = io.github.gracethings.appoops.data.preference.AlertPreferences.isToastEnabled.value
+        val isNotif = io.github.gracethings.appoops.data.preference.AlertPreferences.isNotificationEnabled.value
 
         if (existing == null || now - existing.lastTime > 3000) {
             // 首次或间隔超过3秒：根据用户设置提示并记录审计
             debounceMap[key] = DebouncedEvent(count = 1, lastTime = now)
             if (alertEnabled) {
-                when (alertType) {
-                    io.github.gracethings.appoops.data.preference.AlertNoticeType.TOAST -> {
-                        mainHandler.post {
-                            Toast.makeText(ctx, ctx.getString(io.github.gracethings.appoops.R.string.toast_blocked_single, appName, opReadableName), Toast.LENGTH_SHORT).show()
-                        }
-                        if (io.github.gracethings.appoops.data.preference.AlertPreferences.isTempAllowEnabled.value) {
-                            AppOpsMonitorService.updateNotification(ctx, resolvedPackage, appName, opReadableName, 1, op, uid)
-                        }
+                if (isToast) {
+                    mainHandler.post {
+                        Toast.makeText(ctx, ctx.getString(io.github.gracethings.appoops.R.string.toast_blocked_single, appName, opReadableName), Toast.LENGTH_SHORT).show()
                     }
-                    io.github.gracethings.appoops.data.preference.AlertNoticeType.LIVE_NOTIFICATION -> {
-                        AppOpsMonitorService.updateNotification(ctx, resolvedPackage, appName, opReadableName, 1, op, uid)
-                    }
+                }
+                if (isNotif) {
+                    AppOpsMonitorService.updateNotification(ctx, resolvedPackage, appName, opReadableName, 1, op, uid)
                 }
             }
             AuditRepository.record(resolvedPackage, appName, op, opReadableName, now, 1, mode)
@@ -76,18 +72,13 @@ object InterceptionEventManager {
             existing.count++
             existing.lastTime = now
             if (alertEnabled) {
-                when (alertType) {
-                    io.github.gracethings.appoops.data.preference.AlertNoticeType.TOAST -> {
-                        mainHandler.post {
-                            Toast.makeText(ctx, ctx.getString(io.github.gracethings.appoops.R.string.toast_blocked_multi, appName, opReadableName, existing.count), Toast.LENGTH_SHORT).show()
-                        }
-                        if (io.github.gracethings.appoops.data.preference.AlertPreferences.isTempAllowEnabled.value) {
-                            AppOpsMonitorService.updateNotification(ctx, resolvedPackage, appName, opReadableName, existing.count, op, uid)
-                        }
+                if (isToast) {
+                    mainHandler.post {
+                        Toast.makeText(ctx, ctx.getString(io.github.gracethings.appoops.R.string.toast_blocked_multi, appName, opReadableName, existing.count), Toast.LENGTH_SHORT).show()
                     }
-                    io.github.gracethings.appoops.data.preference.AlertNoticeType.LIVE_NOTIFICATION -> {
-                        AppOpsMonitorService.updateNotification(ctx, resolvedPackage, appName, opReadableName, existing.count, op, uid)
-                    }
+                }
+                if (isNotif) {
+                    AppOpsMonitorService.updateNotification(ctx, resolvedPackage, appName, opReadableName, existing.count, op, uid)
                 }
             }
             AuditRepository.record(resolvedPackage, appName, op, opReadableName, now, 1, mode)

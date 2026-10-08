@@ -1,59 +1,127 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"
     android:height="108dp"
-    android:viewportWidth="960"
-    android:viewportHeight="960"
-    android:tint="#000000">
+    android:viewportWidth="108"
+    android:viewportHeight="108">
 
+    <!-- 阴影：跟随机器人头部整体逆时针旋转 20° -->
     <group
-        android:pivotX="480"
-        android:pivotY="480"
-        android:scaleX="0.5"
-        android:scaleY="0.5">
+        android:pivotX="54"
+        android:pivotY="54"
+        android:rotation="-20">
 
-        <!-- Shield / Permission protection -->
         <path
-            android:fillColor="@android:color/white"
+            android:pathData="M31,63.928c0,0 6.4,-11 12.1,-13.1c7.2,-2.6 26,-1.4 26,-1.4l38.1,38.1L107,108.928l-32,-1L31,63.928z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:endX="85.84757"
+                    android:endY="92.4963"
+                    android:startX="42.9492"
+                    android:startY="49.59793"
+                    android:type="linear">
+                    <item
+                        android:color="#44000000"
+                        android:offset="0.0" />
+                    <item
+                        android:color="#00000000"
+                        android:offset="1.0" />
+                </gradient>
+            </aapt:attr>
+        </path>
+
+    </group>
+
+    <!-- 机器人头部整体逆时针旋转 20° -->
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:rotation="-20">
+
+        <!-- 左侧独立 ! -->
+        <group
+            android:pivotX="38"
+            android:pivotY="41"
+            android:rotation="-15"
+            android:translateX="3"
+            android:translateY="-3">
+
+            <!-- ! 主体 -->
+            <path
+                android:fillColor="#FFFFFF"
+                android:fillType="nonZero"
+                android:pathData="
+                    M38.2,34.0
+                    C39.0,33.7 39.8,34.1 40.0,34.9
+                    L39.3,42.0
+                    C39.2,42.8 38.7,43.3 38.0,43.3
+                    C37.2,43.3 36.7,42.7 36.8,41.9
+                    L37.0,35.2
+                    C37.0,34.6 37.4,34.1 38.2,34.0
+                    Z" />
+
+            <!-- ! 圆点 -->
+            <path
+                android:fillColor="#FFFFFF"
+                android:pathData="
+                    M36.5,45.5
+                    C36.5,44.5 37.2,43.8 38.1,43.8
+                    C39.1,43.8 39.8,44.5 39.8,45.5
+                    C39.8,46.5 39.1,47.2 38.1,47.2
+                    C37.2,47.2 36.5,46.5 36.5,45.5
+                    Z" />
+
+        </group>
+
+        <!-- 右侧天线 -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:fillType="nonZero"
             android:pathData="
-                M 480,120
-                C 480,120 735,205 790,235
-                L 790,450
-                C 790,650 665,785 480,845
-                C 295,785 170,650 170,450
-                L 170,235
-                C 225,205 480,120 480,120
+                M64.7,45.8
+                L68.6,39.1
+                C68.8,38.7 68.7,38.2 68.3,38.0
+                C67.9,37.8 67.4,37.9 67.2,38.3
+                L63.3,45.0
                 Z" />
 
-        <!-- OOPS / Permission hole -->
+        <!-- 机器人头部 -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:fillType="nonZero"
+            android:pathData="
+                M65.3,45.828
+                C59,43.028 51.9,43.028 45.6,45.828
+                C37.7,49.428 32.2,56.028 31.5,63.928
+                L77.5,63.928
+                C76.8,56.028 71.3,49.428 65.3,45.828
+                Z" />
+
+        <!-- 加粗的 >< 震惊眼睛 -->
         <path
             android:fillColor="#000000"
+            android:fillType="nonZero"
             android:pathData="
-                M 480,300
-                C 395,300 330,365 330,450
-                C 330,535 395,600 480,600
-                C 565,600 630,535 630,450
-                C 630,365 565,300 480,300
-                Z
-                M 480,365
-                C 530,365 565,400 565,450
-                C 565,500 530,535 480,535
-                C 430,535 395,500 395,450
-                C 395,400 430,365 480,365
+                M42.0,52.2
+                L44.0,52.2
+                L49.0,55.5
+                L44.0,58.8
+                L42.0,58.8
+                L47.0,55.5
                 Z" />
 
-        <!-- Permission keyhole -->
         <path
-            android:fillColor="@android:color/white"
+            android:fillColor="#000000"
+            android:fillType="nonZero"
             android:pathData="
-                M 480,405
-                C 450,405 425,430 425,460
-                C 425,480 436,497 452,507
-                L 452,555
-                L 508,555
-                L 508,507
-                C 524,497 535,480 535,460
-                C 535,430 510,405 480,405
+                M67.0,52.2
+                L65.0,52.2
+                L60.0,55.5
+                L65.0,58.8
+                L67.0,58.8
+                L62.0,55.5
                 Z" />
 
     </group>
+
 </vector>

@@ -25,7 +25,7 @@
     <string name="monitor_notif_toast_channel">拦截提醒</string>
     <string name="monitor_notif_live_channel">实时更新拦截提醒</string>
     <string name="monitor_notif_initial_title">App Oops 实时守护中</string>
-    <string name="monitor_notif_initial_text">正在监控并拦截摇一摇广告与剪贴板探测</string>
+    <string name="monitor_notif_initial_text">正在拦截用户设定的权限</string>
     <string name="monitor_notif_live_title">App Oops 实时更新</string>
     <string name="monitor_notif_toast_mode_title">App Oops 拦截提醒</string>
     <string name="monitor_notif_blocked_single">已阻止【%1$s】%2$s</string>
@@ -85,7 +85,7 @@
     <!-- 批量策略 -->
     <string name="batch_desc">选择预设防护套件，自由多选应用并一键应用安全策略。</string>
     <string name="suite_sensor_title">禁用加速度计/陀螺仪传感器权限</string>
-    <string name="suite_sensor_desc">全机封锁加速度计与陀螺仪传感器（设为IGNORE），从物理层面消灭误触跳转开屏广告</string>
+    <string name="suite_sensor_desc">全机封锁加速度计与陀螺仪传感器（设为IGNORE），从物理层面杜绝未经授权的运动状态探测</string>
     <string name="suite_clipboard_title">拦截读/写剪贴板</string>
     <string name="suite_clipboard_desc">拦截读取与写入剪贴板，防止第三方应用偷窥剪贴板与私自篡改淘口令</string>
     <string name="suite_query_usage_title">禁止应用列表读取与使用情况统计</string>
@@ -110,7 +110,7 @@
     <string name="audit_empty">暂无拦截记录\n当管控应用尝试偷读剪贴板或读取传感器时将自动记录</string>
     <string name="audit_empty_desc">当应用触发被管控权限时，拦截事件将记录在此处</string>
     <string name="audit_total_intercepts">累计安全拦截 %1$d 次</string>
-    <string name="audit_total_intercepts_desc">底层静默拦截所有被设为 IGNORE 的偷读与摇一摇请求</string>
+    <string name="audit_total_intercepts_desc">底层静默拦截所有被设为 IGNORE 的偷读与受限权限访问请求</string>
     <string name="audit_blocked_badge">已阻止</string>
     <string name="audit_times_badge">x%1$d次</string>
     <string name="audit_clear">清空日志</string>
@@ -122,9 +122,9 @@
 
     <!-- 敏感权限详细说明 -->
     <string name="op_body_sensors_title">运动与身体传感器</string>
-    <string name="op_body_sensors_desc">根除摇一摇广告关键：设为IGNORE从物理层静默拦截加速度计</string>
+    <string name="op_body_sensors_desc">设为IGNORE从物理层静默拦截加速度计等传感器访问</string>
     <string name="op_high_sampling_sensors_title">高采样率运动传感器</string>
-    <string name="op_high_sampling_sensors_desc">限制陀螺仪与加速度计超高频刷新，杜绝微小晃动误触开屏广告</string>
+    <string name="op_high_sampling_sensors_desc">限制陀螺仪与加速度计超高频刷新，防止微小晃动与高频状态探测</string>
     <string name="op_body_sensors_bg_title">后台运动传感器</string>
     <string name="op_body_sensors_bg_desc">禁止退到后台后继续读取运动状态</string>
     <string name="op_activity_rec_title">健身与活动识别</string>
@@ -152,9 +152,14 @@
     <string name="setting_alert_title">拦截成功提示</string>
     <string name="setting_alert_on_desc">敏感权限被拦截时向用户反馈</string>
     <string name="setting_alert_off_desc">已关闭提示 (仅记录审计日志)</string>
-    <string name="setting_alert_type_title">提示形式</string>
-    <string name="setting_alert_toast">Toast 通知</string>
+    <string name="setting_alert_toast">Toast 提示</string>
+    <string name="setting_alert_toast_desc">拦截敏感权限时弹出 Toast 气泡提醒</string>
+    <string name="setting_alert_notification">通知提醒</string>
+    <string name="setting_alert_notification_desc">在系统通知栏发送拦截提醒通知</string>
     <string name="setting_alert_live_notification">实时更新 (Android 16+)</string>
+    <string name="setting_alert_live_desc_supported">在状态栏胶囊与锁屏显示实时活动更新</string>
+    <string name="setting_alert_live_desc_unsupported">设备系统低于 Android 16，不可开启此特性</string>
+    <string name="test_alert_no_method_enabled">未开启任何提示形式（Toast 与通知均已关闭）</string>
     <string name="setting_theme_title">外观主题</string>
     <string name="setting_theme_system">跟随系统</string>
     <string name="setting_theme_light">浅色模式</string>
@@ -182,5 +187,5 @@
     <string name="live_update_subtext">实时更新</string>
     <string name="status_bar_chip_blocked">已拦截</string>
     <string name="setting_about_title">关于 App Oops</string>
-    <string name="setting_about_version">版本: 1.0.0 (AGP 9.1.0 • Kotlin 2.1.10 • Compose M3E)\n核心目标：彻底根除摇一摇开屏广告、切断全机画像扫描、保护剪贴板与冻结后台。</string>
+    <string name="setting_about_version">版本: 1.0.0 (AGP 9.1.0 • Kotlin 2.1.10 • Compose M3E)\n核心目标：全方位管控敏感权限、切断全机画像扫描、保护剪贴板与冻结后台。</string>
 </resources>
