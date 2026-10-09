@@ -77,6 +77,7 @@
     <string name="immunize_shake_btn">Disable Sensors</string>
     <string name="shield_clipboard_btn">Shield Clipboard</string>
     <string name="reset_default_btn">Reset Defaults</string>
+    <string name="apply_btn">Apply Selected</string>
     <string name="toast_applied_sensors">Applied "Disable Accelerometer/Gyroscope"</string>
     <string name="toast_applied_clipboard">Applied "Clipboard Shield"</string>
     <string name="toast_applied_reset">Restored to system defaults</string>

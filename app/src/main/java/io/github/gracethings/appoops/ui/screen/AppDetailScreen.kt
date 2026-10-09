@@ -3,8 +3,10 @@ package io.github.gracethings.appoops.ui.screen
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -36,7 +38,6 @@ import io.github.gracethings.appoops.util.AppOpsConstants
 import io.github.gracethings.appoops.util.PackageUtils
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppDetailScreen(
     packageName: String,
@@ -199,27 +200,38 @@ fun AppDetailScreen(
         refreshModes()
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(app.appName, fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { refreshModes() }) {
-                        Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
-                    }
-                }
+    // Multi-select state for recommended protections
+    val selectedActions = remember { mutableStateSetOf<String>() }
+    val chipScrollState = rememberScrollState()
+
+    Column(modifier = modifier.fillMaxSize()) {
+        // Manual top bar (same level as other screens — no extra inset)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 4.dp, vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onBack) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back"
+                )
+            }
+            Text(
+                text = app.appName,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
             )
+            IconButton(onClick = { refreshModes() }) {
+                Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
+            }
         }
-    ) { innerPadding ->
+
         LazyColumn(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(bottom = 32.dp)
@@ -294,7 +306,7 @@ fun AppDetailScreen(
                 }
             }
 
-            // Quick Action Buttons
+            // Recommended Protections — multi-select FilterChips
             item {
                 Text(
                     text = stringResource(R.string.quick_recommendations),
@@ -303,56 +315,79 @@ fun AppDetailScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(chipScrollState),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
+                    FilterChip(
+                        selected = "shake" in selectedActions,
+                        onClick = {
+                            if ("shake" in selectedActions) selectedActions.remove("shake")
+                            else selectedActions.add("shake")
+                        },
+                        label = { Text(stringResource(R.string.immunize_shake_btn)) },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Vibration,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    )
+                    FilterChip(
+                        selected = "clipboard" in selectedActions,
+                        onClick = {
+                            if ("clipboard" in selectedActions) selectedActions.remove("clipboard")
+                            else selectedActions.add("clipboard")
+                        },
+                        label = { Text(stringResource(R.string.shield_clipboard_btn)) },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.ContentPaste,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    )
+                    FilterChip(
+                        selected = "reset" in selectedActions,
+                        onClick = {
+                            if ("reset" in selectedActions) selectedActions.remove("reset")
+                            else selectedActions.add("reset")
+                        },
+                        label = { Text(stringResource(R.string.reset_default_btn)) },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Security,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    )
+                }
+                if (selectedActions.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(8.dp))
                     Button(
                         onClick = {
                             coroutineScope.launch {
-                                AppOpsController.immunizeShakeAds(packageName, uid)
+                                if ("shake" in selectedActions) {
+                                    AppOpsController.immunizeShakeAds(packageName, uid)
+                                }
+                                if ("clipboard" in selectedActions) {
+                                    AppOpsController.shieldClipboard(packageName, uid)
+                                }
+                                if ("reset" in selectedActions) {
+                                    AppOpsController.resetToDefault(packageName, uid)
+                                }
+                                selectedActions.clear()
                                 Toast.makeText(context, context.getString(R.string.toast_applied_sensors), Toast.LENGTH_SHORT).show()
                                 refreshModes()
                             }
                         },
-                        shape = RoundedCornerShape(14.dp),
-                        modifier = Modifier.weight(1f),
-                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 10.dp)
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Icon(Icons.Default.Vibration, contentDescription = null, modifier = Modifier.size(16.dp))
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(stringResource(R.string.immunize_shake_btn), style = MaterialTheme.typography.labelSmall)
-                    }
-
-                    FilledTonalButton(
-                        onClick = {
-                            coroutineScope.launch {
-                                AppOpsController.shieldClipboard(packageName, uid)
-                                Toast.makeText(context, context.getString(R.string.toast_applied_clipboard), Toast.LENGTH_SHORT).show()
-                                refreshModes()
-                            }
-                        },
-                        shape = RoundedCornerShape(14.dp),
-                        modifier = Modifier.weight(1f),
-                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 10.dp)
-                    ) {
-                        Icon(Icons.Default.ContentPaste, contentDescription = null, modifier = Modifier.size(16.dp))
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(stringResource(R.string.shield_clipboard_btn), style = MaterialTheme.typography.labelSmall)
-                    }
-
-                    OutlinedButton(
-                        onClick = {
-                            coroutineScope.launch {
-                                AppOpsController.resetToDefault(packageName, uid)
-                                Toast.makeText(context, context.getString(R.string.toast_applied_reset), Toast.LENGTH_SHORT).show()
-                                refreshModes()
-                            }
-                        },
-                        shape = RoundedCornerShape(14.dp),
-                        modifier = Modifier.weight(1f),
-                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 10.dp)
-                    ) {
-                        Text(stringResource(R.string.reset_default_btn), style = MaterialTheme.typography.labelSmall)
+                        Text(stringResource(R.string.apply_btn))
                     }
                 }
             }
