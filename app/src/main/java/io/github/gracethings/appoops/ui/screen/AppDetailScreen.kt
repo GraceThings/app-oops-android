@@ -185,6 +185,23 @@ fun AppDetailScreen(
     val modeStates = remember { mutableStateMapOf<Int, OpMode>() }
     var isLoadingModes by remember { mutableStateOf(true) }
 
+    fun syncRepositoryState() {
+        val currentApp = AppRepository.appsFlow.value.firstOrNull { it.packageName == packageName } ?: return
+        val shakeMode = modeStates[AppOpsConstants.OP_BODY_SENSORS] ?: OpMode.DEFAULT
+        val clipMode = modeStates[AppOpsConstants.OP_READ_CLIPBOARD] ?: OpMode.DEFAULT
+        val bgMode = modeStates[AppOpsConstants.OP_RUN_IN_BACKGROUND] ?: OpMode.DEFAULT
+        val qMode = modeStates[AppOpsConstants.OP_QUERY_ALL_PACKAGES] ?: OpMode.DEFAULT
+
+        AppRepository.updateAppItem(
+            currentApp.copy(
+                isShakeImmunized = shakeMode == OpMode.IGNORE || shakeMode == OpMode.DENY,
+                isClipboardProtected = clipMode == OpMode.IGNORE || clipMode == OpMode.DENY,
+                isBgRestricted = bgMode == OpMode.IGNORE || bgMode == OpMode.DENY,
+                isQueryPackagesBlocked = qMode == OpMode.IGNORE || qMode == OpMode.DENY
+            )
+        )
+    }
+
     fun refreshModes() {
         coroutineScope.launch {
             isLoadingModes = true
@@ -193,6 +210,7 @@ fun AppDetailScreen(
                 modeStates[def.opCode] = mode
             }
             isLoadingModes = false
+            syncRepositoryState()
         }
     }
 
@@ -464,6 +482,8 @@ fun AppDetailScreen(
                                             if (res.isFailure) {
                                                 Toast.makeText(context, context.getString(R.string.toast_set_failed, res.exceptionOrNull()?.message), Toast.LENGTH_SHORT).show()
                                                 modeStates[def.opCode] = currentMode
+                                            } else {
+                                                syncRepositoryState()
                                             }
                                         }
                                     }

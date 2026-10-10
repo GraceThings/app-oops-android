@@ -1,4 +1,4 @@
-﻿package io.github.gracethings.appoops
+package io.github.gracethings.appoops
 
 import android.Manifest
 import android.content.Intent
@@ -177,32 +177,32 @@ fun AppOopsMainApp(
                     NavigationBarItem(
                         selected = currentScreen is Screen.Dashboard,
                         onClick = { currentScreen = Screen.Dashboard },
-                        icon = { Icon(Icons.Default.Dashboard, contentDescription = null) },
-                        label = { Text(stringResource(R.string.dashboard)) }
+                        icon = { Icon(Icons.Default.Dashboard, contentDescription = stringResource(R.string.dashboard)) },
+                        alwaysShowLabel = false
                     )
                     NavigationBarItem(
                         selected = currentScreen is Screen.Apps,
                         onClick = { currentScreen = Screen.Apps },
-                        icon = { Icon(Icons.Default.Apps, contentDescription = null) },
-                        label = { Text(stringResource(R.string.apps)) }
+                        icon = { Icon(Icons.Default.Apps, contentDescription = stringResource(R.string.apps)) },
+                        alwaysShowLabel = false
                     )
                     NavigationBarItem(
                         selected = currentScreen is Screen.Batch,
                         onClick = { currentScreen = Screen.Batch },
-                        icon = { Icon(Icons.Default.Layers, contentDescription = null) },
-                        label = { Text(stringResource(R.string.batch_rules)) }
+                        icon = { Icon(Icons.Default.Layers, contentDescription = stringResource(R.string.batch_rules)) },
+                        alwaysShowLabel = false
                     )
                     NavigationBarItem(
                         selected = currentScreen is Screen.Audit,
                         onClick = { currentScreen = Screen.Audit },
-                        icon = { Icon(Icons.Default.Security, contentDescription = null) },
-                        label = { Text(stringResource(R.string.audit_log)) }
+                        icon = { Icon(Icons.Default.Security, contentDescription = stringResource(R.string.audit_log)) },
+                        alwaysShowLabel = false
                     )
                     NavigationBarItem(
                         selected = currentScreen is Screen.Settings,
                         onClick = { currentScreen = Screen.Settings },
-                        icon = { Icon(Icons.Default.Settings, contentDescription = null) },
-                        label = { Text(stringResource(R.string.settings)) }
+                        icon = { Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings)) },
+                        alwaysShowLabel = false
                     )
                 }
             }

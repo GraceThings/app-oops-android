@@ -89,9 +89,10 @@ fun AppListItemCard(
                 )
 
                 // Protection badges
-                Row(
+                FlowRow(
                     modifier = Modifier.padding(top = 4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     if (app.isShakeImmunized) {
                         TagBadge(
@@ -134,6 +135,8 @@ fun TagBadge(text: String, color: androidx.compose.ui.graphics.Color) {
             style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
             color = color,
             fontWeight = FontWeight.SemiBold,
+            maxLines = 1,
+            softWrap = false,
             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
         )
     }

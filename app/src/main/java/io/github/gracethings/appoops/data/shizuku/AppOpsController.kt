@@ -31,16 +31,18 @@ object AppOpsController {
         AppLogger.w("Binder setMode failed, falling back to shell: ${binderResult.exceptionOrNull()?.message}")
 
         // 通道 2: 平滑回退至特权 Shell
-        val shellCmd = "cmd appops set $packageName $opName ${mode.shellArg}"
-        val shellResult = runCatching {
-            ShizukuShellExecutor.execute(shellCmd)
-        }
-        if (shellResult.isSuccess && shellResult.getOrThrow().exitCode == 0) {
+        val shellCmd1 = "cmd appops set $packageName $opName ${mode.shellArg}"
+        val shellCmd2 = "cmd appops set --uid $uid $opName ${mode.shellArg}"
+        val shellResult1 = runCatching { ShizukuShellExecutor.execute(shellCmd1) }
+        val shellResult2 = runCatching { ShizukuShellExecutor.execute(shellCmd2) }
+
+        if ((shellResult1.isSuccess && shellResult1.getOrThrow().exitCode == 0) ||
+            (shellResult2.isSuccess && shellResult2.getOrThrow().exitCode == 0)) {
             AppLogger.d("Shell setMode success for $packageName ($opName -> $mode)")
             return@withContext Result.success(Unit)
         }
 
-        val err = shellResult.exceptionOrNull() ?: Exception("Shell returned exitCode: ${shellResult.getOrNull()?.exitCode}")
+        val err = shellResult1.exceptionOrNull() ?: Exception("Shell returned exitCode: ${shellResult1.getOrNull()?.exitCode}")
         AppLogger.e("Failed to setMode for $packageName ($opName)", err)
         Result.failure(err)
     }
@@ -52,15 +54,16 @@ object AppOpsController {
     ): OpMode = withContext(Dispatchers.IO) {
         if (!ShizukuManager.isAuthorized) return@withContext OpMode.DEFAULT
 
+        // 通道 1: 优先尝试官方 Binder 查询实际配置模式（非权限检查模式）
         val binderResult = runCatching {
-            val modeVal = AppOpsBinderEngine.checkOperation(opCode, uid, packageName)
-            OpMode.fromValue(modeVal)
-        }
-        if (binderResult.isSuccess) {
-            return@withContext binderResult.getOrThrow()
+            AppOpsBinderEngine.getOpMode(opCode, uid, packageName)?.let { OpMode.fromValue(it) }
+        }.getOrNull()
+
+        if (binderResult != null) {
+            return@withContext binderResult
         }
 
-        // Shell 回退查询
+        // 通道 2: Shell 回退查询
         val opName = AppOpsConstants.getOpName(opCode)
         val shellRes = ShizukuShellExecutor.execute("cmd appops get $packageName $opName")
         if (shellRes.exitCode == 0 && shellRes.output.isNotEmpty()) {
@@ -93,11 +96,6 @@ object AppOpsController {
             if (res.isFailure) hasFail = true
         }
 
-        // 尝试撤销运行时权限作为双重兜底
-        ShizukuShellExecutor.execute("pm revoke $packageName android.permission.BODY_SENSORS")
-        ShizukuShellExecutor.execute("pm revoke $packageName android.permission.HIGH_SAMPLING_RATE_SENSORS")
-        ShizukuShellExecutor.execute("pm revoke $packageName android.permission.ACTIVITY_RECOGNITION")
-
         if (hasFail) Result.failure(Exception("Failed to configure some sensor permissions"))
         else Result.success(Unit)
     }
@@ -118,7 +116,6 @@ object AppOpsController {
     suspend fun blockQueryPackages(packageName: String, uid: Int): Result<Unit> = withContext(Dispatchers.IO) {
         val r1 = setMode(packageName, uid, AppOpsConstants.OP_QUERY_ALL_PACKAGES, "QUERY_ALL_PACKAGES", OpMode.IGNORE)
         val r2 = setMode(packageName, uid, AppOpsConstants.OP_GET_USAGE_STATS, "GET_USAGE_STATS", OpMode.IGNORE)
-        ShizukuShellExecutor.execute("pm revoke $packageName android.permission.QUERY_ALL_PACKAGES")
         if (r1.isSuccess || r2.isSuccess) Result.success(Unit)
         else Result.failure(Exception("Failed to configure query package permissions"))
     }
@@ -156,6 +153,7 @@ object AppOpsController {
         ops.forEach { (code, name) ->
             setMode(packageName, uid, code, name, OpMode.DEFAULT)
         }
+        runCatching { ShizukuShellExecutor.execute("cmd appops reset $packageName") }
         Result.success(Unit)
     }
 }
