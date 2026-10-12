@@ -88,6 +88,10 @@
     <string name="suite_sensor_desc">全机封锁加速度计与陀螺仪传感器（设为IGNORE），从物理层面杜绝未经授权的运动状态探测</string>
     <string name="suite_clipboard_title">拦截读/写剪贴板</string>
     <string name="suite_clipboard_desc">拦截读取与写入剪贴板，防止第三方应用偷窥剪贴板与私自篡改淘口令</string>
+    <string name="suite_read_clipboard_title">拦截读取剪贴板</string>
+    <string name="suite_read_clipboard_desc">拦截读取剪贴板（设为IGNORE），防止第三方应用后台偷偷读取剪贴板敏感信息</string>
+    <string name="suite_write_clipboard_title">拦截写入剪贴板</string>
+    <string name="suite_write_clipboard_desc">拦截写入剪贴板（设为IGNORE），防止第三方应用恶意篡改口令与静默覆盖剪贴板</string>
     <string name="suite_query_usage_title">禁止应用列表读取与使用情况统计</string>
     <string name="suite_query_usage_desc">拦截已安装应用列表扫描与使用情况统计，切断跨App全机画像追踪</string>
     <string name="suite_background_title">后台限制</string>

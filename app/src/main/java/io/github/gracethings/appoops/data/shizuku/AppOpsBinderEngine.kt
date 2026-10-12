@@ -11,7 +11,7 @@ object AppOpsBinderEngine {
     private var setModeMethod: Method? = null
     private var setUidModeMethod: Method? = null
     private var getOpsForPackageMethod: Method? = null
-    private var getUidOpsMethod: Method? = null
+    private var getPackagesForOpsMethod: Method? = null
     private var unsafeCheckOpRawMethod: Method? = null
     private var checkOpMethod: Method? = null
     private var startWatchingNotedMethod: Method? = null
@@ -37,7 +37,7 @@ object AppOpsBinderEngine {
         setModeMethod = sClass.methods.firstOrNull { it.name == "setMode" && it.parameterTypes.size >= 4 }
         setUidModeMethod = sClass.methods.firstOrNull { it.name == "setUidMode" && it.parameterTypes.size >= 3 }
         getOpsForPackageMethod = sClass.methods.firstOrNull { it.name == "getOpsForPackage" && it.parameterTypes.size == 3 }
-        getUidOpsMethod = sClass.methods.firstOrNull { it.name == "getUidOps" && it.parameterTypes.size == 2 }
+        getPackagesForOpsMethod = sClass.methods.firstOrNull { it.name == "getPackagesForOps" && it.parameterTypes.size == 1 }
         unsafeCheckOpRawMethod = sClass.methods.firstOrNull { it.name == "unsafeCheckOpRaw" && it.parameterTypes.size >= 3 }
             ?: sClass.methods.firstOrNull { it.name == "checkOperationRaw" && it.parameterTypes.size >= 3 }
         checkOpMethod = sClass.methods.firstOrNull { it.name == "checkOperation" && it.parameterTypes.size >= 3 }
@@ -58,45 +58,58 @@ object AppOpsBinderEngine {
     }
 
     /**
+     * Batch queries all packages with overridden ops for targetOps in a single IPC call.
+     * Returns map of packageName -> (opCode -> mode), or null if binder call fails.
+     */
+    fun getOverriddenOpsForPackages(targetOps: IntArray): Map<String, Map<Int, Int>>? {
+        val s = ensureService()
+        val m = getPackagesForOpsMethod ?: return null
+        return runCatching {
+            val list = m.invoke(s, targetOps) as? List<*> ?: return null
+            val resultMap = mutableMapOf<String, MutableMap<Int, Int>>()
+            for (pkgOp in list) {
+                if (pkgOp == null) continue
+                val getPackageName = pkgOp.javaClass.methods.firstOrNull { it.name == "getPackageName" }
+                val packageName = getPackageName?.invoke(pkgOp) as? String ?: continue
+                val getOps = pkgOp.javaClass.methods.firstOrNull { it.name == "getOps" } ?: continue
+                val entries = getOps.invoke(pkgOp) as? List<*> ?: continue
+                val appMap = resultMap.getOrPut(packageName) { mutableMapOf() }
+                for (entry in entries) {
+                    if (entry == null) continue
+                    val getOp = entry.javaClass.methods.firstOrNull { it.name == "getOp" }
+                    val getMode = entry.javaClass.methods.firstOrNull { it.name == "getMode" }
+                    val op = (getOp?.invoke(entry) as? Number)?.toInt()
+                    val mode = (getMode?.invoke(entry) as? Number)?.toInt()
+                    if (op != null && mode != null) {
+                        appMap[op] = mode
+                    }
+                }
+            }
+            resultMap
+        }.getOrNull()
+    }
+
+    /**
      * Queries the actual configured AppOp mode without being polluted by runtime permission checks.
      * Returns null if unable to determine via Binder.
      */
     fun getOpMode(code: Int, uid: Int, packageName: String): Int? {
         val s = ensureService()
 
-        // Strategy 1: getOpsForPackage & getUidOps (the same method used by 'cmd appops get')
-        // If neither returns an entry for this opCode, it has never been modified -> MODE_DEFAULT
-        var hasQueriedOps = false
-        var packageMode: Int? = null
-        var uidMode: Int? = null
-
+        // Strategy 1: getOpsForPackage (queries package-level explicit overrides only).
+        // DO NOT query getUidOps, because Android OS automatically sets Uid mode: ignore
+        // for any ungranted runtime permissions (e.g. BODY_SENSORS) across all apps!
         getOpsForPackageMethod?.let { m ->
-            runCatching {
-                val res = m.invoke(s, uid, packageName, intArrayOf(code)) as? List<*>
-                hasQueriedOps = true
-                packageMode = extractModeFromPackageOps(res, code)
-            }
-        }
+            val res = runCatching {
+                m.invoke(s, uid, packageName, intArrayOf(code)) as? List<*>
+            }.getOrNull()
 
-        getUidOpsMethod?.let { m ->
-            runCatching {
-                val res = m.invoke(s, uid, intArrayOf(code)) as? List<*>
-                hasQueriedOps = true
-                uidMode = extractModeFromPackageOps(res, code)
+            if (res != null) {
+                val mode = extractModeFromPackageOps(res, code)
+                // If package ops has an explicit override, return it.
+                // If not found in package ops, the package has no override -> MODE_DEFAULT!
+                return mode ?: io.github.gracethings.appoops.util.AppOpsConstants.MODE_DEFAULT
             }
-        }
-
-        if (hasQueriedOps) {
-            if (packageMode != null && packageMode != io.github.gracethings.appoops.util.AppOpsConstants.MODE_DEFAULT) {
-                return packageMode
-            }
-            if (uidMode != null && uidMode != io.github.gracethings.appoops.util.AppOpsConstants.MODE_DEFAULT) {
-                return uidMode
-            }
-            if (packageMode != null) return packageMode
-            if (uidMode != null) return uidMode
-            // Both queried and found no entry for this op -> it is in system default state
-            return io.github.gracethings.appoops.util.AppOpsConstants.MODE_DEFAULT
         }
 
         // Strategy 2: unsafeCheckOpRaw (raw mode without permission checks)

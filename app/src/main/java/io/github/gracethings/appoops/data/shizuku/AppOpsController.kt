@@ -67,12 +67,21 @@ object AppOpsController {
         val opName = AppOpsConstants.getOpName(opCode)
         val shellRes = ShizukuShellExecutor.execute("cmd appops get $packageName $opName")
         if (shellRes.exitCode == 0 && shellRes.output.isNotEmpty()) {
-            val lower = shellRes.output.lowercase()
-            return@withContext when {
-                lower.contains("ignore") -> OpMode.IGNORE
-                lower.contains("deny") || lower.contains("error") -> OpMode.DENY
-                lower.contains("allow") -> OpMode.ALLOW
-                else -> OpMode.DEFAULT
+            val lines = shellRes.output.lines()
+            val packageLine = lines.firstOrNull { line ->
+                val trimmed = line.trim()
+                trimmed.isNotEmpty() && !trimmed.startsWith("Uid mode:", ignoreCase = true)
+            }
+            if (packageLine != null) {
+                val lower = packageLine.lowercase()
+                return@withContext when {
+                    lower.contains("ignore") -> OpMode.IGNORE
+                    lower.contains("deny") || lower.contains("error") -> OpMode.DENY
+                    lower.contains("allow") -> OpMode.ALLOW
+                    else -> OpMode.DEFAULT
+                }
+            } else {
+                return@withContext OpMode.DEFAULT
             }
         }
 
@@ -101,13 +110,27 @@ object AppOpsController {
     }
 
     /**
-     * Clipboard Shield
+     * Clipboard Shield (Read and Write)
      */
     suspend fun shieldClipboard(packageName: String, uid: Int): Result<Unit> = withContext(Dispatchers.IO) {
         val r1 = setMode(packageName, uid, AppOpsConstants.OP_READ_CLIPBOARD, "READ_CLIPBOARD", OpMode.IGNORE)
         val r2 = setMode(packageName, uid, AppOpsConstants.OP_WRITE_CLIPBOARD, "WRITE_CLIPBOARD", OpMode.IGNORE)
         if (r1.isSuccess && r2.isSuccess) Result.success(Unit)
         else Result.failure(Exception("Failed to configure clipboard permissions"))
+    }
+
+    /**
+     * Intercept Read Clipboard
+     */
+    suspend fun shieldReadClipboard(packageName: String, uid: Int): Result<Unit> = withContext(Dispatchers.IO) {
+        setMode(packageName, uid, AppOpsConstants.OP_READ_CLIPBOARD, "READ_CLIPBOARD", OpMode.IGNORE)
+    }
+
+    /**
+     * Intercept Write Clipboard
+     */
+    suspend fun shieldWriteClipboard(packageName: String, uid: Int): Result<Unit> = withContext(Dispatchers.IO) {
+        setMode(packageName, uid, AppOpsConstants.OP_WRITE_CLIPBOARD, "WRITE_CLIPBOARD", OpMode.IGNORE)
     }
 
     /**

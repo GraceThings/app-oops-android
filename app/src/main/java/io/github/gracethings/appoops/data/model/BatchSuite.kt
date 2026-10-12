@@ -21,6 +21,18 @@ enum class BatchSuiteType(
         titleRes = R.string.suite_clipboard_title,
         descRes = R.string.suite_clipboard_desc
     ),
+    READ_CLIPBOARD(
+        title = "Intercept Read Clipboard",
+        description = "Intercepts reading clipboard (IGNORE) to eliminate background clipboard snooping",
+        titleRes = R.string.suite_read_clipboard_title,
+        descRes = R.string.suite_read_clipboard_desc
+    ),
+    WRITE_CLIPBOARD(
+        title = "Intercept Write Clipboard",
+        description = "Intercepts writing clipboard (IGNORE) to prevent unauthorized clipboard modifications",
+        titleRes = R.string.suite_write_clipboard_title,
+        descRes = R.string.suite_write_clipboard_desc
+    ),
     QUERY_AND_USAGE(
         title = "Block App List Reading & Usage Stats",
         description = "Intercepts installed app scanning and usage stats to cut off device profiling",

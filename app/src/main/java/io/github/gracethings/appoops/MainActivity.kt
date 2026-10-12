@@ -135,6 +135,13 @@ fun AppOopsMainApp(
         AppRepository.loadApps(context)
     }
 
+    // Automatically enrich app protection states as soon as Shizuku is authorized
+    LaunchedEffect(shizukuStatus) {
+        if (shizukuStatus == io.github.gracethings.appoops.data.shizuku.ShizukuState.AUTHORIZED) {
+            AppRepository.loadApps(context, forceRefresh = true)
+        }
+    }
+
     // Auto-start or stop monitor service based on user preference and Shizuku status
     LaunchedEffect(shizukuStatus, isGuardEnabled) {
         if (isGuardEnabled && shizukuStatus == io.github.gracethings.appoops.data.shizuku.ShizukuState.AUTHORIZED) {

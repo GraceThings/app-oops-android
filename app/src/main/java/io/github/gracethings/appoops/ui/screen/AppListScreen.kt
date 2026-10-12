@@ -1,4 +1,4 @@
-﻿package io.github.gracethings.appoops.ui.screen
+package io.github.gracethings.appoops.ui.screen
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import io.github.gracethings.appoops.R
 import io.github.gracethings.appoops.data.model.AppItem
 import io.github.gracethings.appoops.data.repository.AppRepository
+import io.github.gracethings.appoops.data.shizuku.ShizukuManager
+import io.github.gracethings.appoops.data.shizuku.ShizukuState
 import io.github.gracethings.appoops.ui.components.AppListItemCard
 import kotlinx.coroutines.launch
 
@@ -41,13 +43,15 @@ fun AppListScreen(
     val apps by AppRepository.appsFlow.collectAsState()
     val isLoading by AppRepository.isLoading.collectAsState()
     val isInitialLoadCompleted by AppRepository.isInitialLoadCompleted.collectAsState()
+    val isEnriched by AppRepository.isEnriched.collectAsState()
+    val shizukuStatus by ShizukuManager.status.collectAsState()
 
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf(AppFilter.ALL) }
 
-    LaunchedEffect(Unit) {
-        if (apps.isEmpty()) {
-            AppRepository.loadApps(context)
+    LaunchedEffect(isEnriched, shizukuStatus) {
+        if (apps.isEmpty() || (!isEnriched && shizukuStatus == ShizukuState.AUTHORIZED)) {
+            AppRepository.loadApps(context, forceRefresh = !isEnriched && apps.isNotEmpty())
         }
     }
 

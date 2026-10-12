@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BatteryChargingFull
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.ContentPaste
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Security
@@ -63,6 +64,24 @@ fun BatchScreen(
                     icon = Icons.Default.ContentPaste,
                     containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                     onSelect = { onNavigateToSelect(BatchSuiteType.CLIPBOARD) }
+                )
+            }
+
+            item {
+                BatchPresetCard(
+                    suite = BatchSuiteType.READ_CLIPBOARD,
+                    icon = Icons.Default.ContentPaste,
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                    onSelect = { onNavigateToSelect(BatchSuiteType.READ_CLIPBOARD) }
+                )
+            }
+
+            item {
+                BatchPresetCard(
+                    suite = BatchSuiteType.WRITE_CLIPBOARD,
+                    icon = Icons.Default.ContentCopy,
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                    onSelect = { onNavigateToSelect(BatchSuiteType.WRITE_CLIPBOARD) }
                 )
             }
 

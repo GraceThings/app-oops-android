@@ -1,4 +1,4 @@
-﻿package io.github.gracethings.appoops.ui.screen
+package io.github.gracethings.appoops.ui.screen
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -93,6 +93,12 @@ fun BatchSelectScreen(
                         }
                         BatchSuiteType.CLIPBOARD -> {
                             AppOpsController.shieldClipboard(app.packageName, app.uid)
+                        }
+                        BatchSuiteType.READ_CLIPBOARD -> {
+                            AppOpsController.shieldReadClipboard(app.packageName, app.uid)
+                        }
+                        BatchSuiteType.WRITE_CLIPBOARD -> {
+                            AppOpsController.shieldWriteClipboard(app.packageName, app.uid)
                         }
                         BatchSuiteType.QUERY_AND_USAGE -> {
                             AppOpsController.blockQueryPackages(app.packageName, app.uid)

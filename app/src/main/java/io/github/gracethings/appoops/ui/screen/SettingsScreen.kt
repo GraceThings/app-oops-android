@@ -206,55 +206,59 @@ fun SettingsScreen(
                             )
                         }
 
-                        // notification 开启时，展示子选项：live updates (android16+) (默认关闭，低于 Android 16 不可开启)
-                        androidx.compose.animation.AnimatedVisibility(visible = isNotificationEnabled) {
-                            Surface(
-                                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f),
-                                shape = RoundedCornerShape(14.dp),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 24.dp, top = 6.dp, bottom = 4.dp)
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 14.dp, vertical = 10.dp)
-                                ) {
-                                    Column(modifier = Modifier.weight(1f)) {
-                                        Text(
-                                            text = stringResource(R.string.setting_alert_live_notification),
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            fontWeight = FontWeight.SemiBold,
-                                            color = if (isAndroid16) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                                        )
-                                        Spacer(modifier = Modifier.height(2.dp))
-                                        Text(
-                                            text = if (isAndroid16) {
-                                                stringResource(R.string.setting_alert_live_desc_supported)
-                                            } else {
-                                                stringResource(R.string.setting_alert_live_desc_unsupported)
-                                            },
-                                            style = MaterialTheme.typography.bodySmall,
-                                            color = if (isAndroid16) {
-                                                MaterialTheme.colorScheme.onSurfaceVariant
-                                            } else {
-                                                MaterialTheme.colorScheme.error.copy(alpha = 0.85f)
-                                            }
-                                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        // 子选项 3：live updates (android16+) (直接显示在 notification 设置下方，不再作为子卡片)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.NotificationsActive,
+                                contentDescription = null,
+                                tint = if (isAndroid16) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = stringResource(R.string.setting_alert_live_notification),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    fontWeight = FontWeight.Medium,
+                                    color = if (isAndroid16) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                )
+                                Text(
+                                    text = if (isAndroid16) {
+                                        stringResource(R.string.setting_alert_live_desc_supported)
+                                    } else {
+                                        stringResource(R.string.setting_alert_live_desc_unsupported)
+                                    },
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = if (isAndroid16) {
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                    } else {
+                                        MaterialTheme.colorScheme.error.copy(alpha = 0.85f)
                                     }
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    Switch(
-                                        checked = isAndroid16 && isLiveUpdatesEnabled,
-                                        enabled = isAndroid16,
-                                        onCheckedChange = { enable ->
-                                            if (isAndroid16) {
-                                                io.github.gracethings.appoops.data.preference.AlertPreferences.setLiveUpdatesEnabled(context, enable)
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Switch(
+                                checked = isAndroid16 && isLiveUpdatesEnabled,
+                                enabled = isAndroid16,
+                                onCheckedChange = { enable ->
+                                    if (isAndroid16) {
+                                        io.github.gracethings.appoops.data.preference.AlertPreferences.setLiveUpdatesEnabled(context, enable)
+                                        if (enable && !isNotificationEnabled) {
+                                            io.github.gracethings.appoops.data.preference.AlertPreferences.setNotificationEnabled(context, true)
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                                                ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                                                notifPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                                             }
                                         }
-                                    )
+                                    }
                                 }
-                            }
+                            )
                         }
 
                         Spacer(modifier = Modifier.height(14.dp))

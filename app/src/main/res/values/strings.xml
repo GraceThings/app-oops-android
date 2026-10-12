@@ -89,6 +89,10 @@
     <string name="suite_sensor_desc">Blocks accelerometer and gyroscope sensors (IGNORE) to eliminate unauthorized motion and movement tracking</string>
     <string name="suite_clipboard_title">Intercept Read/Write Clipboard</string>
     <string name="suite_clipboard_desc">Intercepts reading and writing clipboard to prevent third-party snooping and modification</string>
+    <string name="suite_read_clipboard_title">Intercept Read Clipboard</string>
+    <string name="suite_read_clipboard_desc">Intercepts reading clipboard (IGNORE) to eliminate background clipboard snooping</string>
+    <string name="suite_write_clipboard_title">Intercept Write Clipboard</string>
+    <string name="suite_write_clipboard_desc">Intercepts writing clipboard (IGNORE) to prevent rogue apps from overwriting clipboard</string>
     <string name="suite_query_usage_title">Block App List Reading &amp; Usage Stats</string>
     <string name="suite_query_usage_desc">Intercepts installed app scanning and usage stats to cut off device profiling</string>
     <string name="suite_background_title">Background Restriction</string>
