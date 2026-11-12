@@ -28,6 +28,8 @@ class AppOopsApplication : Application() {
 
         ThemePreferences.init(this)
         io.github.gracethings.appoops.data.preference.AlertPreferences.init(this)
+        io.github.gracethings.appoops.data.preference.SubscriptionPreferences.init(this)
+        io.github.gracethings.appoops.data.repository.CommunityRuleRepository.loadCachedRules(this)
         InterceptionEventManager.init(this)
         ShizukuManager.init()
     }

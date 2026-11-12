@@ -2,7 +2,7 @@
     <string name="app_name">App Oops</string>
     <string name="dashboard">仪表盘</string>
     <string name="apps">应用管理</string>
-    <string name="batch_rules">批量策略</string>
+    <string name="batch_rules">规则</string>
     <string name="audit_log">拦截日志</string>
     <string name="settings">设置</string>
 
@@ -77,13 +77,20 @@
     <string name="immunize_shake_btn">禁用传感器</string>
     <string name="shield_clipboard_btn">保护剪贴板</string>
     <string name="reset_default_btn">恢复默认</string>
+    <string name="apply_btn">应用所选</string>
     <string name="toast_applied_sensors">已应用“禁用加速度计/陀螺仪”</string>
     <string name="toast_applied_clipboard">已应用“剪贴板防护”</string>
     <string name="toast_applied_reset">已恢复系统默认</string>
     <string name="toast_set_failed">设置失败: %1$s</string>
 
-    <!-- 批量策略 -->
-    <string name="batch_desc">选择预设防护套件，自由多选应用并一键应用安全策略。</string>
+    <!-- 规则与批量预设 -->
+    <string name="batch_desc">使用内置批量预设模板，或订阅社区规则一键应用具体应用策略。</string>
+    <string name="rules_community_title">社区规则</string>
+    <string name="rules_community_desc">订阅 GraceThings/app-oops-rules 或第三方规则仓库，获取、套用或贡献各应用的精细规则。</string>
+    <string name="rules_community_status">已订阅 %1$d 个仓库 • 共 %2$d 条规则</string>
+    <string name="rules_community_empty_hint">暂未添加订阅 — 点击进入以添加规则源</string>
+    <string name="rules_community_btn">进入社区规则</string>
+    <string name="rules_presets_header">内置批量模板</string>
     <string name="suite_sensor_title">禁用加速度计/陀螺仪传感器权限</string>
     <string name="suite_sensor_desc">全机封锁加速度计与陀螺仪传感器（设为IGNORE），从物理层面杜绝未经授权的运动状态探测</string>
     <string name="suite_clipboard_title">拦截读/写剪贴板</string>
@@ -192,4 +199,64 @@
     <string name="status_bar_chip_blocked">已拦截</string>
     <string name="setting_about_title">关于 App Oops</string>
     <string name="setting_about_version">版本: 1.0.0 (AGP 9.1.0 • Kotlin 2.1.10 • Compose M3E)\n核心目标：全方位管控敏感权限、切断全机画像扫描、保护剪贴板与冻结后台。</string>
+
+    <!-- 社区规则与订阅 -->
+    <string name="community_title">社区规则</string>
+    <string name="community_search_hint">搜索应用名、包名、规则或作者...</string>
+    <string name="community_matched_installed_apps">本机已匹配 %1$d 个应用（共 %2$d 条规则）</string>
+    <string name="community_empty_sub_title">尚未添加规则订阅</string>
+    <string name="community_empty_sub_desc">点击右下角 + 按钮输入 GraceThings/app-oops-rules 订阅链接（GitHub 或 Gitee），或添加其他第三方维护的规则源。</string>
+    <string name="community_empty_rules_title">未找到匹配的社区规则</string>
+    <string name="community_empty_rules_desc">请尝试清空搜索关键词、点击顶部刷新按钮同步最新规则，或添加其他订阅源。</string>
+    <string name="community_empty_no_installed_match_title">暂无适配本机应用的规则</string>
+    <string name="community_empty_no_installed_match_desc">已同步 %1$d 条订阅规则，但本机均未安装对应应用（已自动隐藏未安装应用的规则）。</string>
+    <string name="community_badge_recommended">精选推荐</string>
+    <string name="community_rule_count">%1$d 套方案</string>
+    <string name="community_level_gentle">温和</string>
+    <string name="community_level_balanced">均衡</string>
+    <string name="community_level_strict">严格</string>
+    <string name="community_add_sub_fab">添加订阅</string>
+    <string name="community_add_sub_title">添加规则订阅</string>
+    <string name="community_add_sub_url_label">订阅链接或仓库地址</string>
+    <string name="community_add_sub_url_placeholder">https://github.com/GraceThings/app-oops-rules</string>
+    <string name="community_add_sub_name_label">显示名称（选填）</string>
+    <string name="community_add_sub_quick_fill">快捷填入官方仓库 (GraceThings/app-oops-rules)：</string>
+    <string name="community_quick_github">GitHub 官方源</string>
+    <string name="community_quick_jsdelivr">jsDelivr 加速</string>
+    <string name="community_quick_gitee">Gitee 国内镜像</string>
+    <string name="community_btn_add_sync">添加并加载</string>
+    <string name="community_sub_manager_title">订阅管理</string>
+    <string name="community_sub_info">%1$d 条规则 • %2$s</string>
+    <string name="community_sub_never_synced">尚未同步</string>
+    <string name="community_sub_added_toast">已订阅【%1$s】（共 %2$d 条规则）</string>
+    <string name="community_sub_refresh_success">已刷新 %1$d 个订阅源</string>
+    <string name="community_sub_refresh_failed">刷新失败: %1$s</string>
+    <string name="community_sub_empty_short">暂无订阅源</string>
+    <string name="community_apply_reset_toggle">套用前先恢复该应用其他权限为默认</string>
+    <string name="community_apply_rule_btn">一键套用 (%1$d 项)</string>
+    <string name="community_apply_requires_shizuku">请先在仪表盘授权连接 Shizuku 后再套用</string>
+    <string name="community_apply_success">已成功套用【%1$s】（修改了 %2$d 项权限）</string>
+    <string name="community_unsupported_ops_hint">安全提示：该规则中的 %1$d 项当前版本不支持的指令已安全忽略。</string>
+    <string name="community_author_format">贡献者: %1$s • 来源: %2$s</string>
+    <string name="community_contribute_btn">贡献规则</string>
+    <string name="community_contribute_dialog_title">贡献应用规则</string>
+    <string name="community_contribute_pick_app">目标应用</string>
+    <string name="community_contribute_no_changes">当前应用的所有可控权限均处于“默认”状态。请先在应用详情页将至少一项权限设为忽略、允许或拒绝后再贡献导出。</string>
+    <string name="community_contribute_rule_title_label">方案标题 *</string>
+    <string name="community_contribute_rule_title_hint">例如：拦截摇一摇广告与读剪贴板</string>
+    <string name="community_contribute_rule_id_label">规则文件标识 (Slug) *</string>
+    <string name="community_contribute_desc_label">适用说明与副作用</string>
+    <string name="community_contribute_author_label">署名昵称</string>
+    <string name="community_contribute_level_label">限制强度分类</string>
+    <string name="community_contribute_ops_header">包含的权限设置（%1$d 项）</string>
+    <string name="community_contribute_submit_github">跳转 GitHub 提交 Issue</string>
+    <string name="community_contribute_copy_json">复制规则 JSON</string>
+    <string name="community_contribute_hint_footer">跳转时已自动将规则 JSON 复制到剪贴板作为备份。在 GitHub 提交 Issue 后，仓库 Actions 将自动校验并创建 PR 合并后同步到 Gitee 镜像。</string>
+    <string name="community_contribute_copied">已复制规则 JSON 到剪贴板</string>
+    <string name="community_contribute_missing_title">请填写方案标题</string>
+    <string name="community_detail_view_rules">社区规则</string>
+    <string name="community_detail_share_rule">贡献此规则</string>
+    <string name="common_cancel">取消</string>
+    <string name="common_close">关闭</string>
+    <string name="common_delete">删除</string>
 </resources>

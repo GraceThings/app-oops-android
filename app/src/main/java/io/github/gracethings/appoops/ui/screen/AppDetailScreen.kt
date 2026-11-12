@@ -12,8 +12,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.ContentPaste
+import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material.icons.filled.Vibration
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -24,6 +26,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import io.github.gracethings.appoops.R
@@ -33,6 +36,7 @@ import io.github.gracethings.appoops.data.model.OpCategory
 import io.github.gracethings.appoops.data.model.OpMode
 import io.github.gracethings.appoops.data.repository.AppRepository
 import io.github.gracethings.appoops.data.shizuku.AppOpsController
+import io.github.gracethings.appoops.ui.components.ContributeRuleDialog
 import io.github.gracethings.appoops.ui.components.OpModeSelector
 import io.github.gracethings.appoops.util.AppOpsConstants
 import io.github.gracethings.appoops.util.PackageUtils
@@ -43,6 +47,7 @@ fun AppDetailScreen(
     packageName: String,
     uid: Int,
     onBack: () -> Unit,
+    onNavigateToCommunityRules: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -221,6 +226,7 @@ fun AppDetailScreen(
     // Multi-select state for recommended protections
     val selectedActions = remember { mutableStateSetOf<String>() }
     val chipScrollState = rememberScrollState()
+    var showContributeDialog by remember { mutableStateOf(false) }
 
     Column(modifier = modifier.fillMaxSize()) {
         // Manual top bar (same level as other screens — no extra inset)
@@ -240,8 +246,22 @@ fun AppDetailScreen(
                 text = app.appName,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f)
             )
+            IconButton(onClick = { onNavigateToCommunityRules(packageName) }) {
+                Icon(
+                    imageVector = Icons.Default.Public,
+                    contentDescription = stringResource(R.string.community_detail_view_rules)
+                )
+            }
+            IconButton(onClick = { showContributeDialog = true }) {
+                Icon(
+                    imageVector = Icons.Default.Upload,
+                    contentDescription = stringResource(R.string.community_detail_share_rule)
+                )
+            }
             IconButton(onClick = { refreshModes() }) {
                 Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
             }
@@ -494,6 +514,19 @@ fun AppDetailScreen(
                 }
             }
         }
+    }
+
+    if (showContributeDialog) {
+        val currentPreloaded = remember(modeStates.toMap()) {
+            opDefs.associate { def ->
+                def.opName to (modeStates[def.opCode] ?: OpMode.DEFAULT)
+            }
+        }
+        ContributeRuleDialog(
+            targetApp = app,
+            preloadedOps = currentPreloaded,
+            onDismiss = { showContributeDialog = false }
+        )
     }
 }
 

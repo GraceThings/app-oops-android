@@ -39,6 +39,7 @@ import io.github.gracethings.appoops.ui.screen.AppDetailScreen
 import io.github.gracethings.appoops.ui.screen.AppListScreen
 import io.github.gracethings.appoops.ui.screen.AuditLogScreen
 import io.github.gracethings.appoops.ui.screen.BatchScreen
+import io.github.gracethings.appoops.ui.screen.CommunityRulesScreen
 import io.github.gracethings.appoops.ui.screen.DashboardScreen
 import io.github.gracethings.appoops.ui.screen.SettingsScreen
 import io.github.gracethings.appoops.ui.theme.AppOopsTheme
@@ -51,6 +52,10 @@ sealed class Screen {
     data class Detail(val packageName: String, val uid: Int) : Screen()
     data object Batch : Screen()
     data class BatchSelect(val suite: io.github.gracethings.appoops.data.model.BatchSuiteType) : Screen()
+    data class CommunityRules(
+        val initialPackage: String? = null,
+        val returnToDetail: Pair<String, Int>? = null
+    ) : Screen()
     data object Audit : Screen()
     data object Settings : Screen()
 
@@ -60,6 +65,7 @@ sealed class Screen {
         is Detail -> 2
         Batch -> 3
         is BatchSelect -> 4
+        is CommunityRules -> 4
         Audit -> 5
         Settings -> 6
     }
@@ -167,7 +173,9 @@ fun AppOopsMainApp(
         }
     }
 
-    val isFullScreen = currentScreen is Screen.Detail || currentScreen is Screen.BatchSelect
+    val isFullScreen = currentScreen is Screen.Detail ||
+        currentScreen is Screen.BatchSelect ||
+        currentScreen is Screen.CommunityRules
 
     BackHandler(enabled = currentScreen is Screen.Detail) {
         currentScreen = Screen.Apps
@@ -175,6 +183,15 @@ fun AppOopsMainApp(
 
     BackHandler(enabled = currentScreen is Screen.BatchSelect) {
         currentScreen = Screen.Batch
+    }
+
+    BackHandler(enabled = currentScreen is Screen.CommunityRules) {
+        val cs = currentScreen as? Screen.CommunityRules
+        currentScreen = if (cs?.returnToDetail != null) {
+            Screen.Detail(cs.returnToDetail.first, cs.returnToDetail.second)
+        } else {
+            Screen.Batch
+        }
     }
 
     Scaffold(
@@ -265,12 +282,25 @@ fun AppOopsMainApp(
                     is Screen.Batch -> BatchScreen(
                         onNavigateToSelect = { suite ->
                             currentScreen = Screen.BatchSelect(suite)
+                        },
+                        onNavigateToCommunityRules = {
+                            currentScreen = Screen.CommunityRules()
                         }
                     )
                     is Screen.BatchSelect -> io.github.gracethings.appoops.ui.screen.BatchSelectScreen(
                         suite = screen.suite,
                         onBack = { currentScreen = Screen.Batch },
                         onApplied = { currentScreen = Screen.Batch }
+                    )
+                    is Screen.CommunityRules -> CommunityRulesScreen(
+                        initialPackage = screen.initialPackage,
+                        onBack = {
+                            currentScreen = if (screen.returnToDetail != null) {
+                                Screen.Detail(screen.returnToDetail.first, screen.returnToDetail.second)
+                            } else {
+                                Screen.Batch
+                            }
+                        }
                     )
                     is Screen.Audit -> AuditLogScreen(
                         onNavigateToDetail = { pkg ->
@@ -284,7 +314,13 @@ fun AppOopsMainApp(
                     is Screen.Detail -> AppDetailScreen(
                         packageName = screen.packageName,
                         uid = screen.uid,
-                        onBack = { currentScreen = Screen.Apps }
+                        onBack = { currentScreen = Screen.Apps },
+                        onNavigateToCommunityRules = { pkg ->
+                            currentScreen = Screen.CommunityRules(
+                                initialPackage = pkg,
+                                returnToDetail = pkg to screen.uid
+                            )
+                        }
                     )
                 }
             }

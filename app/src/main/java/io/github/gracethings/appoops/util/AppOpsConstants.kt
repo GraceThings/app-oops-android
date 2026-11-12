@@ -73,7 +73,27 @@ object AppOpsConstants {
         OP_RECORD_AUDIO to "录音与麦克风"
     )
 
+    val communityAllowedOps: Map<String, Int> = mapOf(
+        "BODY_SENSORS" to OP_BODY_SENSORS,
+        "BODY_SENSORS_BACKGROUND" to OP_BODY_SENSORS_BACKGROUND,
+        "HIGH_SAMPLING_RATE_SENSORS" to OP_HIGH_SAMPLING_RATE_SENSORS,
+        "ACTIVITY_RECOGNITION" to OP_ACTIVITY_RECOGNITION,
+        "READ_CLIPBOARD" to OP_READ_CLIPBOARD,
+        "WRITE_CLIPBOARD" to OP_WRITE_CLIPBOARD,
+        "QUERY_ALL_PACKAGES" to OP_QUERY_ALL_PACKAGES,
+        "GET_USAGE_STATS" to OP_GET_USAGE_STATS,
+        "RUN_IN_BACKGROUND" to OP_RUN_IN_BACKGROUND,
+        "RUN_ANY_IN_BACKGROUND" to OP_RUN_ANY_IN_BACKGROUND,
+        "WAKE_LOCK" to OP_WAKE_LOCK,
+        "SYSTEM_ALERT_WINDOW" to OP_SYSTEM_ALERT_WINDOW,
+        "WRITE_SETTINGS" to OP_WRITE_SETTINGS,
+        "ACCESS_NOTIFICATIONS" to OP_ACCESS_NOTIFICATIONS
+    )
+
     fun getOpName(op: Int): String = opNames[op] ?: "OP_$op"
+
+    fun getOpCode(opName: String): Int? =
+        communityAllowedOps[opName.trim().uppercase()]
 
     fun getOpReadableName(op: Int): String = opChineseNames[op] ?: getOpName(op)
 

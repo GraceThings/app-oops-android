@@ -2,7 +2,7 @@
     <string name="app_name">App Oops</string>
     <string name="dashboard">Dashboard</string>
     <string name="apps">Applications</string>
-    <string name="batch_rules">Batch Shield</string>
+    <string name="batch_rules">Rules</string>
     <string name="audit_log">Audit Log</string>
     <string name="settings">Settings</string>
 
@@ -83,8 +83,14 @@
     <string name="toast_applied_reset">Restored to system defaults</string>
     <string name="toast_set_failed">Setting failed: %1$s</string>
 
-    <!-- Batch Shield -->
-    <string name="batch_desc">Choose preset protection suites and apply security rules to selected apps.</string>
+    <!-- Rules & Presets -->
+    <string name="batch_desc">Apply built-in preset suites or subscribe to community rules for specific apps.</string>
+    <string name="rules_community_title">Community Rules</string>
+    <string name="rules_community_desc">Subscribe to GraceThings/app-oops-rules or third-party repositories to apply and contribute app rules.</string>
+    <string name="rules_community_status">%1$d subscription(s) • %2$d rules loaded</string>
+    <string name="rules_community_empty_hint">No subscriptions added yet — tap to subscribe</string>
+    <string name="rules_community_btn">Open Community Rules</string>
+    <string name="rules_presets_header">Built-in Batch Presets</string>
     <string name="suite_sensor_title">Disable Accelerometer/Gyroscope</string>
     <string name="suite_sensor_desc">Blocks accelerometer and gyroscope sensors (IGNORE) to eliminate unauthorized motion and movement tracking</string>
     <string name="suite_clipboard_title">Intercept Read/Write Clipboard</string>
@@ -191,6 +197,66 @@
     <string name="toast_need_notification_permission">Please grant notification permission to receive live updates</string>
     <string name="live_update_subtext">Live Updates</string>
     <string name="status_bar_chip_blocked">Blocked</string>
+
+    <!-- Community Rules & Subscriptions -->
+    <string name="community_title">Community Rules</string>
+    <string name="community_search_hint">Search app, package name, rule or author...</string>
+    <string name="community_matched_installed_apps">Matched %1$d installed app(s) (%2$d synced rules)</string>
+    <string name="community_empty_sub_title">No Rule Subscriptions Added</string>
+    <string name="community_empty_sub_desc">Tap the + button below to enter the GraceThings/app-oops-rules link (GitHub or Gitee) or any third-party subscription URL.</string>
+    <string name="community_empty_rules_title">No Matching Rules Found</string>
+    <string name="community_empty_rules_desc">Try clearing your search query, refreshing subscriptions, or adding another rule repository.</string>
+    <string name="community_empty_no_installed_match_title">No Rules for Installed Apps</string>
+    <string name="community_empty_no_installed_match_desc">Synced %1$d rule(s) from subscriptions, none matching apps currently installed on this device (rules for uninstalled apps are hidden).</string>
+    <string name="community_badge_recommended">Recommended</string>
+    <string name="community_rule_count">%1$d rule(s)</string>
+    <string name="community_level_gentle">Gentle</string>
+    <string name="community_level_balanced">Balanced</string>
+    <string name="community_level_strict">Strict</string>
+    <string name="community_add_sub_fab">Add Subscription</string>
+    <string name="community_add_sub_title">Add Rule Subscription</string>
+    <string name="community_add_sub_url_label">Subscription Link / Repo URL</string>
+    <string name="community_add_sub_url_placeholder">https://github.com/GraceThings/app-oops-rules</string>
+    <string name="community_add_sub_name_label">Display Name (Optional)</string>
+    <string name="community_add_sub_quick_fill">Quick-fill Official Repository (GraceThings/app-oops-rules):</string>
+    <string name="community_quick_github">GitHub Official</string>
+    <string name="community_quick_jsdelivr">jsDelivr CDN</string>
+    <string name="community_quick_gitee">Gitee Mirror</string>
+    <string name="community_btn_add_sync">Add &amp; Sync</string>
+    <string name="community_sub_manager_title">Manage Subscriptions</string>
+    <string name="community_sub_info">%1$d rules • %2$s</string>
+    <string name="community_sub_never_synced">Not synced</string>
+    <string name="community_sub_added_toast">Subscribed to [%1$s] (%2$d rules)</string>
+    <string name="community_sub_refresh_success">Synced %1$d subscription(s)</string>
+    <string name="community_sub_refresh_failed">Sync failed: %1$s</string>
+    <string name="community_sub_empty_short">No subscriptions yet</string>
+    <string name="community_apply_reset_toggle">Reset other permissions to default first</string>
+    <string name="community_apply_rule_btn">Apply Rule (%1$d ops)</string>
+    <string name="community_apply_requires_shizuku">Please authorize Shizuku first before applying rules</string>
+    <string name="community_apply_success">Applied [%1$s] (%2$d permissions)</string>
+    <string name="community_unsupported_ops_hint">Safety note: %1$d unsupported permission key(s) in this rule were safely skipped.</string>
+    <string name="community_author_format">Author: %1$s • Source: %2$s</string>
+    <string name="community_contribute_btn">Contribute</string>
+    <string name="community_contribute_dialog_title">Contribute App Rule</string>
+    <string name="community_contribute_pick_app">Target Application</string>
+    <string name="community_contribute_no_changes">This app currently has all supported permissions set to Default. Configure at least one permission to IGNORE, ALLOW, or DENY on its detail page first.</string>
+    <string name="community_contribute_rule_title_label">Rule Title *</string>
+    <string name="community_contribute_rule_title_hint">e.g. Block shake ads &amp; clipboard snooping</string>
+    <string name="community_contribute_rule_id_label">Rule Slug / ID *</string>
+    <string name="community_contribute_desc_label">Description &amp; Notes</string>
+    <string name="community_contribute_author_label">Author Nickname</string>
+    <string name="community_contribute_level_label">Restriction Level</string>
+    <string name="community_contribute_ops_header">Included Permissions (%1$d)</string>
+    <string name="community_contribute_submit_github">Submit via GitHub Issue</string>
+    <string name="community_contribute_copy_json">Copy Rule JSON</string>
+    <string name="community_contribute_hint_footer">Rule JSON is automatically copied to clipboard as backup. Once submitted on GitHub, Actions validates it and opens a PR for merge &amp; Gitee mirror sync.</string>
+    <string name="community_contribute_copied">Copied rule JSON to clipboard</string>
+    <string name="community_contribute_missing_title">Please enter a rule title</string>
+    <string name="community_detail_view_rules">Community Rules</string>
+    <string name="community_detail_share_rule">Contribute Rule</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_close">Close</string>
+    <string name="common_delete">Delete</string>
     <string name="setting_about_title">About App Oops</string>
     <string name="setting_about_version">Version: 1.0.0 (AGP 9.1.0 • Kotlin 2.1.10 • Compose M3E)\nCore Goal: Comprehensively manage sensitive permissions, cut off profiling tracking, guard clipboard, and restrict background.</string>
 </resources>
