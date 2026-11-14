@@ -1,4 +1,4 @@
-﻿package io.github.gracethings.appoops.data.shizuku
+package io.github.gracethings.appoops.data.shizuku
 
 import android.content.pm.PackageManager
 import io.github.gracethings.appoops.util.AppLogger
@@ -20,6 +20,8 @@ object ShizukuManager {
 
     private val binderDeadListener = Shizuku.OnBinderDeadListener {
         AppLogger.w("Shizuku binder dead")
+        AppOpsNotedWatcher.reset()
+        AppOpsBinderEngine.reset()
         _status.value = ShizukuState.DEAD
     }
 

@@ -1,6 +1,7 @@
 package io.github.gracethings.appoops
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -29,12 +30,17 @@ import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
+import io.github.gracethings.appoops.data.preference.LanguagePreferences
 import io.github.gracethings.appoops.data.repository.AppRepository
 import io.github.gracethings.appoops.data.shizuku.ShizukuManager
 import io.github.gracethings.appoops.service.AppOpsMonitorService
+import io.github.gracethings.appoops.ui.screen.AboutScreen
 import io.github.gracethings.appoops.ui.screen.AppDetailScreen
 import io.github.gracethings.appoops.ui.screen.AppListScreen
 import io.github.gracethings.appoops.ui.screen.AuditLogScreen
@@ -58,6 +64,7 @@ sealed class Screen {
     ) : Screen()
     data object Audit : Screen()
     data object Settings : Screen()
+    data object About : Screen()
 
     fun getOrder(): Int = when (this) {
         Dashboard -> 0
@@ -68,6 +75,7 @@ sealed class Screen {
         is CommunityRules -> 4
         Audit -> 5
         Settings -> 6
+        About -> 7
     }
 }
 
@@ -78,6 +86,15 @@ class MainActivity : ComponentActivity() {
     private val notificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { /* Permission result handled */ }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LanguagePreferences.wrapContext(newBase))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        LanguagePreferences.syncFromSystem(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,27 +143,61 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+private val ScreenSaver: Saver<Screen, Any> = listSaver(
+    save = { screen ->
+        when (screen) {
+            is Screen.Dashboard -> listOf("Dashboard")
+            is Screen.Apps -> listOf("Apps")
+            is Screen.Detail -> listOf("Detail", screen.packageName, screen.uid)
+            is Screen.Batch -> listOf("Batch")
+            is Screen.BatchSelect -> listOf("BatchSelect", screen.suite.name)
+            is Screen.CommunityRules -> listOf(
+                "CommunityRules",
+                screen.initialPackage,
+                screen.returnToDetail?.first,
+                screen.returnToDetail?.second
+            )
+            is Screen.Audit -> listOf("Audit")
+            is Screen.Settings -> listOf("Settings")
+            is Screen.About -> listOf("About")
+        }
+    },
+    restore = { list ->
+        when (list.firstOrNull() as? String) {
+            "Apps" -> Screen.Apps
+            "Detail" -> Screen.Detail(list[1] as String, list[2] as Int)
+            "Batch" -> Screen.Batch
+            "BatchSelect" -> Screen.BatchSelect(
+                io.github.gracethings.appoops.data.model.BatchSuiteType.valueOf(list[1] as String)
+            )
+            "CommunityRules" -> {
+                val initPkg = list[1] as? String
+                val retPkg = list[2] as? String
+                val retUid = list[3] as? Int
+                Screen.CommunityRules(
+                    initialPackage = initPkg,
+                    returnToDetail = if (retPkg != null && retUid != null) retPkg to retUid else null
+                )
+            }
+            "Audit" -> Screen.Audit
+            "Settings" -> Screen.Settings
+            "About" -> Screen.About
+            else -> Screen.Dashboard
+        }
+    }
+)
+
 @Composable
 fun AppOopsMainApp(
     initialTargetPackage: String?,
     onClearTargetPackage: () -> Unit
 ) {
     val context = androidx.compose.ui.platform.LocalContext.current
-    var currentScreen by remember { mutableStateOf<Screen>(Screen.Dashboard) }
+    var currentScreen by rememberSaveable(stateSaver = ScreenSaver) { mutableStateOf<Screen>(Screen.Dashboard) }
 
     val shizukuStatus by ShizukuManager.status.collectAsState()
     val isGuardEnabled by io.github.gracethings.appoops.data.preference.AlertPreferences.isGuardEnabled.collectAsState()
 
-    LaunchedEffect(Unit) {
-        AppRepository.loadApps(context)
-    }
-
-    // Automatically enrich app protection states as soon as Shizuku is authorized
-    LaunchedEffect(shizukuStatus) {
-        if (shizukuStatus == io.github.gracethings.appoops.data.shizuku.ShizukuState.AUTHORIZED) {
-            AppRepository.loadApps(context, forceRefresh = true)
-        }
-    }
 
     // Auto-start or stop monitor service based on user preference and Shizuku status
     LaunchedEffect(shizukuStatus, isGuardEnabled) {
@@ -175,7 +226,8 @@ fun AppOopsMainApp(
 
     val isFullScreen = currentScreen is Screen.Detail ||
         currentScreen is Screen.BatchSelect ||
-        currentScreen is Screen.CommunityRules
+        currentScreen is Screen.CommunityRules ||
+        currentScreen is Screen.About
 
     BackHandler(enabled = currentScreen is Screen.Detail) {
         currentScreen = Screen.Apps
@@ -192,6 +244,10 @@ fun AppOopsMainApp(
         } else {
             Screen.Batch
         }
+    }
+
+    BackHandler(enabled = currentScreen is Screen.About) {
+        currentScreen = Screen.Settings
     }
 
     Scaffold(
@@ -310,7 +366,12 @@ fun AppOopsMainApp(
                             currentScreen = Screen.Detail(pkg, uid)
                         }
                     )
-                    is Screen.Settings -> SettingsScreen()
+                    is Screen.Settings -> SettingsScreen(
+                        onNavigateToAbout = { currentScreen = Screen.About }
+                    )
+                    is Screen.About -> AboutScreen(
+                        onBack = { currentScreen = Screen.Settings }
+                    )
                     is Screen.Detail -> AppDetailScreen(
                         packageName = screen.packageName,
                         uid = screen.uid,

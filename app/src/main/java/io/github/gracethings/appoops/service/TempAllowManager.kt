@@ -2,8 +2,10 @@ package io.github.gracethings.appoops.service
 
 import android.content.Context
 import android.widget.Toast
+import androidx.core.app.NotificationManagerCompat
 import io.github.gracethings.appoops.R
 import io.github.gracethings.appoops.data.model.OpMode
+import io.github.gracethings.appoops.data.preference.AlertPreferences
 import io.github.gracethings.appoops.data.shizuku.AppOpsController
 import io.github.gracethings.appoops.util.AppLogger
 import io.github.gracethings.appoops.util.AppOpsConstants
@@ -26,7 +28,8 @@ object TempAllowManager {
         packageName: String,
         uid: Int,
         op: Int,
-        durationSeconds: Int
+        durationSeconds: Int,
+        notificationId: Int = AppOpsMonitorService.getAlertNotificationId(packageName, op)
     ) {
         val key = "$packageName-$op"
         activeRevertJobs[key]?.cancel()
@@ -57,7 +60,7 @@ object TempAllowManager {
 
                 // 2. Countdown loop with live progress updates (Live Updates / ProgressStyle)
                 for (remaining in durationSeconds downTo 1) {
-                    if (io.github.gracethings.appoops.data.preference.AlertPreferences.isLiveUpdatesActive()) {
+                    if (AlertPreferences.isLiveUpdatesActive()) {
                         AppOpsMonitorService.updateCountdownNotification(
                             context = context,
                             packageName = packageName,
@@ -66,7 +69,8 @@ object TempAllowManager {
                             remainingSeconds = remaining,
                             totalSeconds = durationSeconds,
                             op = op,
-                            uid = uid
+                            uid = uid,
+                            notificationId = notificationId
                         )
                     }
                     delay(1000L)
@@ -77,7 +81,7 @@ object TempAllowManager {
                     AppOpsController.setMode(packageName, uid, op, opName, OpMode.IGNORE)
                 }
                 AppLogger.i("Reverted $packageName ($uid) op $op back to IGNORE")
-                androidx.core.app.NotificationManagerCompat.from(context).cancel(AppOpsMonitorService.ALERT_NOTIFICATION_ID)
+                NotificationManagerCompat.from(context).cancel(notificationId)
 
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
@@ -92,6 +96,22 @@ object TempAllowManager {
                 activeRevertJobs.remove(key)
             }
         }.also { activeRevertJobs[key] = it }
+    }
+
+    fun cancelAndRevert(context: Context, packageName: String, op: Int, notificationId: Int) {
+        val key = "$packageName-$op"
+        val job = activeRevertJobs.remove(key)
+        if (job != null) {
+            job.cancel()
+            if (packageName != "io.github.gracethings.appoops.test") {
+                val opName = AppOpsConstants.getOpName(op)
+                scope.launch {
+                    val uid = runCatching { context.packageManager.getApplicationInfo(packageName, 0).uid }.getOrDefault(0)
+                    AppOpsController.setMode(packageName, uid, op, opName, OpMode.IGNORE)
+                }
+            }
+        }
+        NotificationManagerCompat.from(context).cancel(notificationId)
     }
 
     fun cancelAndRevertAll(context: Context) {
@@ -111,7 +131,6 @@ object TempAllowManager {
             }
         }
         activeRevertJobs.clear()
-        androidx.core.app.NotificationManagerCompat.from(context).cancel(AppOpsMonitorService.ALERT_NOTIFICATION_ID)
+        NotificationManagerCompat.from(context).cancel(AppOpsMonitorService.ALERT_NOTIFICATION_ID)
     }
 }
-

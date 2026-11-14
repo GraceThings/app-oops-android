@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationManagerCompat
+import io.github.gracethings.appoops.data.preference.AlertPreferences
 import io.github.gracethings.appoops.service.AppOpsMonitorService
 import io.github.gracethings.appoops.service.TempAllowManager
 import io.github.gracethings.appoops.util.AppLogger
@@ -33,17 +34,22 @@ class TempAllowReceiver : BroadcastReceiver() {
                 val duration = intent.getIntExtra(EXTRA_DURATION, 10)
                 val notifId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, AppOpsMonitorService.ALERT_NOTIFICATION_ID)
 
-                TempAllowManager.temporaryAllow(context, packageName, uid, op, duration)
-                if (!io.github.gracethings.appoops.data.preference.AlertPreferences.isLiveUpdatesActive()) {
+                TempAllowManager.temporaryAllow(context, packageName, uid, op, duration, notifId)
+                if (!AlertPreferences.isLiveUpdatesActive()) {
                     NotificationManagerCompat.from(context).cancel(notifId)
                 }
             }
             ACTION_DISMISS_NOTIFICATION -> {
                 val notifId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, AppOpsMonitorService.ALERT_NOTIFICATION_ID)
-                TempAllowManager.cancelAndRevertAll(context)
-                NotificationManagerCompat.from(context).cancel(notifId)
+                val packageName = intent.getStringExtra(EXTRA_PACKAGE)
+                val op = intent.getIntExtra(EXTRA_OP, -1)
+                if (!packageName.isNullOrBlank() && op >= 0) {
+                    TempAllowManager.cancelAndRevert(context, packageName, op, notifId)
+                } else {
+                    TempAllowManager.cancelAndRevertAll(context)
+                    NotificationManagerCompat.from(context).cancel(notifId)
+                }
             }
         }
     }
 }
-

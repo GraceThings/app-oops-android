@@ -4,7 +4,9 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import io.github.gracethings.appoops.R
 import io.github.gracethings.appoops.data.model.OpMode
+import io.github.gracethings.appoops.data.preference.AlertPreferences
 import io.github.gracethings.appoops.data.repository.AuditRepository
 import io.github.gracethings.appoops.util.AppOpsConstants
 import io.github.gracethings.appoops.util.PackageUtils
@@ -42,47 +44,51 @@ object InterceptionEventManager {
 
         if (resolvedPackage.isBlank()) return
 
-        val appName = PackageUtils.getAppName(ctx, resolvedPackage)
+        val appName = if (resolvedPackage == "io.github.gracethings.appoops.test") {
+            ctx.getString(R.string.test_notice_app_name)
+        } else {
+            PackageUtils.getAppName(ctx, resolvedPackage)
+        }
         val opReadableName = AppOpsConstants.getOpReadableName(ctx, op)
         val key = "$resolvedPackage-$op"
 
         val now = System.currentTimeMillis()
-        val existing = debounceMap[key]
-
-        val alertEnabled = io.github.gracethings.appoops.data.preference.AlertPreferences.isAlertEnabled.value
-        val isToast = io.github.gracethings.appoops.data.preference.AlertPreferences.isToastEnabled.value
-        val isNotif = io.github.gracethings.appoops.data.preference.AlertPreferences.isNotificationEnabled.value
-
-        if (existing == null || now - existing.lastTime > 3000) {
-            // 首次或间隔超过3秒：根据用户设置提示并记录审计
-            debounceMap[key] = DebouncedEvent(count = 1, lastTime = now)
-            if (alertEnabled) {
-                if (isToast) {
-                    mainHandler.post {
-                        Toast.makeText(ctx, ctx.getString(io.github.gracethings.appoops.R.string.toast_blocked_single, appName, opReadableName), Toast.LENGTH_SHORT).show()
-                    }
-                }
-                if (isNotif) {
-                    AppOpsMonitorService.updateNotification(ctx, resolvedPackage, appName, opReadableName, 1, op, uid)
-                }
+        val count = synchronized(debounceMap) {
+            val existing = debounceMap[key]
+            if (existing == null || now - existing.lastTime > 3000) {
+                debounceMap[key] = DebouncedEvent(count = 1, lastTime = now)
+                1
+            } else {
+                existing.count++
+                existing.lastTime = now
+                existing.count
             }
-            AuditRepository.record(resolvedPackage, appName, op, opReadableName, now, 1, mode)
-        } else {
-            // 3秒内高频调用：合并计数
-            existing.count++
-            existing.lastTime = now
-            if (alertEnabled) {
-                if (isToast) {
-                    mainHandler.post {
-                        Toast.makeText(ctx, ctx.getString(io.github.gracethings.appoops.R.string.toast_blocked_multi, appName, opReadableName, existing.count), Toast.LENGTH_SHORT).show()
-                    }
-                }
-                if (isNotif) {
-                    AppOpsMonitorService.updateNotification(ctx, resolvedPackage, appName, opReadableName, existing.count, op, uid)
-                }
-            }
-            AuditRepository.record(resolvedPackage, appName, op, opReadableName, now, 1, mode)
         }
+
+        if (AlertPreferences.isAlertEnabled.value) {
+            if (AlertPreferences.isToastEnabled.value) {
+                val toastText = if (count == 1) {
+                    ctx.getString(R.string.toast_blocked_single, appName, opReadableName)
+                } else {
+                    ctx.getString(R.string.toast_blocked_multi, appName, opReadableName, count)
+                }
+                mainHandler.post {
+                    Toast.makeText(ctx, toastText, Toast.LENGTH_SHORT).show()
+                }
+            }
+            if (AlertPreferences.isNotificationEnabled.value) {
+                AppOpsMonitorService.updateNotification(
+                    context = ctx,
+                    packageName = resolvedPackage,
+                    appName = appName,
+                    opName = opReadableName,
+                    count = count,
+                    op = op,
+                    uid = uid
+                )
+            }
+        }
+
+        AuditRepository.record(resolvedPackage, appName, op, opReadableName, now, 1, mode)
     }
 }
-

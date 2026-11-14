@@ -52,6 +52,7 @@ import io.github.gracethings.appoops.data.preference.SubscriptionPreferences
 import io.github.gracethings.appoops.data.repository.AppRepository
 import io.github.gracethings.appoops.data.repository.CommunityRuleRepository
 import io.github.gracethings.appoops.data.shizuku.ShizukuManager
+import io.github.gracethings.appoops.ui.components.AppIcon
 import io.github.gracethings.appoops.ui.components.ContributeRuleDialog
 import io.github.gracethings.appoops.util.AppOpsConstants
 import kotlinx.coroutines.launch
@@ -533,34 +534,14 @@ private fun CommunityAppGroupCard(
                 .padding(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val iconBitmap = group.installedAppItem.let { item ->
-                item.iconBitmap ?: item.icon?.let {
-                    runCatching { it.toBitmap(96, 96).asImageBitmap() }.getOrNull()
-                }
-            }
-            if (iconBitmap != null) {
-                Image(
-                    bitmap = iconBitmap,
-                    contentDescription = group.displayAppName,
-                    modifier = Modifier
-                        .size(46.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .size(46.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(MaterialTheme.colorScheme.primaryContainer),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Android,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
-            }
+            AppIcon(
+                packageName = group.packageName,
+                contentDescription = group.displayAppName,
+                initialBitmap = group.installedAppItem.iconBitmap,
+                initialDrawable = group.installedAppItem.icon,
+                size = 46.dp,
+                cornerRadius = 12.dp
+            )
 
             Spacer(modifier = Modifier.width(12.dp))
 

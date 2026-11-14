@@ -22,15 +22,25 @@ import io.github.gracethings.appoops.R
 import io.github.gracethings.appoops.data.preference.AlertPreferences
 import io.github.gracethings.appoops.data.shizuku.AppOpsNotedWatcher
 import io.github.gracethings.appoops.data.shizuku.ShizukuManager
+import io.github.gracethings.appoops.data.shizuku.ShizukuState
 import io.github.gracethings.appoops.receiver.TempAllowReceiver
 import io.github.gracethings.appoops.util.AppLogger
 import io.github.gracethings.appoops.util.AppOpsConstants
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class AppOpsMonitorService : Service {
     constructor() : super()
+
+    private val serviceScope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
+    private var shizukuObserverJob: Job? = null
 
     companion object {
         const val FOREGROUND_CHANNEL_ID = "appops_monitor_channel_v1"
@@ -39,6 +49,8 @@ class AppOpsMonitorService : Service {
 
         const val FOREGROUND_NOTIFICATION_ID = 2001
         const val ALERT_NOTIFICATION_ID = 2002
+        private const val ALERT_NOTIFICATION_ID_BASE = 2100
+        private const val ALERT_GROUP_KEY = "appops_interception_alerts"
 
         const val ACTION_START = "io.github.gracethings.appoops.service.ACTION_START"
         const val ACTION_STOP = "io.github.gracethings.appoops.service.ACTION_STOP"
@@ -47,6 +59,11 @@ class AppOpsMonitorService : Service {
 
         private val _isRunning = MutableStateFlow(false)
         val isRunning: StateFlow<Boolean> = _isRunning.asStateFlow()
+
+        fun getAlertNotificationId(packageName: String, op: Int): Int {
+            val hash = ((packageName.hashCode() * 31) + op) and 0x7FFFFFFF
+            return ALERT_NOTIFICATION_ID_BASE + (hash % 1000)
+        }
 
         fun startService(context: Context) {
             val intent = Intent(context, AppOpsMonitorService::class.java).apply {
@@ -136,6 +153,8 @@ class AppOpsMonitorService : Service {
                 return
             }
 
+            val notifId = getAlertNotificationId(packageName, op)
+
             // Inspect action (opens app detail)
             val inspectIntent = Intent(context, MainActivity::class.java).apply {
                 action = ACTION_INSPECT
@@ -144,7 +163,7 @@ class AppOpsMonitorService : Service {
             }
             val inspectPendingIntent = PendingIntent.getActivity(
                 context,
-                1002,
+                notifId * 10 + 1,
                 inspectIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
@@ -164,11 +183,11 @@ class AppOpsMonitorService : Service {
                     putExtra(TempAllowReceiver.EXTRA_UID, uid)
                     putExtra(TempAllowReceiver.EXTRA_OP, op)
                     putExtra(TempAllowReceiver.EXTRA_DURATION, duration)
-                    putExtra(TempAllowReceiver.EXTRA_NOTIFICATION_ID, ALERT_NOTIFICATION_ID)
+                    putExtra(TempAllowReceiver.EXTRA_NOTIFICATION_ID, notifId)
                 }
                 PendingIntent.getBroadcast(
                     context,
-                    1003,
+                    notifId * 10 + 2,
                     tempAllowIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
@@ -177,22 +196,27 @@ class AppOpsMonitorService : Service {
             // Dismiss pending intent
             val dismissIntent = Intent(context, TempAllowReceiver::class.java).apply {
                 action = TempAllowReceiver.ACTION_DISMISS_NOTIFICATION
-                putExtra(TempAllowReceiver.EXTRA_NOTIFICATION_ID, ALERT_NOTIFICATION_ID)
+                putExtra(TempAllowReceiver.EXTRA_PACKAGE, packageName)
+                putExtra(TempAllowReceiver.EXTRA_OP, op)
+                putExtra(TempAllowReceiver.EXTRA_NOTIFICATION_ID, notifId)
             }
             val dismissPending = PendingIntent.getBroadcast(
                 context,
-                1004,
+                notifId * 10 + 3,
                 dismissIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
             val useLive = forceLive ?: AlertPreferences.isLiveUpdatesActive()
+            val onlyAlertOnce = count > 1
 
             if (useLive) {
                 // Live Updates Mode: post promoted ongoing notification (status bar pill only)
                 postLiveAlertNotification(
                     context = context,
+                    notificationId = notifId,
                     text = text,
+                    onlyAlertOnce = onlyAlertOnce,
                     inspectPending = inspectPendingIntent,
                     tempAllowPending = tempAllowPending,
                     dismissPending = dismissPending
@@ -201,7 +225,9 @@ class AppOpsMonitorService : Service {
                 // Standard notification without "实时更新"
                 postStandardAlertNotification(
                     context = context,
+                    notificationId = notifId,
                     text = text,
+                    onlyAlertOnce = onlyAlertOnce,
                     inspectPending = inspectPendingIntent,
                     tempAllowPending = tempAllowPending,
                     dismissPending = dismissPending
@@ -211,7 +237,9 @@ class AppOpsMonitorService : Service {
 
         private fun postStandardAlertNotification(
             context: Context,
+            notificationId: Int,
             text: String,
+            onlyAlertOnce: Boolean,
             inspectPending: PendingIntent,
             tempAllowPending: PendingIntent?,
             dismissPending: PendingIntent
@@ -222,9 +250,10 @@ class AppOpsMonitorService : Service {
                 .setContentTitle(context.getString(R.string.monitor_notif_toast_mode_title))
                 .setContentText(text)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(text))
+                .setGroup(ALERT_GROUP_KEY)
                 .setOngoing(false)
                 .setAutoCancel(true)
-                .setOnlyAlertOnce(true)
+                .setOnlyAlertOnce(onlyAlertOnce)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(inspectPending)
                 .addAction(
@@ -249,7 +278,7 @@ class AppOpsMonitorService : Service {
             )
 
             try {
-                nm.notify(ALERT_NOTIFICATION_ID, builder.build())
+                nm.notify(notificationId, builder.build())
             } catch (e: Throwable) {
                 AppLogger.w("Failed to post standard alert notification", e)
             }
@@ -257,7 +286,9 @@ class AppOpsMonitorService : Service {
 
         private fun postLiveAlertNotification(
             context: Context,
+            notificationId: Int,
             text: String,
+            onlyAlertOnce: Boolean,
             inspectPending: PendingIntent,
             tempAllowPending: PendingIntent?,
             dismissPending: PendingIntent
@@ -278,9 +309,10 @@ class AppOpsMonitorService : Service {
                         .setSubText(context.getString(R.string.live_update_subtext))
                         .setContentText(text)
                         .setStyle(progressStyle)
+                        .setGroup(ALERT_GROUP_KEY)
                         .setOngoing(true)
                         .setShortCriticalText(shortCritical)
-                        .setOnlyAlertOnce(true)
+                        .setOnlyAlertOnce(onlyAlertOnce)
                         .setContentIntent(inspectPending)
                         .addAction(
                             Notification.Action.Builder(
@@ -318,7 +350,7 @@ class AppOpsMonitorService : Service {
                     val notif = nativeBuilder.build()
                     notif.flags = notif.flags or Notification.FLAG_PROMOTED_ONGOING
                     AppLogger.i("postLiveAlertNotification (Android 16): hasPromotableCharacteristics=${notif.hasPromotableCharacteristics()}")
-                    nm.notify(ALERT_NOTIFICATION_ID, notif)
+                    nm.notify(notificationId, notif)
                     return
                 } catch (e: Throwable) {
                     AppLogger.w("Failed to post live alert notification (Android 16), falling back to compat", e)
@@ -331,7 +363,9 @@ class AppOpsMonitorService : Service {
                 .setContentTitle(context.getString(R.string.monitor_notif_live_title))
                 .setSubText(context.getString(R.string.live_update_subtext))
                 .setContentText(text)
+                .setGroup(ALERT_GROUP_KEY)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setOnlyAlertOnce(onlyAlertOnce)
                 .setOngoing(true)
                 .setContentIntent(inspectPending)
                 .addAction(0, context.getString(R.string.monitor_notif_action_inspect), inspectPending)
@@ -352,7 +386,7 @@ class AppOpsMonitorService : Service {
             )
 
             try {
-                nm.notify(ALERT_NOTIFICATION_ID, builder.build())
+                nm.notify(notificationId, builder.build())
             } catch (e: Throwable) {
                 AppLogger.w("Failed to post fallback live notification", e)
             }
@@ -407,7 +441,8 @@ class AppOpsMonitorService : Service {
             remainingSeconds: Int,
             totalSeconds: Int,
             op: Int,
-            uid: Int
+            uid: Int,
+            notificationId: Int = getAlertNotificationId(packageName, op)
         ) {
             ensureNotificationChannels(context)
             val nm = NotificationManagerCompat.from(context)
@@ -418,11 +453,13 @@ class AppOpsMonitorService : Service {
 
             val dismissIntent = Intent(context, TempAllowReceiver::class.java).apply {
                 action = TempAllowReceiver.ACTION_DISMISS_NOTIFICATION
-                putExtra(TempAllowReceiver.EXTRA_NOTIFICATION_ID, ALERT_NOTIFICATION_ID)
+                putExtra(TempAllowReceiver.EXTRA_PACKAGE, packageName)
+                putExtra(TempAllowReceiver.EXTRA_OP, op)
+                putExtra(TempAllowReceiver.EXTRA_NOTIFICATION_ID, notificationId)
             }
             val dismissPending = PendingIntent.getBroadcast(
                 context,
-                1004,
+                notificationId * 10 + 3,
                 dismissIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
@@ -434,7 +471,7 @@ class AppOpsMonitorService : Service {
             }
             val inspectPending = PendingIntent.getActivity(
                 context,
-                1002,
+                notificationId * 10 + 1,
                 inspectIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
@@ -453,6 +490,7 @@ class AppOpsMonitorService : Service {
                         .setSubText(context.getString(R.string.live_update_subtext))
                         .setContentText(text)
                         .setStyle(progressStyle)
+                        .setGroup(ALERT_GROUP_KEY)
                         .setOngoing(true)
                         .setShortCriticalText("${remainingSeconds}s")
                         .setOnlyAlertOnce(true)
@@ -473,7 +511,7 @@ class AppOpsMonitorService : Service {
 
                     val notif = nativeBuilder.build()
                     notif.flags = notif.flags or Notification.FLAG_PROMOTED_ONGOING
-                    nm.notify(ALERT_NOTIFICATION_ID, notif)
+                    nm.notify(notificationId, notif)
                     return
                 } catch (e: Throwable) {
                     AppLogger.w("Failed to notify countdown (Android 16), falling back to compat", e)
@@ -484,14 +522,16 @@ class AppOpsMonitorService : Service {
                 .setSmallIcon(R.drawable.ic_notification_shield)
                 .setContentTitle(context.getString(R.string.monitor_notif_live_title))
                 .setContentText(text)
+                .setGroup(ALERT_GROUP_KEY)
                 .setProgress(100, progressPercent, false)
                 .setOngoing(true)
+                .setOnlyAlertOnce(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(inspectPending)
                 .addAction(0, context.getString(R.string.monitor_notif_action_close), dismissPending)
 
             try {
-                nm.notify(ALERT_NOTIFICATION_ID, builder.build())
+                nm.notify(notificationId, builder.build())
             } catch (e: Throwable) {
                 AppLogger.w("Failed to notify countdown", e)
             }
@@ -501,6 +541,15 @@ class AppOpsMonitorService : Service {
     override fun onCreate() {
         super.onCreate()
         ensureNotificationChannels(this)
+        shizukuObserverJob = serviceScope.launch {
+            ShizukuManager.status.collect { status ->
+                if (_isRunning.value && status == ShizukuState.AUTHORIZED) {
+                    startWatching()
+                } else if (status == ShizukuState.DEAD || status == ShizukuState.NOT_RUNNING) {
+                    AppOpsNotedWatcher.reset()
+                }
+            }
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -524,20 +573,7 @@ class AppOpsMonitorService : Service {
 
     private fun startWatching() {
         try {
-            val targetOps = intArrayOf(
-                AppOpsConstants.OP_READ_CLIPBOARD,
-                AppOpsConstants.OP_WRITE_CLIPBOARD,
-                AppOpsConstants.OP_BODY_SENSORS,
-                AppOpsConstants.OP_BODY_SENSORS_BACKGROUND,
-                AppOpsConstants.OP_HIGH_SAMPLING_RATE_SENSORS,
-                AppOpsConstants.OP_ACTIVITY_RECOGNITION,
-                AppOpsConstants.OP_QUERY_ALL_PACKAGES,
-                AppOpsConstants.OP_GET_USAGE_STATS,
-                AppOpsConstants.OP_RUN_IN_BACKGROUND,
-                AppOpsConstants.OP_WAKE_LOCK,
-                AppOpsConstants.OP_SYSTEM_ALERT_WINDOW
-            )
-            AppOpsNotedWatcher.startWatching(targetOps)
+            AppOpsNotedWatcher.startWatching(AppOpsConstants.allManagedOps)
         } catch (e: Throwable) {
             AppLogger.e("Failed to startWatching in service", e)
         }
@@ -572,10 +608,11 @@ class AppOpsMonitorService : Service {
 
     override fun onDestroy() {
         super.onDestroy()
+        shizukuObserverJob?.cancel()
+        serviceScope.cancel()
         stopWatching()
         _isRunning.value = false
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
 }
-

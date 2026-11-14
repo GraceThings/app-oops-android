@@ -6,26 +6,28 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.gracethings.appoops.R
-import io.github.gracethings.appoops.data.model.AppItem
 import io.github.gracethings.appoops.data.repository.AppRepository
 import io.github.gracethings.appoops.data.shizuku.ShizukuManager
 import io.github.gracethings.appoops.data.shizuku.ShizukuState
 import io.github.gracethings.appoops.ui.components.AppListItemCard
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 enum class AppFilter {
@@ -44,31 +46,62 @@ fun AppListScreen(
     val isLoading by AppRepository.isLoading.collectAsState()
     val isInitialLoadCompleted by AppRepository.isInitialLoadCompleted.collectAsState()
     val isEnriched by AppRepository.isEnriched.collectAsState()
+    val isPackagesDirty by AppRepository.isPackagesDirty.collectAsState()
     val shizukuStatus by ShizukuManager.status.collectAsState()
 
+    var isEntryReady by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf(AppFilter.ALL) }
+    val pullToRefreshState = rememberPullToRefreshState()
 
-    LaunchedEffect(isEnriched, shizukuStatus) {
-        if (apps.isEmpty() || (!isEnriched && shizukuStatus == ShizukuState.AUTHORIZED)) {
-            AppRepository.loadApps(context, forceRefresh = !isEnriched && apps.isNotEmpty())
+    // Show loading indicator first during screen entry animation, then run state checks and load apps
+    LaunchedEffect(Unit) {
+        delay(300L)
+        val currentApps = AppRepository.appsFlow.value
+        val needsLoad = currentApps.isEmpty() ||
+            AppRepository.isPackagesDirty.value ||
+            (!AppRepository.isEnriched.value && ShizukuManager.isAuthorized)
+        if (needsLoad) {
+            AppRepository.loadApps(
+                context = context,
+                forceRefresh = AppRepository.isPackagesDirty.value ||
+                    (!AppRepository.isEnriched.value && currentApps.isNotEmpty())
+            )
+        }
+        isEntryReady = true
+    }
+
+    // Handle subsequent Shizuku or package changes while already on this screen
+    LaunchedEffect(isEntryReady, isEnriched, shizukuStatus, isPackagesDirty) {
+        if (!isEntryReady) return@LaunchedEffect
+        if (apps.isEmpty() || isPackagesDirty || (!isEnriched && shizukuStatus == ShizukuState.AUTHORIZED)) {
+            AppRepository.loadApps(
+                context = context,
+                forceRefresh = isPackagesDirty || (!isEnriched && apps.isNotEmpty())
+            )
         }
     }
 
-    val filteredApps = remember(apps, searchQuery, selectedFilter) {
-        apps.filter { app ->
-            val matchSearch = searchQuery.isBlank() ||
-                    app.appName.contains(searchQuery, ignoreCase = true) ||
-                    app.packageName.contains(searchQuery, ignoreCase = true)
-            val matchFilter = when (selectedFilter) {
-                AppFilter.ALL -> true
-                AppFilter.SHAKE -> app.isShakeImmunized
-                AppFilter.CLIPBOARD -> app.isClipboardProtected
-                AppFilter.BACKGROUND -> app.isBgRestricted
-                AppFilter.USER_ONLY -> !app.isSystemApp
-                AppFilter.SYSTEM_ONLY -> app.isSystemApp
+    val showLoadingIndicator = !isEntryReady || !isInitialLoadCompleted || (apps.isEmpty() && isLoading)
+
+    val filteredApps = remember(showLoadingIndicator, apps, searchQuery, selectedFilter) {
+        if (showLoadingIndicator) {
+            emptyList()
+        } else {
+            apps.filter { app ->
+                val matchSearch = searchQuery.isBlank() ||
+                        app.appName.contains(searchQuery, ignoreCase = true) ||
+                        app.packageName.contains(searchQuery, ignoreCase = true)
+                val matchFilter = when (selectedFilter) {
+                    AppFilter.ALL -> true
+                    AppFilter.SHAKE -> app.isShakeImmunized
+                    AppFilter.CLIPBOARD -> app.isClipboardProtected
+                    AppFilter.BACKGROUND -> app.isBgRestricted
+                    AppFilter.USER_ONLY -> !app.isSystemApp
+                    AppFilter.SYSTEM_ONLY -> app.isSystemApp
+                }
+                matchSearch && matchFilter
             }
-            matchSearch && matchFilter
         }
     }
 
@@ -78,24 +111,14 @@ fun AppListScreen(
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         // Header
-        Row(
+        Text(
+            text = stringResource(R.string.apps),
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.ExtraBold,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = stringResource(R.string.apps),
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.ExtraBold,
-                modifier = Modifier.weight(1f)
-            )
-            IconButton(onClick = {
-                coroutineScope.launch { AppRepository.loadApps(context, forceRefresh = true) }
-            }) {
-                Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
-            }
-        }
+                .padding(vertical = 8.dp)
+        )
 
         // Search Bar
         OutlinedTextField(
@@ -163,18 +186,9 @@ fun AppListScreen(
                 label = { Text(stringResource(R.string.filter_system)) }
             )
         }
-        
-        // Background loading indicator when apps are already shown
-        if (isLoading && apps.isNotEmpty()) {
-            LinearWavyProgressIndicator(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            )
-        }
 
-        // App List Content
-        if (!isInitialLoadCompleted || (apps.isEmpty() && isLoading)) {
+        // App List Content with M3E LoadingIndicator & Pull-to-Refresh
+        if (showLoadingIndicator) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -193,33 +207,51 @@ fun AppListScreen(
                     )
                 }
             }
-        } else if (filteredApps.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(32.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.no_apps_found),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
         } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                items(filteredApps, key = { it.packageName }) { app ->
-                    AppListItemCard(
-                        app = app,
-                        onClick = { onNavigateToDetail(app.packageName, app.uid) }
+            PullToRefreshBox(
+                isRefreshing = isLoading,
+                onRefresh = {
+                    coroutineScope.launch { AppRepository.loadApps(context, forceRefresh = true) }
+                },
+                state = pullToRefreshState,
+                indicator = {
+                    PullToRefreshDefaults.LoadingIndicator(
+                        state = pullToRefreshState,
+                        isRefreshing = isLoading,
+                        modifier = Modifier.align(Alignment.TopCenter)
                     )
+                },
+                modifier = Modifier.fillMaxSize()
+            ) {
+                if (filteredApps.isEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                            .padding(32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.no_apps_found),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(vertical = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        items(filteredApps, key = { it.packageName }) { app ->
+                            AppListItemCard(
+                                app = app,
+                                onClick = { onNavigateToDetail(app.packageName, app.uid) }
+                            )
+                        }
+                    }
                 }
             }
         }
     }
 }
-

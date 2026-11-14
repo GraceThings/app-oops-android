@@ -16,6 +16,23 @@ object AppOpsBinderEngine {
     private var checkOpMethod: Method? = null
     private var startWatchingNotedMethod: Method? = null
     private var stopWatchingNotedMethod: Method? = null
+    private var startWatchingStartedMethod: Method? = null
+    private var stopWatchingStartedMethod: Method? = null
+
+    @Synchronized
+    fun reset() {
+        serviceInstance = null
+        setModeMethod = null
+        setUidModeMethod = null
+        getOpsForPackageMethod = null
+        getPackagesForOpsMethod = null
+        unsafeCheckOpRawMethod = null
+        checkOpMethod = null
+        startWatchingNotedMethod = null
+        stopWatchingNotedMethod = null
+        startWatchingStartedMethod = null
+        stopWatchingStartedMethod = null
+    }
 
     @Synchronized
     private fun ensureService(): Any {
@@ -43,6 +60,8 @@ object AppOpsBinderEngine {
         checkOpMethod = sClass.methods.firstOrNull { it.name == "checkOperation" && it.parameterTypes.size >= 3 }
         startWatchingNotedMethod = sClass.methods.firstOrNull { it.name == "startWatchingNoted" }
         stopWatchingNotedMethod = sClass.methods.firstOrNull { it.name == "stopWatchingNoted" }
+        startWatchingStartedMethod = sClass.methods.firstOrNull { it.name == "startWatchingStarted" }
+        stopWatchingStartedMethod = sClass.methods.firstOrNull { it.name == "stopWatchingStarted" }
 
         return s
     }
@@ -174,5 +193,28 @@ object AppOpsBinderEngine {
             false
         }
     }
-}
 
+    fun startWatchingStarted(ops: IntArray, callbackBinder: AppOpsStartedCallbackBinder): Boolean {
+        return try {
+            val s = ensureService()
+            val m = startWatchingStartedMethod ?: return false
+            m.invoke(s, ops, callbackBinder.proxy)
+            true
+        } catch (e: Throwable) {
+            AppLogger.w("Failed to invoke startWatchingStarted", e)
+            false
+        }
+    }
+
+    fun stopWatchingStarted(callbackBinder: AppOpsStartedCallbackBinder): Boolean {
+        return try {
+            val s = ensureService()
+            val m = stopWatchingStartedMethod ?: return false
+            m.invoke(s, callbackBinder.proxy)
+            true
+        } catch (e: Throwable) {
+            AppLogger.w("Failed to invoke stopWatchingStarted", e)
+            false
+        }
+    }
+}

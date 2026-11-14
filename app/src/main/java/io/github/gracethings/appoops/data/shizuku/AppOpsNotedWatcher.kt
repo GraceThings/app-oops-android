@@ -1,4 +1,4 @@
-﻿package io.github.gracethings.appoops.data.shizuku
+package io.github.gracethings.appoops.data.shizuku
 
 import io.github.gracethings.appoops.data.model.OpMode
 import io.github.gracethings.appoops.service.InterceptionEventManager
@@ -6,48 +6,71 @@ import io.github.gracethings.appoops.util.AppLogger
 
 object AppOpsNotedWatcher {
     private var isWatching = false
-    private var callbackBinder: AppOpsNotedCallbackBinder? = null
+    private var notedBinder: AppOpsNotedCallbackBinder? = null
+    private var startedBinder: AppOpsStartedCallbackBinder? = null
 
     fun startWatching(opsToWatch: IntArray) {
         if (isWatching) return
         try {
-            val binder = AppOpsNotedCallbackBinder { op, uid, packageName, mode ->
-                if (uid < android.os.Process.FIRST_APPLICATION_UID) {
-                    return@AppOpsNotedCallbackBinder
-                }
-                // mode == 1 is MODE_IGNORED, mode == 2 is MODE_ERRORED (Deny)
-                if (mode == 1 || mode == 2) {
-                    AppLogger.d("opNoted blocked: op=$op, uid=$uid, pkg=$packageName, mode=$mode")
-                    InterceptionEventManager.onIntercepted(op, uid, packageName, OpMode.fromValue(mode))
-                }
+            val nBinder = AppOpsNotedCallbackBinder { op, uid, packageName, mode ->
+                handleInterceptedCallback(op, uid, packageName, mode, source = "opNoted")
             }
-            val success = AppOpsBinderEngine.startWatchingNoted(opsToWatch, binder)
-            if (success) {
-                callbackBinder = binder
+            val sBinder = AppOpsStartedCallbackBinder { op, uid, packageName, mode ->
+                handleInterceptedCallback(op, uid, packageName, mode, source = "opStarted")
+            }
+
+            val notedSuccess = AppOpsBinderEngine.startWatchingNoted(opsToWatch, nBinder)
+            val startedSuccess = AppOpsBinderEngine.startWatchingStarted(opsToWatch, sBinder)
+
+            if (notedSuccess || startedSuccess) {
+                notedBinder = if (notedSuccess) nBinder else null
+                startedBinder = if (startedSuccess) sBinder else null
                 isWatching = true
-                AppLogger.i("AppOpsNotedWatcher successfully registered for ${opsToWatch.size} ops")
+                AppLogger.i("AppOpsWatcher registered for ${opsToWatch.size} ops (noted=$notedSuccess, started=$startedSuccess)")
             } else {
-                AppLogger.w("AppOpsNotedWatcher startWatchingNoted returned false")
+                AppLogger.w("AppOpsWatcher failed to register both noted and started callbacks")
             }
         } catch (e: Throwable) {
-            AppLogger.e("Failed to start watching noted ops", e)
+            AppLogger.e("Failed to start watching ops", e)
+        }
+    }
+
+    private fun handleInterceptedCallback(
+        op: Int,
+        uid: Int,
+        packageName: String,
+        mode: Int,
+        source: String
+    ) {
+        if (uid < android.os.Process.FIRST_APPLICATION_UID) {
+            return
+        }
+        // mode == 1 is MODE_IGNORED, mode == 2 is MODE_ERRORED (Deny)
+        if (mode == 1 || mode == 2) {
+            AppLogger.d("$source blocked: op=$op, uid=$uid, pkg=$packageName, mode=$mode")
+            InterceptionEventManager.onIntercepted(op, uid, packageName, OpMode.fromValue(mode))
         }
     }
 
     fun stopWatching() {
         if (!isWatching) return
         try {
-            callbackBinder?.let {
-                AppOpsBinderEngine.stopWatchingNoted(it)
-            }
-            callbackBinder = null
+            notedBinder?.let { AppOpsBinderEngine.stopWatchingNoted(it) }
+            startedBinder?.let { AppOpsBinderEngine.stopWatchingStarted(it) }
+            notedBinder = null
+            startedBinder = null
             isWatching = false
             AppLogger.i("AppOpsNotedWatcher stopped")
         } catch (e: Throwable) {
-            AppLogger.w("Failed to stop watching noted ops", e)
+            AppLogger.w("Failed to stop watching ops", e)
         }
+    }
+
+    fun reset() {
+        notedBinder = null
+        startedBinder = null
+        isWatching = false
     }
 
     val isRunning: Boolean get() = isWatching
 }
-

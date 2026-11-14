@@ -1,0 +1,285 @@
+<resources>
+    <string name="app_name">App Oops</string>
+    <string name="dashboard">儀表板</string>
+    <string name="apps">應用程式</string>
+    <string name="batch_rules">規則</string>
+    <string name="audit_log">攔截日誌</string>
+    <string name="settings">設定</string>
+
+    <!-- Shizuku 狀態 -->
+    <string name="shizuku_authorized">Shizuku 已連接</string>
+    <string name="shizuku_authorized_desc">特權 Shell UID: 2000 運行中</string>
+    <string name="shizuku_needs_permission">等待 Shizuku 授權</string>
+    <string name="shizuku_needs_permission_desc">點擊下方按鈕授權特權存取</string>
+    <string name="shizuku_not_running">Shizuku 未運行</string>
+    <string name="shizuku_not_running_desc">請透過無線偵錯或 Root 啟動 Shizuku 服務</string>
+    <string name="shizuku_btn_grant">授權存取</string>
+    <string name="shizuku_btn_refresh">重新整理</string>
+
+    <!-- 實時監聽守護服務與通知 -->
+    <string name="monitor_service_title">實時攔截守護服務</string>
+    <string name="monitor_service_running">正在背景實時監控並攔截敏感行為</string>
+    <string name="monitor_service_stopped">守護服務已停止</string>
+    <string name="monitor_notif_channel">App Oops 守護服務</string>
+    <string name="monitor_notif_channel_desc">背景實時監控 AppOps 敏感權限攔截</string>
+    <string name="monitor_notif_toast_channel">攔截提醒</string>
+    <string name="monitor_notif_live_channel">實時更新攔截提醒</string>
+    <string name="monitor_notif_initial_title">App Oops 實時守護中</string>
+    <string name="monitor_notif_initial_text">正在攔截用戶設定的權限</string>
+    <string name="monitor_notif_live_title">App Oops 實時更新</string>
+    <string name="monitor_notif_toast_mode_title">App Oops 攔截提醒</string>
+    <string name="monitor_notif_blocked_single">已阻止【%1$s】%2$s</string>
+    <string name="monitor_notif_blocked_multi">已阻止【%1$s】%2$s (累計 %3$d 次)</string>
+    <string name="monitor_notif_action_inspect">檢查權限</string>
+    <string name="toast_blocked_single">🛡️ App Oops: 已攔截【%1$s】%2$s</string>
+    <string name="toast_blocked_multi">🛡️ App Oops: 已攔截【%1$s】%2$s (累計 %3$d 次)</string>
+
+    <!-- 分類 -->
+    <string name="category_sensor">感應器與動態識別</string>
+    <string name="category_privacy">剪貼簿與私隱防追蹤</string>
+    <string name="category_background">背景抑制與流暢保護</string>
+    <string name="category_system">系統防護與防滋擾</string>
+
+    <!-- 模式 -->
+    <string name="mode_allow">允許</string>
+    <string name="mode_ignore">忽略（推薦）</string>
+    <string name="mode_deny">拒絕</string>
+    <string name="mode_default">預設</string>
+
+    <!-- 儀表板 -->
+    <string name="latest_intercept_title">最新實時攔截</string>
+    <string name="latest_intercept_format">已阻止【%1$s】%2$s（%3$d 次）</string>
+    <string name="view_log">檢視日誌</string>
+    <string name="metric_shake_blocked">感應器受限</string>
+    <string name="metric_clipboard_protected">剪貼簿已保護</string>
+    <string name="metric_bg_frozen">背景已限制</string>
+    <string name="metric_intercept_count">累計攔截</string>
+
+    <!-- 應用程式列表篩選與徽章 -->
+    <string name="search_placeholder">搜尋應用程式名稱或套件名稱...</string>
+    <string name="filter_all">全部 (%1$d)</string>
+    <string name="filter_user">用戶應用</string>
+    <string name="filter_sensor_disabled">已停用加速計／陀螺儀</string>
+    <string name="filter_clipboard_protected">剪貼簿已保護</string>
+    <string name="filter_background_restricted">背景已限制</string>
+    <string name="filter_system">系統應用</string>
+    <string name="no_apps_found">找不到符合條件的應用程式</string>
+    <string name="badge_sensor_disabled">已停用加速計／陀螺儀</string>
+    <string name="badge_clipboard_protected">剪貼簿保護</string>
+    <string name="badge_bg_restricted">背景受限</string>
+    <string name="badge_system">系統</string>
+
+    <!-- 應用程式詳情 -->
+    <string name="app_type_user">用戶應用</string>
+    <string name="app_type_system">系統應用</string>
+    <string name="app_uid_format">UID: %1$d • %2$s</string>
+    <string name="quick_recommendations">一鍵防護建議</string>
+    <string name="immunize_shake_btn">停用感應器</string>
+    <string name="shield_clipboard_btn">保護剪貼簿</string>
+    <string name="reset_default_btn">重設為預設</string>
+    <string name="apply_btn">套用已選</string>
+    <string name="toast_applied_sensors">已套用「停用加速計／陀螺儀」</string>
+    <string name="toast_applied_clipboard">已套用「剪貼簿防護」</string>
+    <string name="toast_applied_reset">已還原為系統預設</string>
+    <string name="toast_set_failed">設定失敗: %1$s</string>
+
+    <!-- 規則與批量預設 -->
+    <string name="batch_desc">使用內建批量預設範本，或訂閱社群規則一鍵套用指定應用程式策略。</string>
+    <string name="rules_community_title">社群規則</string>
+    <string name="rules_community_desc">訂閱 GraceThings/app-oops-rules 或第三方規則庫，獲取、套用及貢獻各應用程式的精細規則。</string>
+    <string name="rules_community_status">已訂閱 %1$d 個倉庫 • 共 %2$d 條規則</string>
+    <string name="rules_community_empty_hint">尚未加入訂閱 — 點擊進入以新增規則來源</string>
+    <string name="rules_community_btn">探索社群規則</string>
+    <string name="rules_presets_header">內建批量範本</string>
+    <string name="suite_sensor_title">停用加速計／陀螺儀感應器權限</string>
+    <string name="suite_sensor_desc">封鎖加速計與陀螺儀感應器（設為 IGNORE），從底層杜絕未經授權的動態與移動偵測</string>
+    <string name="suite_clipboard_title">攔截讀寫剪貼簿</string>
+    <string name="suite_clipboard_desc">攔截讀取及寫入剪貼簿，防止第三方應用程式窺探或私自篡改內容</string>
+    <string name="suite_read_clipboard_title">攔截讀取剪貼簿</string>
+    <string name="suite_read_clipboard_desc">攔截讀取剪貼簿（設為 IGNORE），防止第三方應用程式於背景偷看剪貼簿敏感資訊</string>
+    <string name="suite_write_clipboard_title">攔截寫入剪貼簿</string>
+    <string name="suite_write_clipboard_desc">攔截寫入剪貼簿（設為 IGNORE），防止惡意應用程式隨意覆寫剪貼簿</string>
+    <string name="suite_query_usage_title">禁止讀取應用列表及使用情況統計</string>
+    <string name="suite_query_usage_desc">攔截已安裝應用程式掃描及使用情況統計，切斷跨應用裝置畫像追蹤</string>
+    <string name="suite_background_title">背景限制</string>
+    <string name="suite_background_desc">限制背景運行及 CPU 喚醒鎖，並攔截開機廣播自啟，退至背景即徹底掛起</string>
+    <string name="btn_apply_to_selected">一鍵套用至已選應用程式</string>
+
+    <!-- 批量多選頁 -->
+    <string name="select_apps_title">選擇應用程式</string>
+    <string name="apply_to_selected_fab">套用至已選 (%1$d)</string>
+    <string name="batch_processing_title">正在批量套用策略...</string>
+    <string name="batch_processing_msg">正在處理: %1$s (%2$d/%3$d)</string>
+    <string name="batch_success_toast">已成功為 %2$d 個應用程式套用【%1$s】</string>
+    <string name="select_at_least_one">請至少勾選一個應用程式</string>
+    <string name="select_all_current">全選目前 (%1$d)</string>
+    <string name="deselect_all">取消全選</string>
+    <string name="select_only_user">僅第三方應用</string>
+    <string name="selected_count_hint">已勾選 %1$d 個應用程式，點擊下方按鈕即可批量套用規則</string>
+
+    <!-- 審計日誌 -->
+    <string name="audit_empty">暫無攔截紀錄\n當受控應用程式嘗試偷讀剪貼簿或存取感應器時將會自動紀錄</string>
+    <string name="audit_empty_desc">當應用程式觸發受保護權限時，攔截事件將會紀錄於此</string>
+    <string name="audit_total_intercepts">累計安全攔截 %1$d 次</string>
+    <string name="audit_total_intercepts_desc">底層靜默攔截所有被設為 IGNORE 的偷讀與受限權限存取請求</string>
+    <string name="audit_blocked_badge">已阻止</string>
+    <string name="audit_times_badge">x%1$d 次</string>
+    <string name="audit_clear">清除日誌</string>
+    <string name="audit_clear_confirm">確認清除所有攔截日誌？</string>
+    <string name="audit_dialog_confirm">清除</string>
+    <string name="audit_dialog_cancel">取消</string>
+    <string name="audit_permission_format">權限: %1$s (%2$s)</string>
+    <string name="audit_count_format">%1$d 次</string>
+
+    <!-- 敏感權限詳細說明 -->
+    <string name="op_body_sensors_title">動態與身體感應器</string>
+    <string name="op_body_sensors_desc">設為 IGNORE 從底層靜默攔截加速計等感應器存取</string>
+    <string name="op_high_sampling_sensors_title">高取樣率動態感應器</string>
+    <string name="op_high_sampling_sensors_desc">限制陀螺儀及加速計超高頻更新率，防止細微晃動與高頻狀態偵測</string>
+    <string name="op_body_sensors_bg_title">背景動態感應器</string>
+    <string name="op_body_sensors_bg_desc">禁止退到背景後繼續讀取動態狀態</string>
+    <string name="op_activity_rec_title">健身與活動識別</string>
+    <string name="op_activity_rec_desc">防止應用程式偵測步行、跑步或手機晃動狀態</string>
+    <string name="op_read_clipboard_title">讀取剪貼簿</string>
+    <string name="op_read_clipboard_desc">設為 IGNORE 後應用程式讀取剪貼簿將傳回空內容，徹底杜絕偷窺</string>
+    <string name="op_write_clipboard_title">寫入剪貼簿</string>
+    <string name="op_write_clipboard_desc">禁止流氓 SDK 在背景靜默覆寫用戶目前的剪貼簿內容</string>
+    <string name="op_query_packages_title">讀取已安裝應用程式列表</string>
+    <string name="op_query_packages_desc">設為 IGNORE 切斷裝置畫像追蹤，禁止掃描銀行、遊戲或競爭對手應用</string>
+    <string name="op_usage_stats_title">使用情況統計</string>
+    <string name="op_usage_stats_desc">移除應用程式窺探你目前正在使用甚麼其他應用程式的能力</string>
+    <string name="op_run_in_bg_title">背景運行權限</string>
+    <string name="op_run_in_bg_desc">退到背景立即掛起凍結，杜絕隱蔽保活消耗電量與數據</string>
+    <string name="op_wake_lock_title">保持喚醒鎖 (WakeLock)</string>
+    <string name="op_wake_lock_desc">撤銷持有 CPU 喚醒鎖的能力，防止發熱與暗中耗電</string>
+    <string name="op_system_alert_title">顯示於其他應用程式上層（懸浮窗）</string>
+    <string name="op_system_alert_desc">徹底關閉流氓彈窗並防範透明點擊劫持 (Clickjacking)</string>
+    <string name="op_write_settings_title">修改系統設定</string>
+    <string name="op_write_settings_desc">防止未經許可篡改系統音量、亮度、螢幕常亮或網絡設定</string>
+    <string name="op_access_notif_title">全域通知監聽</string>
+    <string name="op_access_notif_desc">審查並阻斷偷讀系統通知欄訊息（防止盜取短訊驗證碼）</string>
+    <string name="op_run_any_in_bg_title">任意背景活動</string>
+    <string name="op_boot_completed_title">開機自動啟動</string>
+
+    <!-- 設定 -->
+    <string name="setting_alert_title">攔截成功提示</string>
+    <string name="setting_alert_on_desc">敏感權限被攔截時向用戶發出提示</string>
+    <string name="setting_alert_off_desc">已關閉提示（僅紀錄於審計日誌）</string>
+    <string name="setting_alert_toast">Toast 提示</string>
+    <string name="setting_alert_toast_desc">攔截敏感權限時彈出 Toast 氣泡提醒</string>
+    <string name="setting_alert_notification">通知提醒</string>
+    <string name="setting_alert_notification_desc">於系統通知欄發送攔截提醒通知</string>
+    <string name="setting_alert_live_notification">實時更新 (Android 16+)</string>
+    <string name="setting_alert_live_desc_supported">於狀態欄膠囊及鎖定畫面顯示實時動態更新</string>
+    <string name="setting_alert_live_desc_unsupported">裝置系統低於 Android 16，無法開啟此功能</string>
+    <string name="test_alert_no_method_enabled">未開啟任何提示形式（Toast 與通知均已關閉）</string>
+    <string name="setting_theme_title">外觀主題</string>
+    <string name="setting_theme_system">跟隨系統</string>
+    <string name="setting_theme_light">淺色模式</string>
+    <string name="setting_theme_dark">深色模式</string>
+    <string name="setting_color_title">表現力主題色彩</string>
+    <string name="setting_color_dynamic">動態取色 (Monet)</string>
+    <string name="setting_color_jade">翡翠玉綠</string>
+    <string name="setting_color_cobalt">深邃海藍</string>
+    <string name="setting_color_amethyst">活力幻紫</string>
+    <string name="setting_color_amber">溫暖日落</string>
+    <string name="setting_language_title">應用語言</string>
+    <string name="setting_language_dialog_title">選擇應用語言</string>
+    <string name="setting_language_system">跟隨系統</string>
+    <string name="setting_language_en">English</string>
+    <string name="setting_language_zh_cn">简体中文</string>
+    <string name="setting_language_zh_hk">繁體中文（香港）</string>
+    <string name="setting_language_zh_tw">繁體中文（台灣）</string>
+    <string name="setting_language_ja">日本語</string>
+    <string name="setting_language_ko">한국어</string>
+    <string name="setting_shizuku_title">Shizuku 服務說明與除錯</string>
+    <string name="setting_shizuku_desc">App Oops 透過 Shizuku 取得特權 Shell (UID: 2000) 與 IAppOpsService 服務代理，無需 Root 即可安全修改各應用程式的底層權限。\n\n• 模擬器除錯：在已啟動的模擬器中執行 tools/setup_emulator_shizuku.ps1 即可一鍵啟動除錯\n• 實體裝置使用：於「開發者選項」中開啟「無線偵錯」，並透過 Shizuku 官方應用配對啟動即可。</string>
+    <string name="btn_test_notification">測試通知</string>
+    <string name="test_notice_app_name">測試應用</string>
+    <string name="loading_apps">正在載入應用程式列表...</string>
+    <string name="setting_temp_allow_title">臨時允許權限</string>
+    <string name="setting_temp_allow_desc">攔截後於通知提供快捷按鈕，臨時放行並於到期後自動恢復攔截</string>
+    <string name="setting_temp_duration_title">放行時長</string>
+    <string name="monitor_notif_action_temp_allow">臨時允許 (%1$d秒)</string>
+    <string name="monitor_notif_action_close">關閉</string>
+    <string name="toast_temp_allow_granted">已臨時放行【%1$s】%2$s（%3$d秒）</string>
+    <string name="toast_temp_allow_expired">臨時允許已到期，已恢復攔截【%1$s】%2$s</string>
+    <string name="monitor_notif_temp_countdown">已臨時放行【%1$s】：剩餘 %2$d 秒</string>
+    <string name="toast_need_notification_permission">請授予通知權限以接收實時更新</string>
+    <string name="live_update_subtext">實時更新</string>
+    <string name="status_bar_chip_blocked">已攔截</string>
+    <string name="setting_about_title">關於 App Oops</string>
+    <string name="setting_about_version">版本: 1.0.1 (AGP 9.1.0 • Kotlin 2.1.10 • Compose M3E)\n核心目標：全方位管控敏感權限、切斷裝置畫像掃描、保護剪貼簿及凍結背景運行。</string>
+
+    <!-- 社群規則與訂閱 -->
+    <string name="community_title">社群規則</string>
+    <string name="community_search_hint">搜尋應用名稱、套件名稱、規則或作者...</string>
+    <string name="community_matched_installed_apps">本機已配對 %1$d 個應用程式（共 %2$d 條規則）</string>
+    <string name="community_empty_sub_title">尚未加入規則訂閱</string>
+    <string name="community_empty_sub_desc">點擊右下角 + 按鈕輸入 GraceThings/app-oops-rules 訂閱連結（GitHub 或 Gitee），或新增其他第三方維護的規則來源。</string>
+    <string name="community_empty_rules_title">找不到相符的社群規則</string>
+    <string name="community_empty_rules_desc">請嘗試清除搜尋關鍵字、點擊頂部重新整理按鈕同步最新規則，或加入其他訂閱來源。</string>
+    <string name="community_empty_no_installed_match_title">暫無適配本機應用的規則</string>
+    <string name="community_empty_no_installed_match_desc">已同步 %1$d 條訂閱規則，但本機均未安裝對應應用程式（已自動隱藏未安裝應用的規則）。</string>
+    <string name="community_badge_recommended">精選推薦</string>
+    <string name="community_rule_count">%1$d 套方案</string>
+    <string name="community_level_gentle">溫和</string>
+    <string name="community_level_balanced">均衡</string>
+    <string name="community_level_strict">嚴格</string>
+    <string name="community_add_sub_fab">新增訂閱</string>
+    <string name="community_add_sub_title">新增規則訂閱</string>
+    <string name="community_add_sub_url_label">訂閱連結或倉庫網址</string>
+    <string name="community_add_sub_url_placeholder">https://github.com/GraceThings/app-oops-rules</string>
+    <string name="community_add_sub_name_label">顯示名稱（選填）</string>
+    <string name="community_add_sub_quick_fill">快速填入官方倉庫 (GraceThings/app-oops-rules)：</string>
+    <string name="community_quick_github">GitHub 官方源</string>
+    <string name="community_quick_jsdelivr">jsDelivr 加速</string>
+    <string name="community_quick_gitee">Gitee 鏡像源</string>
+    <string name="community_btn_add_sync">新增並同步</string>
+    <string name="community_sub_manager_title">訂閱管理</string>
+    <string name="community_sub_info">%1$d 條規則 • %2$s</string>
+    <string name="community_sub_never_synced">尚未同步</string>
+    <string name="community_sub_added_toast">已訂閱【%1$s】（共 %2$d 條規則）</string>
+    <string name="community_sub_refresh_success">已同步 %1$d 個訂閱來源</string>
+    <string name="community_sub_refresh_failed">同步失敗: %1$s</string>
+    <string name="community_sub_empty_short">暫無訂閱來源</string>
+    <string name="community_apply_reset_toggle">套用前先將此應用程式其他權限重設為預設</string>
+    <string name="community_apply_rule_btn">一鍵套用 (%1$d 項)</string>
+    <string name="community_apply_requires_shizuku">請先於儀表板授權連接 Shizuku 後再套用</string>
+    <string name="community_apply_success">已成功套用【%1$s】（修改了 %2$d 項權限）</string>
+    <string name="community_unsupported_ops_hint">安全提示：此規則中有 %1$d 項目前版本不支援的指令已安全略過。</string>
+    <string name="community_author_format">貢獻者: %1$s • 來源: %2$s</string>
+    <string name="community_contribute_btn">貢獻規則</string>
+    <string name="community_contribute_dialog_title">貢獻應用規則</string>
+    <string name="community_contribute_pick_app">目標應用程式</string>
+    <string name="community_contribute_no_changes">此應用程式目前所有可控權限均為「預設」狀態。請先於應用詳情頁將至少一項權限設為忽略、允許或拒絕後再匯出貢獻。</string>
+    <string name="community_contribute_rule_title_label">方案標題 *</string>
+    <string name="community_contribute_rule_title_hint">例如：攔截搖一搖廣告及讀取剪貼簿</string>
+    <string name="community_contribute_rule_id_label">規則檔案識別碼 (Slug) *</string>
+    <string name="community_contribute_desc_label">適用說明與注意事項</string>
+    <string name="community_contribute_author_label">署名暱稱</string>
+    <string name="community_contribute_level_label">限制強度分類</string>
+    <string name="community_contribute_ops_header">包含的權限設定（%1$d 項）</string>
+    <string name="community_contribute_submit_github">前往 GitHub 提交 Issue</string>
+    <string name="community_contribute_copy_json">複製規則 JSON</string>
+    <string name="community_contribute_hint_footer">跳轉時已自動將規則 JSON 複製到剪貼簿作備份。於 GitHub 提交 Issue 後，倉庫 Actions 將自動校驗並建立 PR，合併後會同步至 Gitee 鏡像。</string>
+    <string name="community_contribute_copied">已複製規則 JSON 到剪貼簿</string>
+    <string name="community_contribute_missing_title">請填寫方案標題</string>
+    <string name="community_detail_view_rules">社群規則</string>
+    <string name="community_detail_share_rule">貢獻此規則</string>
+    <string name="common_cancel">取消</string>
+    <string name="common_close">關閉</string>
+    <string name="common_delete">刪除</string>
+    <string name="setting_about_entry_title">關於</string>
+    <string name="setting_about_entry_desc">Shizuku 服務說明與除錯、應用版本、開發者與項目主頁</string>
+    <string name="about_description">基於 Shizuku 與 Material 3 Expressive 構建的 Android 敏感權限審計與管理工具，無需 Root 即可管控應用程式感應器、剪貼簿讀寫、背景喚醒等底層 AppOps 權限，並支援訂閱社群規則。</string>
+    <string name="about_version_label">目前版本</string>
+    <string name="about_developer_label">開發者</string>
+    <string name="about_developer_name">Grace Chan (GraceThings)</string>
+    <string name="about_tech_stack_label">技術棧</string>
+    <string name="about_tech_stack_value">Kotlin 2.1.10 • Jetpack Compose (M3E) • Shizuku 13.1.5</string>
+    <string name="about_homepage_label">項目主頁</string>
+    <string name="about_homepage_url">https://github.com/GraceThings/app-oops-android</string>
+    <string name="about_rules_repo_label">社群規則倉庫</string>
+    <string name="about_rules_repo_url">https://github.com/GraceThings/app-oops-rules</string>
+</resources>

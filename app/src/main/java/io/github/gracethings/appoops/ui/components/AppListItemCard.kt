@@ -1,25 +1,17 @@
 package io.github.gracethings.appoops.ui.components
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Android
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.drawable.toBitmap
 import io.github.gracethings.appoops.data.model.AppItem
 
 @Composable
@@ -42,33 +34,14 @@ fun AppListItemCard(
                 .padding(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // App Icon
-            val iconBitmap = app.iconBitmap ?: app.icon?.let {
-                runCatching { it.toBitmap(96, 96).asImageBitmap() }.getOrNull()
-            }
-            if (iconBitmap != null) {
-                Image(
-                    bitmap = iconBitmap,
-                    contentDescription = app.appName,
-                    modifier = Modifier
-                        .size(44.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .size(44.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(MaterialTheme.colorScheme.primaryContainer),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Android,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
-            }
+            AppIcon(
+                packageName = app.packageName,
+                contentDescription = app.appName,
+                initialBitmap = app.iconBitmap,
+                initialDrawable = app.icon,
+                size = 44.dp,
+                cornerRadius = 12.dp
+            )
 
             Spacer(modifier = Modifier.width(12.dp))
 
@@ -141,4 +114,3 @@ fun TagBadge(text: String, color: androidx.compose.ui.graphics.Color) {
         )
     }
 }
-

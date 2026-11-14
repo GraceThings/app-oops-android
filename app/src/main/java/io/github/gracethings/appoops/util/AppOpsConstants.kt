@@ -1,4 +1,4 @@
-﻿package io.github.gracethings.appoops.util
+package io.github.gracethings.appoops.util
 
 object AppOpsConstants {
     const val OP_COARSE_LOCATION = 0
@@ -90,7 +90,23 @@ object AppOpsConstants {
         "ACCESS_NOTIFICATIONS" to OP_ACCESS_NOTIFICATIONS
     )
 
-    fun getOpName(op: Int): String = opNames[op] ?: "OP_$op"
+    val opBootCompleted: Int? by lazy {
+        runCatching {
+            val m = android.app.AppOpsManager::class.java.getMethod("strOpToOp", String::class.java)
+            (m.invoke(null, "android:boot_completed") as? Int)?.takeIf { it >= 0 }
+        }.getOrNull()
+    }
+
+    val allManagedOps: IntArray by lazy {
+        val base = communityAllowedOps.values.toMutableList()
+        opBootCompleted?.let { if (it !in base) base.add(it) }
+        base.distinct().toIntArray()
+    }
+
+    fun getOpName(op: Int): String {
+        if (op == opBootCompleted) return "BOOT_COMPLETED"
+        return opNames[op] ?: "OP_$op"
+    }
 
     fun getOpCode(opName: String): Int? =
         communityAllowedOps[opName.trim().uppercase()]
@@ -108,10 +124,12 @@ object AppOpsConstants {
             OP_QUERY_ALL_PACKAGES -> io.github.gracethings.appoops.R.string.op_query_packages_title
             OP_GET_USAGE_STATS -> io.github.gracethings.appoops.R.string.op_usage_stats_title
             OP_RUN_IN_BACKGROUND -> io.github.gracethings.appoops.R.string.op_run_in_bg_title
+            OP_RUN_ANY_IN_BACKGROUND -> io.github.gracethings.appoops.R.string.op_run_any_in_bg_title
             OP_WAKE_LOCK -> io.github.gracethings.appoops.R.string.op_wake_lock_title
             OP_SYSTEM_ALERT_WINDOW -> io.github.gracethings.appoops.R.string.op_system_alert_title
             OP_WRITE_SETTINGS -> io.github.gracethings.appoops.R.string.op_write_settings_title
             OP_ACCESS_NOTIFICATIONS -> io.github.gracethings.appoops.R.string.op_access_notif_title
+            opBootCompleted -> io.github.gracethings.appoops.R.string.op_boot_completed_title
             else -> null
         }
         return resId?.let { context.getString(it) } ?: getOpName(op)

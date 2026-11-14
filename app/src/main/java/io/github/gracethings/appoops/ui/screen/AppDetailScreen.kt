@@ -36,6 +36,7 @@ import io.github.gracethings.appoops.data.model.OpCategory
 import io.github.gracethings.appoops.data.model.OpMode
 import io.github.gracethings.appoops.data.repository.AppRepository
 import io.github.gracethings.appoops.data.shizuku.AppOpsController
+import io.github.gracethings.appoops.ui.components.AppIcon
 import io.github.gracethings.appoops.ui.components.ContributeRuleDialog
 import io.github.gracethings.appoops.ui.components.OpModeSelector
 import io.github.gracethings.appoops.util.AppOpsConstants
@@ -289,33 +290,16 @@ fun AppDetailScreen(
                             .padding(18.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        val iconBitmap = app.icon?.let {
-                            runCatching { it.toBitmap(128, 128).asImageBitmap() }.getOrNull()
-                        }
-                        if (iconBitmap != null) {
-                            Image(
-                                bitmap = iconBitmap,
-                                contentDescription = app.appName,
-                                modifier = Modifier
-                                    .size(60.dp)
-                                    .clip(RoundedCornerShape(16.dp))
-                            )
-                        } else {
-                            Box(
-                                modifier = Modifier
-                                    .size(60.dp)
-                                    .clip(RoundedCornerShape(16.dp))
-                                    .background(MaterialTheme.colorScheme.primaryContainer),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Android,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    modifier = Modifier.size(32.dp)
-                                )
-                            }
-                        }
+                        AppIcon(
+                            packageName = app.packageName,
+                            contentDescription = app.appName,
+                            initialBitmap = app.iconBitmap,
+                            initialDrawable = app.icon,
+                            size = 60.dp,
+                            cornerRadius = 16.dp,
+                            fallbackIconSize = 32.dp,
+                            iconPx = 128
+                        )
 
                         Spacer(modifier = Modifier.width(16.dp))
 

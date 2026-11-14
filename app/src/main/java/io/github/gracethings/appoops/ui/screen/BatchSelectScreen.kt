@@ -34,6 +34,7 @@ import io.github.gracethings.appoops.data.model.AppItem
 import io.github.gracethings.appoops.data.model.BatchSuiteType
 import io.github.gracethings.appoops.data.repository.AppRepository
 import io.github.gracethings.appoops.data.shizuku.AppOpsController
+import io.github.gracethings.appoops.ui.components.AppIcon
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,12 +48,26 @@ fun BatchSelectScreen(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val apps by AppRepository.appsFlow.collectAsState()
+    var hasAutoSelected by remember { mutableStateOf(apps.isNotEmpty()) }
+
+    LaunchedEffect(Unit) {
+        if (apps.isEmpty()) {
+            AppRepository.loadApps(context)
+        }
+    }
 
     var searchQuery by remember { mutableStateOf("") }
     // By default, pre-select user (third-party) apps for convenience
     val selectedPackages = remember {
         mutableStateMapOf<String, AppItem>().apply {
             apps.filter { !it.isSystemApp }.forEach { put(it.packageName, it) }
+        }
+    }
+
+    LaunchedEffect(apps) {
+        if (!hasAutoSelected && apps.isNotEmpty()) {
+            hasAutoSelected = true
+            apps.filter { !it.isSystemApp }.forEach { selectedPackages[it.packageName] = it }
         }
     }
 
@@ -307,33 +322,15 @@ fun BatchSelectScreen(
 
                             Spacer(modifier = Modifier.width(8.dp))
 
-                            val iconBitmap = app.iconBitmap ?: app.icon?.let {
-                                runCatching { it.toBitmap(96, 96).asImageBitmap() }.getOrNull()
-                            }
-                            if (iconBitmap != null) {
-                                Image(
-                                    bitmap = iconBitmap,
-                                    contentDescription = app.appName,
-                                    modifier = Modifier
-                                        .size(40.dp)
-                                        .clip(RoundedCornerShape(10.dp))
-                                )
-                            } else {
-                                Box(
-                                    modifier = Modifier
-                                        .size(40.dp)
-                                        .clip(RoundedCornerShape(10.dp))
-                                        .background(MaterialTheme.colorScheme.primaryContainer),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Android,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                                        modifier = Modifier.size(22.dp)
-                                    )
-                                }
-                            }
+                            AppIcon(
+                                packageName = app.packageName,
+                                contentDescription = app.appName,
+                                initialBitmap = app.iconBitmap,
+                                initialDrawable = app.icon,
+                                size = 40.dp,
+                                cornerRadius = 10.dp,
+                                fallbackIconSize = 22.dp
+                            )
 
                             Spacer(modifier = Modifier.width(12.dp))
 

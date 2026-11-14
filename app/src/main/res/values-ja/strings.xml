@@ -1,0 +1,285 @@
+<resources>
+    <string name="app_name">App Oops</string>
+    <string name="dashboard">ダッシュボード</string>
+    <string name="apps">アプリ</string>
+    <string name="batch_rules">ルール</string>
+    <string name="audit_log">遮断ログ</string>
+    <string name="settings">設定</string>
+
+    <!-- Shizuku ステータス -->
+    <string name="shizuku_authorized">Shizuku 接続済み</string>
+    <string name="shizuku_authorized_desc">特権シェル UID: 2000 稼働中</string>
+    <string name="shizuku_needs_permission">権限の許可が必要</string>
+    <string name="shizuku_needs_permission_desc">タップして Shizuku の権限を許可してください</string>
+    <string name="shizuku_not_running">Shizuku 未起動</string>
+    <string name="shizuku_not_running_desc">ワイヤレスデバッグまたは Root で Shizuku サービスを起動してください</string>
+    <string name="shizuku_btn_grant">許可する</string>
+    <string name="shizuku_btn_refresh">更新</string>
+
+    <!-- 監視サービスと通知 -->
+    <string name="monitor_service_title">リアルタイム遮断ガード</string>
+    <string name="monitor_service_running">バックグラウンドで監視・遮断を実行中</string>
+    <string name="monitor_service_stopped">ガード停止中</string>
+    <string name="monitor_notif_channel">App Oops 監視サービス</string>
+    <string name="monitor_notif_channel_desc">AppOps 機密権限のリアルタイム監視</string>
+    <string name="monitor_notif_toast_channel">遮断アラート</string>
+    <string name="monitor_notif_live_channel">ライブアップデートアラート</string>
+    <string name="monitor_notif_initial_title">App Oops ガード稼働中</string>
+    <string name="monitor_notif_initial_text">設定された権限アクセスを監視・遮断中</string>
+    <string name="monitor_notif_live_title">App Oops ライブアップデート</string>
+    <string name="monitor_notif_toast_mode_title">遮断アラート</string>
+    <string name="monitor_notif_blocked_single">【%1$s】の%2$sを遮断しました</string>
+    <string name="monitor_notif_blocked_multi">【%1$s】の%2$sを遮断しました（計 %3$d 回）</string>
+    <string name="monitor_notif_action_inspect">権限を確認</string>
+    <string name="toast_blocked_single">🛡️ App Oops: 【%1$s】の%2$sを遮断</string>
+    <string name="toast_blocked_multi">🛡️ App Oops: 【%1$s】の%2$sを遮断（計 %3$d 回）</string>
+
+    <!-- カテゴリ -->
+    <string name="category_sensor">センサーとモーション</string>
+    <string name="category_privacy">クリップボードとプライバシー</string>
+    <string name="category_background">バックグラウンドと WakeLock</string>
+    <string name="category_system">システムアラートとセキュリティ</string>
+
+    <!-- モード -->
+    <string name="mode_allow">許可</string>
+    <string name="mode_ignore">無視（推奨）</string>
+    <string name="mode_deny">拒否</string>
+    <string name="mode_default">デフォルト</string>
+
+    <!-- ダッシュボード -->
+    <string name="latest_intercept_title">最新の遮断</string>
+    <string name="latest_intercept_format">【%1$s】%2$sを遮断（%3$d 回）</string>
+    <string name="view_log">ログを見る</string>
+    <string name="metric_shake_blocked">センサー制限</string>
+    <string name="metric_clipboard_protected">クリップボード保護</string>
+    <string name="metric_bg_frozen">バックグラウンド制限</string>
+    <string name="metric_intercept_count">合計遮断数</string>
+
+    <!-- アプリ一覧フィルタとバッジ -->
+    <string name="search_placeholder">アプリ名やパッケージ名を検索...</string>
+    <string name="filter_all">すべて (%1$d)</string>
+    <string name="filter_user">ユーザーアプリ</string>
+    <string name="filter_sensor_disabled">加速度・ジャイロ無効</string>
+    <string name="filter_clipboard_protected">クリップボード保護中</string>
+    <string name="filter_background_restricted">バックグラウンド制限中</string>
+    <string name="filter_system">システムアプリ</string>
+    <string name="no_apps_found">一致するアプリが見つかりません</string>
+    <string name="badge_sensor_disabled">加速度・ジャイロ無効</string>
+    <string name="badge_clipboard_protected">クリップボード保護</string>
+    <string name="badge_bg_restricted">バックグラウンド制限</string>
+    <string name="badge_system">システム</string>
+
+    <!-- アプリ詳細 -->
+    <string name="app_type_user">ユーザーアプリ</string>
+    <string name="app_type_system">システムアプリ</string>
+    <string name="app_uid_format">UID: %1$d • %2$s</string>
+    <string name="quick_recommendations">おすすめの保護設定</string>
+    <string name="immunize_shake_btn">センサー無効化</string>
+    <string name="shield_clipboard_btn">クリップボード保護</string>
+    <string name="reset_default_btn">デフォルトに戻す</string>
+    <string name="apply_btn">選択を適用</string>
+    <string name="toast_applied_sensors">「加速度・ジャイロセンサー無効化」を適用しました</string>
+    <string name="toast_applied_clipboard">「クリップボード保護」を適用しました</string>
+    <string name="toast_applied_reset">システムデフォルトに復元しました</string>
+    <string name="toast_set_failed">設定に失敗しました: %1$s</string>
+
+    <!-- ルールとプリセット -->
+    <string name="batch_desc">内蔵プリセットを一括適用するか、コミュニティルールを購読してアプリごとのルールを適用できます。</string>
+    <string name="rules_community_title">コミュニティルール</string>
+    <string name="rules_community_desc">GraceThings/app-oops-rules やサードパーティリポジトリを購読して、アプリルールの取得・適用・貢献ができます。</string>
+    <string name="rules_community_status">%1$d 件の購読 • %2$d 件のルールを読み込み済み</string>
+    <string name="rules_community_empty_hint">購読ソースがありません — タップして追加</string>
+    <string name="rules_community_btn">コミュニティルールを探索</string>
+    <string name="rules_presets_header">内蔵一括プリセット</string>
+    <string name="suite_sensor_title">加速度・ジャイロセンサーを無効化</string>
+    <string name="suite_sensor_desc">加速度センサーとジャイロスコープを遮断（IGNORE）し、無断のモーション・揺れ検知を防ぎます</string>
+    <string name="suite_clipboard_title">クリップボードの読み書きを遮断</string>
+    <string name="suite_clipboard_desc">クリップボードの読み取り・書き込みを遮断し、サードパーティによる盗み見や改ざんを防ぎます</string>
+    <string name="suite_read_clipboard_title">クリップボードの読み取りを遮断</string>
+    <string name="suite_read_clipboard_desc">クリップボードの読み取りを遮断（IGNORE）し、バックグラウンドでの盗み見を防止します</string>
+    <string name="suite_write_clipboard_title">クリップボードの書き込みを遮断</string>
+    <string name="suite_write_clipboard_desc">クリップボードへの書き込みを遮断（IGNORE）し、不正な上書きを防ぎます</string>
+    <string name="suite_query_usage_title">アプリ一覧取得と使用状況統計を制限</string>
+    <string name="suite_query_usage_desc">インストール済みアプリのスキャンや使用状況の取得を遮断し、端末プロファイリングを遮断します</string>
+    <string name="suite_background_title">バックグラウンド制限</string>
+    <string name="suite_background_desc">バックグラウンド実行、WakeLock、起動時自動実行を制限します</string>
+    <string name="btn_apply_to_selected">選択したアプリに適用</string>
+
+    <!-- 一括選択画面 -->
+    <string name="select_apps_title">アプリを選択</string>
+    <string name="apply_to_selected_fab">選択に適用 (%1$d)</string>
+    <string name="batch_processing_title">ルールを一括適用中...</string>
+    <string name="batch_processing_msg">処理中: %1$s (%2$d/%3$d)</string>
+    <string name="batch_success_toast">%2$d 件のアプリに【%1$s】を適用しました</string>
+    <string name="select_at_least_one">1 つ以上のアプリを選択してください</string>
+    <string name="select_all_current">すべて選択 (%1$d)</string>
+    <string name="deselect_all">選択解除</string>
+    <string name="select_only_user">ユーザーアプリのみ</string>
+    <string name="selected_count_hint">%1$d 件のアプリを選択中。下のボタンをタップしてルールを適用します。</string>
+
+    <!-- 監査ログ -->
+    <string name="audit_empty">遮断記録はまだありません\n制限された操作がトリガーされると自動的にここへ記録されます</string>
+    <string name="audit_empty_desc">保護対象の操作をアプリが試行するとここに記録されます</string>
+    <string name="audit_total_intercepts">累計遮断回数: %1$d 回</string>
+    <string name="audit_total_intercepts_desc">IGNORE に設定された不正な読み取り・制限権限へのアクセスを静かに遮断しています</string>
+    <string name="audit_blocked_badge">遮断済み</string>
+    <string name="audit_times_badge">x%1$d 回</string>
+    <string name="audit_clear">ログを消去</string>
+    <string name="audit_clear_confirm">すべての遮断ログを消去しますか？</string>
+    <string name="audit_dialog_confirm">消去</string>
+    <string name="audit_dialog_cancel">キャンセル</string>
+    <string name="audit_permission_format">権限: %1$s (%2$s)</string>
+    <string name="audit_count_format">%1$d 回</string>
+
+    <!-- AppOps 権限詳細 -->
+    <string name="op_body_sensors_title">ボディ・モーションセンサー</string>
+    <string name="op_body_sensors_desc">IGNORE に設定して加速度計などのセンサーアクセスを静かに遮断します</string>
+    <string name="op_high_sampling_sensors_title">高サンプリングレートセンサー</string>
+    <string name="op_high_sampling_sensors_desc">ジャイロ・加速度計の超高頻度取得を制限し、微細な揺れ検知を防止します</string>
+    <string name="op_body_sensors_bg_title">バックグラウンドセンサー</string>
+    <string name="op_body_sensors_bg_desc">バックグラウンド移行後のモーション状態取得を禁止します</string>
+    <string name="op_activity_rec_title">身体活動認識</string>
+    <string name="op_activity_rec_desc">歩行・走行や端末の揺れ検知を防止します</string>
+    <string name="op_read_clipboard_title">クリップボード読み取り</string>
+    <string name="op_read_clipboard_desc">IGNORE 設定により空データを返し、クリップボードの盗み見を防ぎます</string>
+    <string name="op_write_clipboard_title">クリップボード書き込み</string>
+    <string name="op_write_clipboard_desc">不正な SDK によるクリップボードの無断上書きを禁止します</string>
+    <string name="op_query_packages_title">インストール済みアプリ一覧</string>
+    <string name="op_query_packages_desc">銀行・ゲーム・競合アプリのスキャンを遮断しプロファイリングを防ぎます</string>
+    <string name="op_usage_stats_title">使用状況統計</string>
+    <string name="op_usage_stats_desc">現在使用中の他アプリの監視権限を制限します</string>
+    <string name="op_run_in_bg_title">バックグラウンド実行</string>
+    <string name="op_run_in_bg_desc">バックグラウンド移行時に即時停止し、バッテリーと通信量の消費を抑えます</string>
+    <string name="op_wake_lock_title">WakeLock の保持</string>
+    <string name="op_wake_lock_desc">CPU のスリープ解除維持を制限し、発熱と電池消耗を防ぎます</string>
+    <string name="op_system_alert_title">他のアプリの上に重ねて表示</string>
+    <string name="op_system_alert_desc">不正なポップアップやクリックジャッキング攻撃を防ぎます</string>
+    <string name="op_write_settings_title">システム設定の変更</string>
+    <string name="op_write_settings_desc">音量・画面輝度・ネットワーク設定などの無断変更を防止します</string>
+    <string name="op_access_notif_title">通知へのアクセス</string>
+    <string name="op_access_notif_desc">通知内容や SMS 認証コードの盗み見を監視・遮断します</string>
+    <string name="op_run_any_in_bg_title">任意のバックグラウンド動作</string>
+    <string name="op_boot_completed_title">起動時の自動実行</string>
+
+    <!-- 設定 -->
+    <string name="setting_alert_title">遮断通知アラート</string>
+    <string name="setting_alert_on_desc">機密権限が遮断されたときに通知します</string>
+    <string name="setting_alert_off_desc">通知オフ（監査ログのみ記録）</string>
+    <string name="setting_alert_toast">Toast 通知</string>
+    <string name="setting_alert_toast_desc">権限を遮断した際に Toast メッセージを表示します</string>
+    <string name="setting_alert_notification">システム通知</string>
+    <string name="setting_alert_notification_desc">権限を遮断した際に通知シェードへアラートを送信します</string>
+    <string name="setting_alert_live_notification">ライブアップデート (Android 16+)</string>
+    <string name="setting_alert_live_desc_supported">ステータスバーとロック画面にリアルタイムのプロモート通知を表示します</string>
+    <string name="setting_alert_live_desc_unsupported">Android 16 未満のためこの機能は利用できません</string>
+    <string name="test_alert_no_method_enabled">通知方式が有効になっていません（Toast と通知が両方オフです）</string>
+    <string name="setting_theme_title">外観</string>
+    <string name="setting_theme_system">システムに従う</string>
+    <string name="setting_theme_light">ライトモード</string>
+    <string name="setting_theme_dark">ダークモード</string>
+    <string name="setting_color_title">Expressive カラーパレット</string>
+    <string name="setting_color_dynamic">ダイナミック (Monet)</string>
+    <string name="setting_color_jade">エメラルドジェイド</string>
+    <string name="setting_color_cobalt">ディープコバルト</string>
+    <string name="setting_color_amethyst">ラディアントパープル</string>
+    <string name="setting_color_amber">サンセットアンバー</string>
+    <string name="setting_language_title">言語</string>
+    <string name="setting_language_dialog_title">言語を選択</string>
+    <string name="setting_language_system">システムに従う</string>
+    <string name="setting_language_en">English</string>
+    <string name="setting_language_zh_cn">简体中文</string>
+    <string name="setting_language_zh_hk">繁體中文（香港）</string>
+    <string name="setting_language_zh_tw">繁體中文（台灣）</string>
+    <string name="setting_language_ja">日本語</string>
+    <string name="setting_language_ko">한국어</string>
+    <string name="setting_shizuku_title">Shizuku ガイドとデバッグ</string>
+    <string name="setting_shizuku_desc">App Oops は Shizuku 経由で特権シェル (UID: 2000) と IAppOpsService プロキシを取得し、Root 権限なしでアプリの AppOps 権限を安全に変更します。\n\n• エミュレータ: tools/setup_emulator_shizuku.ps1 を実行してデバッグを開始\n• 実機: 開発者向けオプションで「ワイヤレスデバッグ」を有効にし、Shizuku アプリとペアリングして起動してください。</string>
+    <string name="btn_test_notification">テスト通知</string>
+    <string name="test_notice_app_name">テストアプリ</string>
+    <string name="loading_apps">アプリ一覧を読み込み中...</string>
+    <string name="setting_temp_allow_title">権限の一時許可</string>
+    <string name="setting_temp_allow_desc">遮断通知から一時的に許可し、期限切れ後に自動で再び遮断するクイック操作を提供します</string>
+    <string name="setting_temp_duration_title">一時許可の期間</string>
+    <string name="monitor_notif_action_temp_allow">一時許可 (%1$d秒)</string>
+    <string name="monitor_notif_action_close">閉じる</string>
+    <string name="toast_temp_allow_granted">【%1$s】の%2$sを一時許可しました（%3$d秒）</string>
+    <string name="toast_temp_allow_expired">一時許可が終了したため、【%1$s】の%2$sを再び遮断しました</string>
+    <string name="monitor_notif_temp_countdown">【%1$s】を一時許可中：残り %2$d 秒</string>
+    <string name="toast_need_notification_permission">ライブアップデートを受け取るには通知権限を許可してください</string>
+    <string name="live_update_subtext">ライブアップデート</string>
+    <string name="status_bar_chip_blocked">遮断済み</string>
+    <string name="setting_about_title">App Oops について</string>
+    <string name="setting_about_version">バージョン: 1.0.1 (AGP 9.1.0 • Kotlin 2.1.10 • Compose M3E)\n目的：機密権限の総合管理、プロファイリング追跡の遮断、クリップボード保護、バックグラウンド制限。</string>
+
+    <!-- コミュニティルールと購読 -->
+    <string name="community_title">コミュニティルール</string>
+    <string name="community_search_hint">アプリ名・パッケージ名・ルール・作者を検索...</string>
+    <string name="community_matched_installed_apps">インストール済みアプリ %1$d 件に一致（同期済みルール %2$d 件）</string>
+    <string name="community_empty_sub_title">購読ルールがありません</string>
+    <string name="community_empty_sub_desc">右下の + ボタンから GraceThings/app-oops-rules（GitHub または Gitee）やサードパーティの購読 URL を追加してください。</string>
+    <string name="community_empty_rules_title">一致するルールが見つかりません</string>
+    <string name="community_empty_rules_desc">検索キーワードをクリアするか、上部の更新ボタンで最新ルールを同期し、別のリポジトリを追加してみてください。</string>
+    <string name="community_empty_no_installed_match_title">インストール済みアプリ向けルールなし</string>
+    <string name="community_empty_no_installed_match_desc">%1$d 件のルールを同期しましたが、この端末に一致するアプリがインストールされていません（未インストール分は非表示）。</string>
+    <string name="community_badge_recommended">おすすめ</string>
+    <string name="community_rule_count">%1$d 件のルール</string>
+    <string name="community_level_gentle">マイルド</string>
+    <string name="community_level_balanced">バランス</string>
+    <string name="community_level_strict">厳格</string>
+    <string name="community_add_sub_fab">購読を追加</string>
+    <string name="community_add_sub_title">ルール購読を追加</string>
+    <string name="community_add_sub_url_label">購読リンク / リポジトリ URL</string>
+    <string name="community_add_sub_url_placeholder">https://github.com/GraceThings/app-oops-rules</string>
+    <string name="community_add_sub_name_label">表示名（任意）</string>
+    <string name="community_add_sub_quick_fill">公式リポジトリを自動入力 (GraceThings/app-oops-rules):</string>
+    <string name="community_quick_github">GitHub 公式</string>
+    <string name="community_quick_jsdelivr">jsDelivr CDN</string>
+    <string name="community_quick_gitee">Gitee ミラー</string>
+    <string name="community_btn_add_sync">追加して同期</string>
+    <string name="community_sub_manager_title">購読の管理</string>
+    <string name="community_sub_info">%1$d 件のルール • %2$s</string>
+    <string name="community_sub_never_synced">未同期</string>
+    <string name="community_sub_added_toast">【%1$s】を購読しました（%2$d 件）</string>
+    <string name="community_sub_refresh_success">%1$d 件の購読を同期しました</string>
+    <string name="community_sub_refresh_failed">同期失敗: %1$s</string>
+    <string name="community_sub_empty_short">購読ソースなし</string>
+    <string name="community_apply_reset_toggle">適用前に他の権限をデフォルトに戻す</string>
+    <string name="community_apply_rule_btn">ルールを適用 (%1$d 項目)</string>
+    <string name="community_apply_requires_shizuku">適用する前にダッシュボードで Shizuku を認証してください</string>
+    <string name="community_apply_success">【%1$s】を適用しました（%2$d 権限）</string>
+    <string name="community_unsupported_ops_hint">安全通知：このルール内の未対応キー %1$d 件は安全にスキップされました。</string>
+    <string name="community_author_format">作者: %1$s • ソース: %2$s</string>
+    <string name="community_contribute_btn">ルールを貢献</string>
+    <string name="community_contribute_dialog_title">アプリルールを貢献</string>
+    <string name="community_contribute_pick_app">対象アプリ</string>
+    <string name="community_contribute_no_changes">このアプリのすべての権限がデフォルト状態です。まず詳細画面で少なくとも 1 つの権限を IGNORE・ALLOW・DENY に設定してください。</string>
+    <string name="community_contribute_rule_title_label">ルールタイトル *</string>
+    <string name="community_contribute_rule_title_hint">例: シェイク広告とクリップボード盗み見を遮断</string>
+    <string name="community_contribute_rule_id_label">ルール識別子 (Slug) *</string>
+    <string name="community_contribute_desc_label">説明・注意事項</string>
+    <string name="community_contribute_author_label">投稿者名</string>
+    <string name="community_contribute_level_label">制限レベル</string>
+    <string name="community_contribute_ops_header">含まれる権限設定 (%1$d)</string>
+    <string name="community_contribute_submit_github">GitHub Issue で送信</string>
+    <string name="community_contribute_copy_json">ルール JSON をコピー</string>
+    <string name="community_contribute_hint_footer">バックアップとしてルール JSON が自動的にクリップボードにコピーされます。GitHub で Issue を送信すると、Actions が検証して PR を作成し、マージ後に Gitee ミラーへ同期されます。</string>
+    <string name="community_contribute_copied">ルール JSON をクリップボードにコピーしました</string>
+    <string name="community_contribute_missing_title">ルールタイトルを入力してください</string>
+    <string name="community_detail_view_rules">コミュニティルール</string>
+    <string name="community_detail_share_rule">ルールを貢献</string>
+    <string name="common_cancel">キャンセル</string>
+    <string name="common_close">閉じる</string>
+    <string name="common_delete">削除</string>
+    <string name="setting_about_entry_title">アプリについて</string>
+    <string name="setting_about_entry_desc">Shizuku ガイド・デバッグ、バージョン情報、開発者・プロジェクトページ</string>
+    <string name="about_description">Shizuku と Material 3 Expressive をベースにした Android 機密権限監査・管理ツール。Root 権限なしでセンサー・クリップボード読み書き・バックグラウンド動作などの AppOps 権限を制御し、コミュニティルールの購読にも対応します。</string>
+    <string name="about_version_label">バージョン</string>
+    <string name="about_developer_label">開発者</string>
+    <string name="about_developer_name">Grace Chan (GraceThings)</string>
+    <string name="about_tech_stack_label">技術スタック</string>
+    <string name="about_tech_stack_value">Kotlin 2.1.10 • Jetpack Compose (M3E) • Shizuku 13.1.5</string>
+    <string name="about_homepage_label">プロジェクトホームページ</string>
+    <string name="about_homepage_url">https://github.com/GraceThings/app-oops-android</string>
+    <string name="about_rules_repo_label">コミュニティルールリポジトリ</string>
+    <string name="about_rules_repo_url">https://github.com/GraceThings/app-oops-rules</string>
+</resources>
