@@ -73,6 +73,7 @@
     <string name="app_type_user">用户应用</string>
     <string name="app_type_system">系统应用</string>
     <string name="app_uid_format">UID: %1$d • %2$s</string>
+    <string name="applied_rule_badge">已套用规则：%1$s</string>
     <string name="quick_recommendations">一键防护建议</string>
     <string name="immunize_shake_btn">禁用传感器</string>
     <string name="shield_clipboard_btn">保护剪贴板</string>

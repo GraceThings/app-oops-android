@@ -3,6 +3,7 @@ package io.github.gracethings.appoops.data.repository
 import android.content.Context
 import android.net.Uri
 import android.util.Base64
+import io.github.gracethings.appoops.data.model.AppliedRuleInfo
 import io.github.gracethings.appoops.data.model.CommunityRule
 import io.github.gracethings.appoops.data.model.OpMode
 import io.github.gracethings.appoops.data.model.RuleLevel
@@ -281,6 +282,20 @@ object CommunityRuleRepository {
             } else {
                 lastError = res.exceptionOrNull()
             }
+        }
+
+        if (appliedCount > 0) {
+            SubscriptionPreferences.recordAppliedRule(
+                context = context,
+                packageName = finalRule.packageName,
+                info = AppliedRuleInfo(
+                    ruleId = finalRule.id,
+                    ruleTitle = finalRule.title,
+                    subscriptionId = finalRule.subscriptionId,
+                    subscriptionName = finalRule.subscriptionName,
+                    appliedAt = System.currentTimeMillis()
+                )
+            )
         }
 
         AppRepository.loadApps(context, forceRefresh = true)

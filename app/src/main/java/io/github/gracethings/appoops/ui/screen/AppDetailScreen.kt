@@ -34,6 +34,7 @@ import io.github.gracethings.appoops.data.model.AppItem
 import io.github.gracethings.appoops.data.model.AppOpDef
 import io.github.gracethings.appoops.data.model.OpCategory
 import io.github.gracethings.appoops.data.model.OpMode
+import io.github.gracethings.appoops.data.preference.SubscriptionPreferences
 import io.github.gracethings.appoops.data.repository.AppRepository
 import io.github.gracethings.appoops.data.shizuku.AppOpRejectedBySystemException
 import io.github.gracethings.appoops.data.shizuku.AppOpsController
@@ -57,6 +58,8 @@ fun AppDetailScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val apps by AppRepository.appsFlow.collectAsState()
+    val appliedRules by SubscriptionPreferences.appliedRules.collectAsState()
+    val appliedRule = appliedRules[packageName]
     val app = remember(apps, packageName) {
         apps.firstOrNull { it.packageName == packageName } ?: AppItem(
             packageName = packageName,
@@ -318,6 +321,35 @@ fun AppDetailScreen(
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.primary
                             )
+                            if (appliedRule != null) {
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Surface(
+                                    onClick = { onNavigateToCommunityRules(packageName) },
+                                    shape = RoundedCornerShape(8.dp),
+                                    color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.85f)
+                                ) {
+                                    Row(
+                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Public,
+                                            contentDescription = null,
+                                            modifier = Modifier.size(13.dp),
+                                            tint = MaterialTheme.colorScheme.onSecondaryContainer
+                                        )
+                                        Text(
+                                            text = stringResource(R.string.applied_rule_badge, appliedRule.ruleTitle),
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = FontWeight.Medium,
+                                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -396,6 +428,7 @@ fun AppDetailScreen(
                                 }
                                 if ("reset" in selectedActions) {
                                     AppOpsController.resetToDefault(packageName, uid)
+                                    SubscriptionPreferences.clearAppliedRule(context, packageName)
                                 }
                                 selectedActions.clear()
                                 Toast.makeText(context, context.getString(R.string.toast_applied_sensors), Toast.LENGTH_SHORT).show()

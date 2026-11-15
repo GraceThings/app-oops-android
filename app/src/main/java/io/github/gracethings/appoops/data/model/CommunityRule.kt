@@ -49,3 +49,11 @@ data class AppRuleGroup(
     val installedAppItem: AppItem,
     val rules: List<CommunityRule>
 )
+
+data class AppliedRuleInfo(
+    val ruleId: String,
+    val ruleTitle: String,
+    val subscriptionId: String = "",
+    val subscriptionName: String = "",
+    val appliedAt: Long = 0L
+)

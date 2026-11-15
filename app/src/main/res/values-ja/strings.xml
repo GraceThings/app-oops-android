@@ -73,6 +73,7 @@
     <string name="app_type_user">ユーザーアプリ</string>
     <string name="app_type_system">システムアプリ</string>
     <string name="app_uid_format">UID: %1$d • %2$s</string>
+    <string name="applied_rule_badge">適用中のルール: %1$s</string>
     <string name="quick_recommendations">おすすめの保護設定</string>
     <string name="immunize_shake_btn">センサー無効化</string>
     <string name="shield_clipboard_btn">クリップボード保護</string>

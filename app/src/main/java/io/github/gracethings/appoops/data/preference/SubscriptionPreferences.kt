@@ -1,6 +1,7 @@
 package io.github.gracethings.appoops.data.preference
 
 import android.content.Context
+import io.github.gracethings.appoops.data.model.AppliedRuleInfo
 import io.github.gracethings.appoops.data.model.RuleSubscription
 import io.github.gracethings.appoops.util.AppLogger
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,6 +14,7 @@ import java.io.File
 object SubscriptionPreferences {
     private const val PREFS_NAME = "app_oops_subscriptions_prefs"
     private const val KEY_SUBSCRIPTIONS = "key_subscriptions_json"
+    private const val KEY_APPLIED_RULES = "key_applied_rules_json"
     private const val CACHE_DIR = "community_rules"
 
     const val OFFICIAL_OWNER = "GraceThings"
@@ -26,8 +28,13 @@ object SubscriptionPreferences {
     private val _subscriptions = MutableStateFlow<List<RuleSubscription>>(emptyList())
     val subscriptions: StateFlow<List<RuleSubscription>> = _subscriptions.asStateFlow()
 
+    private val _appliedRules = MutableStateFlow<Map<String, AppliedRuleInfo>>(emptyMap())
+    val appliedRules: StateFlow<Map<String, AppliedRuleInfo>> = _appliedRules.asStateFlow()
+
     fun init(context: Context) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        loadAppliedRules(prefs.getString(KEY_APPLIED_RULES, null))
+
         val raw = prefs.getString(KEY_SUBSCRIPTIONS, null)
         if (raw.isNullOrBlank()) {
             _subscriptions.value = emptyList()
@@ -109,5 +116,68 @@ object SubscriptionPreferences {
             val file = getCacheFile(context, subId)
             if (file.exists()) file.delete()
         }
+    }
+
+    fun recordAppliedRule(context: Context, packageName: String, info: AppliedRuleInfo) {
+        val updated = _appliedRules.value.toMutableMap().apply {
+            put(packageName, info)
+        }
+        saveAppliedRules(context, updated)
+    }
+
+    fun clearAppliedRule(context: Context, packageName: String) {
+        if (!_appliedRules.value.containsKey(packageName)) return
+        val updated = _appliedRules.value.toMutableMap().apply {
+            remove(packageName)
+        }
+        saveAppliedRules(context, updated)
+    }
+
+    private fun loadAppliedRules(raw: String?) {
+        if (raw.isNullOrBlank()) {
+            _appliedRules.value = emptyMap()
+            return
+        }
+        val map = mutableMapOf<String, AppliedRuleInfo>()
+        runCatching {
+            val root = JSONObject(raw)
+            val keys = root.keys()
+            while (keys.hasNext()) {
+                val pkg = keys.next()
+                val obj = root.optJSONObject(pkg) ?: continue
+                val ruleId = obj.optString("ruleId")
+                val ruleTitle = obj.optString("ruleTitle")
+                if (ruleId.isBlank() || ruleTitle.isBlank()) continue
+                map[pkg] = AppliedRuleInfo(
+                    ruleId = ruleId,
+                    ruleTitle = ruleTitle,
+                    subscriptionId = obj.optString("subscriptionId"),
+                    subscriptionName = obj.optString("subscriptionName"),
+                    appliedAt = obj.optLong("appliedAt", 0L)
+                )
+            }
+        }.onFailure {
+            AppLogger.e("Failed to load applied rules", it)
+        }
+        _appliedRules.value = map
+    }
+
+    private fun saveAppliedRules(context: Context, map: Map<String, AppliedRuleInfo>) {
+        _appliedRules.value = map
+        val root = JSONObject()
+        map.forEach { (pkg, info) ->
+            val obj = JSONObject().apply {
+                put("ruleId", info.ruleId)
+                put("ruleTitle", info.ruleTitle)
+                if (info.subscriptionId.isNotBlank()) put("subscriptionId", info.subscriptionId)
+                if (info.subscriptionName.isNotBlank()) put("subscriptionName", info.subscriptionName)
+                put("appliedAt", info.appliedAt)
+            }
+            root.put(pkg, obj)
+        }
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putString(KEY_APPLIED_RULES, root.toString())
+            .apply()
     }
 }
