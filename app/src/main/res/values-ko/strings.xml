@@ -38,11 +38,11 @@
     <string name="category_sensor">센서 및 모션</string>
     <string name="category_privacy">클립보드 및 개인정보</string>
     <string name="category_background">백그라운드 및 WakeLock</string>
-    <string name="category_system">시스템 알림 및 보안</string>
+    <string name="category_system">시스템 및 보안</string>
 
     <!-- 모드 -->
     <string name="mode_allow">허용</string>
-    <string name="mode_ignore">무시 (안전)</string>
+    <string name="mode_ignore">무시</string>
     <string name="mode_deny">거부</string>
     <string name="mode_default">기본값</string>
 
@@ -133,31 +133,31 @@
 
     <!-- AppOps 상세 설명 -->
     <string name="op_body_sensors_title">신체 및 모션 센서</string>
-    <string name="op_body_sensors_desc">IGNORE로 설정해 가속도계 등 모션 센서 접근을 조용히 차단합니다</string>
+    <string name="op_body_sensors_desc">가속도계, 자이로스코프, 심박수 등 신체 및 모션 센서 데이터 접근을 제어합니다.\nIGNORE 설정 시: 앱 충돌 없이 센서 접근을 조용히 차단하고 빈 데이터를 반환해 흔들기 감지 등을 차단합니다.</string>
     <string name="op_high_sampling_sensors_title">고샘플링 레이트 센서</string>
-    <string name="op_high_sampling_sensors_desc">자이로 및 가속도계 초고빈도 갱신을 제한해 미세 흔들기 추적을 방지합니다</string>
+    <string name="op_high_sampling_sensors_desc">자이로스코프 및 가속도계 등의 모션 센서를 200Hz 이상의 높은 샘플링 빈도로 읽는 권한을 제어합니다.\nIGNORE 설정 시: 앱 충돌 없이 센서 주기를 일반 빈도로 제한해 고주파 미세 흔들기 추적을 방지합니다.</string>
     <string name="op_body_sensors_bg_title">백그라운드 신체 센서</string>
-    <string name="op_body_sensors_bg_desc">앱이 백그라운드일 때 모션 상태 읽기를 차단합니다</string>
+    <string name="op_body_sensors_bg_desc">앱이 백그라운드에서 실행 중일 때도 신체 및 모션 센서 데이터를 계속 읽을 수 있는 권한을 제어합니다.\nIGNORE 설정 시: 포그라운드 기능에는 영향을 주지 않으면서 백그라운드 전환 후의 센서 데이터 수집만 중단합니다.</string>
     <string name="op_activity_rec_title">신체 활동 인식</string>
-    <string name="op_activity_rec_desc">걷기, 달리기 또는 기기 흔들기 상태 감지를 차단합니다</string>
+    <string name="op_activity_rec_desc">걷기, 달리기, 자전거 타기, 차량 이동, 걸음 수 등 시스템이 인식한 사용자 활동 상태에 대한 접근을 제어합니다.\nIGNORE 설정 시: 앱 충돌 없이 활동 상태 및 걸음 수 전달을 조용히 차단해 이동 상태 감지를 방지합니다.</string>
     <string name="op_read_clipboard_title">클립보드 읽기</string>
-    <string name="op_read_clipboard_desc">IGNORE 설정 시 빈 내용을 반환해 클립보드 훔쳐보기를 차단합니다</string>
+    <string name="op_read_clipboard_desc">시스템 클립보드에 복사된 텍스트, 링크, 이미지 등의 내용을 읽는 권한을 제어합니다.\nIGNORE 설정 시: 앱 충돌 없이 클립보드 조회 시 빈 내용을 반환해 백그라운드 훔쳐보기를 방지합니다.</string>
     <string name="op_write_clipboard_title">클립보드 쓰기</string>
-    <string name="op_write_clipboard_desc">악성 SDK가 클립보드 내용을 몰래 덮어쓰지 못하게 차단합니다</string>
+    <string name="op_write_clipboard_desc">시스템 클립보드에 텍스트 및 기타 데이터를 쓰거나 수정·덮어쓰는 권한을 제어합니다.\nIGNORE 설정 시: 앱 동작에 지장을 주지 않고 쓰기 요청을 조용히 무시해 기존 클립보드 내용이 덮어써지는 것을 방지합니다.</string>
     <string name="op_query_packages_title">설치된 앱 목록 읽기</string>
-    <string name="op_query_packages_desc">금융, 게임, 경쟁 앱 스캔을 차단해 기기 프로파일링을 막습니다</string>
+    <string name="op_query_packages_desc">기기에 설치된 다른 앱의 패키지 이름, 버전 및 구성 요소 정보를 조회하는 권한을 제어합니다.\nIGNORE 설정 시: 오류 없이 빈 목록 또는 최소 정보만 반환해 설치 앱 스캔을 통한 기기 프로파일링을 방지합니다.</string>
     <string name="op_usage_stats_title">사용 시간 통계</string>
-    <string name="op_usage_stats_desc">현재 사용 중인 다른 앱을 감시할 수 있는 권한을 회수합니다</string>
+    <string name="op_usage_stats_desc">각 앱의 사용 시간, 실행 빈도 및 현재 사용 중인 앱 상태 등 기기 사용 기록 접근을 제어합니다.\nIGNORE 설정 시: 오류 없이 빈 사용 기록을 반환해 다른 앱의 사용 현황 감시를 방지합니다.</string>
     <string name="op_run_in_bg_title">백그라운드 실행</string>
-    <string name="op_run_in_bg_desc">백그라운드 전환 즉시 일시 중지해 배터리 및 데이터 소모를 줄입니다</string>
+    <string name="op_run_in_bg_desc">앱이 포그라운드에 없을 때 백그라운드 서비스, 예약 작업 및 네트워크 활동을 실행할 수 있는 권한을 제어합니다.\nIGNORE 설정 시: 백그라운드 전환 후의 서비스 및 네트워크 활동을 억제해 배터리와 데이터 소모를 줄입니다(알림이 지연될 수 있음).</string>
     <string name="op_wake_lock_title">WakeLock 유지</string>
-    <string name="op_wake_lock_desc">CPU 절전 해제 유지 권한을 제한해 발열과 배터리 소모를 방지합니다</string>
+    <string name="op_wake_lock_desc">기기가 절전 모드로 전환되지 않도록 CPU 작동이나 화면 켜짐을 유지하는 전원 웨이크락 요청 권한을 제어합니다.\nIGNORE 설정 시: 웨이크락 요청을 조용히 무시하여 기기가 정상적으로 절전 모드에 들어가게 하고 대기 전력 소모와 발열을 줄입니다.</string>
     <string name="op_system_alert_title">다른 앱 위에 표시 (오버레이)</string>
-    <string name="op_system_alert_desc">무단 팝업과 클릭재킹(Clickjacking) 공격을 차단합니다</string>
+    <string name="op_system_alert_desc">다른 앱 화면이나 시스템 UI 위에 플로팅 창, 오버레이 뷰 및 상호작용 레이어를 그리는 권한을 제어합니다.\nIGNORE 설정 시: 앱 충돌 없이 다른 화면 위에 플로팅 창이나 투명 오버레이를 띄우지 못하게 해 화면 가림 및 오작동을 방지합니다.</string>
     <string name="op_write_settings_title">시스템 설정 수정</string>
-    <string name="op_write_settings_desc">음량, 화면 밝기, 네트워크 설정 등의 무단 변경을 방지합니다</string>
+    <string name="op_write_settings_desc">화면 밝기, 화면 꺼짐 시간, 벨소리, 시스템 음량 등 전역 시스템 설정을 변경하는 권한을 제어합니다.\nIGNORE 설정 시: 앱 실행에 영향 없이 시스템 설정 변경 요청을 조용히 차단해 밝기나 음량 등의 무단 변경을 방지합니다.</string>
     <string name="op_access_notif_title">알림 접근 권한</string>
-    <string name="op_access_notif_desc">알림 메시지와 SMS 인증번호 탈취 시도를 감시 및 차단합니다</string>
+    <string name="op_access_notif_desc">기기 알림창에 표시된 모든 앱의 알림 제목, 본문, 발신자 및 작업 버튼 정보를 읽는 권한을 제어합니다.\nIGNORE 설정 시: 앱 충돌 없이 다른 앱의 알림 내용 조회를 차단해 메시지나 인증번호 등의 알림 정보를 보호합니다.</string>
     <string name="op_run_any_in_bg_title">임의 백그라운드 활동</string>
     <string name="op_boot_completed_title">부팅 시 자동 실행</string>
 

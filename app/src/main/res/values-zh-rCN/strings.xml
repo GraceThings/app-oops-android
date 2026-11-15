@@ -36,13 +36,13 @@
 
     <!-- 分类 -->
     <string name="category_sensor">传感器与运动识别</string>
-    <string name="category_privacy">剪贴板与隐私防追踪</string>
-    <string name="category_background">后台抑制与保流畅</string>
-    <string name="category_system">系统防护与防骚扰</string>
+    <string name="category_privacy">剪贴板与隐私</string>
+    <string name="category_background">后台运行与唤醒锁</string>
+    <string name="category_system">系统与安全</string>
 
     <!-- 模式 -->
     <string name="mode_allow">允许</string>
-    <string name="mode_ignore">忽略(推荐)</string>
+    <string name="mode_ignore">忽略</string>
     <string name="mode_deny">拒绝</string>
     <string name="mode_default">默认</string>
 
@@ -132,32 +132,32 @@
     <string name="audit_count_format">%1$d 次</string>
 
     <!-- 敏感权限详细说明 -->
-    <string name="op_body_sensors_title">运动与身体传感器</string>
-    <string name="op_body_sensors_desc">设为IGNORE从物理层静默拦截加速度计等传感器访问</string>
-    <string name="op_high_sampling_sensors_title">高采样率运动传感器</string>
-    <string name="op_high_sampling_sensors_desc">限制陀螺仪与加速度计超高频刷新，防止微小晃动与高频状态探测</string>
-    <string name="op_body_sensors_bg_title">后台运动传感器</string>
-    <string name="op_body_sensors_bg_desc">禁止退到后台后继续读取运动状态</string>
-    <string name="op_activity_rec_title">健身与活动识别</string>
-    <string name="op_activity_rec_desc">防止App探测走路、跑步或手机晃动状态</string>
+    <string name="op_body_sensors_title">身体与运动传感器</string>
+    <string name="op_body_sensors_desc">控制应用读取加速度计、陀螺仪、心率等身体与运动传感器数据的权限。\n设为忽略：静默拦截传感器访问并返回空数据而不导致应用闪退，可屏蔽摇一摇触发等动作检测。</string>
+    <string name="op_high_sampling_sensors_title">高采样率传感器</string>
+    <string name="op_high_sampling_sensors_desc">控制应用以高于 200Hz 的采样频率读取陀螺仪、加速度计等运动传感器数据的权限。\n设为忽略：将传感器采样限制在常规频率且不引发闪退，防止高频细微晃动探测。</string>
+    <string name="op_body_sensors_bg_title">后台身体传感器</string>
+    <string name="op_body_sensors_bg_desc">控制应用在退到后台且无前台界面可见时，继续读取身体与运动传感器数据的权限。\n设为忽略：应用切至后台后将无法继续获取传感器数据，同时不影响前台正常使用。</string>
+    <string name="op_activity_rec_title">身体活动识别</string>
+    <string name="op_activity_rec_desc">控制应用获取系统识别的当前身体活动状态（如步行、跑步、骑行、乘车或步数统计）的权限。\n设为忽略：静默拦截活动状态与步数上报且不引发闪退，防止应用探测当前运动状态。</string>
     <string name="op_read_clipboard_title">读取剪贴板</string>
-    <string name="op_read_clipboard_desc">设为IGNORE后App读剪贴板将返回空内容，彻底杜绝淘口令偷窥</string>
+    <string name="op_read_clipboard_desc">控制应用读取系统剪贴板中当前复制的文本、链接、图片等内容的权限。\n设为忽略：读取剪贴板时静默返回空内容而不引发闪退，防止应用后台偷读复制内容。</string>
     <string name="op_write_clipboard_title">写入剪贴板</string>
-    <string name="op_write_clipboard_desc">禁止流氓SDK后台静默覆盖用户当前剪贴板内容</string>
+    <string name="op_write_clipboard_desc">控制应用向系统剪贴板写入、修改或覆盖文本及其他数据的权限。\n设为忽略：静默丢弃应用的剪贴板写入请求而不影响运行，防止原有剪贴板内容被悄悄覆盖。</string>
     <string name="op_query_packages_title">读取已安装应用列表</string>
-    <string name="op_query_packages_desc">设为IGNORE切断全机画像追踪，禁止扫描安装的银行、游戏或竞品软件</string>
+    <string name="op_query_packages_desc">控制应用查询并获取当前设备上其他已安装应用的包名、版本及组件信息的权限。\n设为忽略：仅返回空列表或最少系统信息而不引起异常，防止应用扫描设备上已安装软件以构建用户画像。</string>
     <string name="op_usage_stats_title">使用情况统计</string>
-    <string name="op_usage_stats_desc">剥夺App偷窥“你当前正在使用什么其他App”的能力</string>
-    <string name="op_run_in_bg_title">后台运行权限</string>
-    <string name="op_run_in_bg_desc">退到后台即刻挂起冻结，杜绝隐蔽保活消耗电池与流量</string>
+    <string name="op_usage_stats_desc">控制应用查看各应用的使用时长、启动频率以及当前正在使用的应用状态的权限。\n设为忽略：查询时返回空使用记录而不报错，防止应用监控你在何时使用过哪些其他应用。</string>
+    <string name="op_run_in_bg_title">后台运行</string>
+    <string name="op_run_in_bg_desc">控制应用在切换到后台后，继续在后台运行服务、执行调度任务或进行网络活动的权限。\n设为忽略：应用退到后台后限制其后台服务与网络活动（可能延迟后台消息推送），有助于减少电量与流量消耗。</string>
     <string name="op_wake_lock_title">保持唤醒锁 (WakeLock)</string>
-    <string name="op_wake_lock_desc">剥夺持有CPU唤醒锁的能力，防止发热暗耗电</string>
-    <string name="op_system_alert_title">显示在其他应用上层 (悬浮窗)</string>
-    <string name="op_system_alert_desc">彻底关闭流氓弹窗与防范透明点击劫持 (Clickjacking)</string>
+    <string name="op_wake_lock_desc">控制应用申请电源唤醒锁以阻止设备进入休眠状态（保持 CPU 运行或屏幕常亮）的权限。\n设为忽略：静默忽略应用的唤醒锁请求，使设备可按系统策略正常休眠，减少待机耗电与发热。</string>
+    <string name="op_system_alert_title">显示在其他应用上层（悬浮窗）</string>
+    <string name="op_system_alert_desc">控制应用在其他应用界面或系统桌面之上绘制悬浮窗口、浮层控件与交互界面的权限。\n设为忽略：禁止应用在其他界面上方显示悬浮窗或覆盖图层且不引发闪退，可避免遮挡界面或误触。</string>
     <string name="op_write_settings_title">修改系统设置</string>
-    <string name="op_write_settings_desc">防止未经允许篡改系统音量、亮度、屏幕常亮或网络</string>
-    <string name="op_access_notif_title">全局通知监听</string>
-    <string name="op_access_notif_desc">审查并阻断偷读全局通知栏消息（防止盗取短信验证码）</string>
+    <string name="op_write_settings_desc">控制应用修改系统级全局设置（如屏幕亮度、休眠超时、系统音量、铃声及显示参数等）的权限。\n设为忽略：静默拦截并丢弃修改系统全局设置的请求，防止应用未经确认擅自更改亮度或音量等偏好。</string>
+    <string name="op_access_notif_title">通知读取权限</string>
+    <string name="op_access_notif_desc">控制应用读取系统通知栏中所有应用发出的通知标题、正文、发送方及操作按钮信息的权限。\n设为忽略：阻止应用获取其他应用发出的系统通知内容（如聊天消息或短信验证码），保障通知隐私安全。</string>
     <string name="op_run_any_in_bg_title">任意后台活动</string>
     <string name="op_boot_completed_title">开机自启</string>
 

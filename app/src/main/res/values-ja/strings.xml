@@ -38,11 +38,11 @@
     <string name="category_sensor">センサーとモーション</string>
     <string name="category_privacy">クリップボードとプライバシー</string>
     <string name="category_background">バックグラウンドと WakeLock</string>
-    <string name="category_system">システムアラートとセキュリティ</string>
+    <string name="category_system">システムとセキュリティ</string>
 
     <!-- モード -->
     <string name="mode_allow">許可</string>
-    <string name="mode_ignore">無視（推奨）</string>
+    <string name="mode_ignore">無視</string>
     <string name="mode_deny">拒否</string>
     <string name="mode_default">デフォルト</string>
 
@@ -133,31 +133,31 @@
 
     <!-- AppOps 権限詳細 -->
     <string name="op_body_sensors_title">ボディ・モーションセンサー</string>
-    <string name="op_body_sensors_desc">IGNORE に設定して加速度計などのセンサーアクセスを静かに遮断します</string>
+    <string name="op_body_sensors_desc">加速度計・ジャイロ・心拍などの身体・モーションセンサーデータへのアクセスを制御します。\nIGNORE 設定時：アプリを強制終了させずにセンサー取得を静かに遮断して空データを返し、シェイク検知などを無効化できます。</string>
     <string name="op_high_sampling_sensors_title">高サンプリングレートセンサー</string>
-    <string name="op_high_sampling_sensors_desc">ジャイロ・加速度計の超高頻度取得を制限し、微細な揺れ検知を防止します</string>
+    <string name="op_high_sampling_sensors_desc">ジャイロスコープや加速度計などのモーションセンサーを 200Hz 超の高頻度で取得する権限を制御します。\nIGNORE 設定時：アプリを落とさずに取得頻度を通常範囲へ制限し、高頻度の微細な揺れ追跡を防ぎます。</string>
     <string name="op_body_sensors_bg_title">バックグラウンドセンサー</string>
-    <string name="op_body_sensors_bg_desc">バックグラウンド移行後のモーション状態取得を禁止します</string>
+    <string name="op_body_sensors_bg_desc">アプリがバックグラウンドにある状態でも身体・モーションセンサーデータを継続的に読み取る権限を制御します。\nIGNORE 設定時：フォアグラウンド動作には影響せず、バックグラウンド移行後のセンサー取得のみを停止します。</string>
     <string name="op_activity_rec_title">身体活動認識</string>
-    <string name="op_activity_rec_desc">歩行・走行や端末の揺れ検知を防止します</string>
+    <string name="op_activity_rec_desc">歩行・走行・自転車・乗車中や歩数など、システムが認識するユーザーの身体活動状態へのアクセスを制御します。\nIGNORE 設定時：アプリを強制終了させずに活動状態や歩数の通知を遮断し、行動状態の追跡を防ぎます。</string>
     <string name="op_read_clipboard_title">クリップボード読み取り</string>
-    <string name="op_read_clipboard_desc">IGNORE 設定により空データを返し、クリップボードの盗み見を防ぎます</string>
+    <string name="op_read_clipboard_desc">システムクリップボードにコピーされたテキスト・リンク・画像などを読み取る権限を制御します。\nIGNORE 設定時：アプリを落とさずに読み取り結果として空データを返し、バックグラウンドでの盗み見を防ぎます。</string>
     <string name="op_write_clipboard_title">クリップボード書き込み</string>
-    <string name="op_write_clipboard_desc">不正な SDK によるクリップボードの無断上書きを禁止します</string>
+    <string name="op_write_clipboard_desc">システムクリップボードへテキストなどのデータを書き込み・更新・上書きする権限を制御します。\nIGNORE 設定時：書き込み要求を静かに無視し、既存のクリップボード内容が勝手に上書きされるのを防ぎます。</string>
     <string name="op_query_packages_title">インストール済みアプリ一覧</string>
-    <string name="op_query_packages_desc">銀行・ゲーム・競合アプリのスキャンを遮断しプロファイリングを防ぎます</string>
+    <string name="op_query_packages_desc">端末にインストールされている他アプリのパッケージ名やメタデータを照会・取得する権限を制御します。\nIGNORE 設定時：エラーを起こさずに最小限または空の一覧のみを返し、インストールアプリのスキャンやプロファイリングを防ぎます。</string>
     <string name="op_usage_stats_title">使用状況統計</string>
-    <string name="op_usage_stats_desc">現在使用中の他アプリの監視権限を制限します</string>
+    <string name="op_usage_stats_desc">各アプリの利用時間・起動頻度・現在使用中のアプリなど、端末の使用履歴へのアクセスを制御します。\nIGNORE 設定時：エラーを出さずに空の利用履歴を返し、他アプリの使用状況監視を防ぎます。</string>
     <string name="op_run_in_bg_title">バックグラウンド実行</string>
-    <string name="op_run_in_bg_desc">バックグラウンド移行時に即時停止し、バッテリーと通信量の消費を抑えます</string>
+    <string name="op_run_in_bg_desc">フォアグラウンドにない状態でバックグラウンドサービス・定期ジョブ・通信などを実行する権限を制御します。\nIGNORE 設定時：画面から離れた後のバックグラウンド処理や通信を抑え、電池消費や通信量を削減します（通知が遅れる場合があります）。</string>
     <string name="op_wake_lock_title">WakeLock の保持</string>
-    <string name="op_wake_lock_desc">CPU のスリープ解除維持を制限し、発熱と電池消耗を防ぎます</string>
+    <string name="op_wake_lock_desc">端末がスリープ状態に入らないよう CPU 稼働や画面点灯を維持する電源ウェイクロックの取得権限を制御します。\nIGNORE 設定時：ウェイクロック要求を静かに無効化し、端末が通常どおりスリープできるようにして待機消費電力や発熱を抑えます。</string>
     <string name="op_system_alert_title">他のアプリの上に重ねて表示</string>
-    <string name="op_system_alert_desc">不正なポップアップやクリックジャッキング攻撃を防ぎます</string>
+    <string name="op_system_alert_desc">他のアプリ画面やシステム UI の前面にフローティングウィンドウやオーバーレイ要素を描画する権限を制御します。\nIGNORE 設定時：アプリを落とさずに他画面上でのフローティング表示や透明オーバーレイを禁止し、画面の遮りや誤タップを防ぎます。</string>
     <string name="op_write_settings_title">システム設定の変更</string>
-    <string name="op_write_settings_desc">音量・画面輝度・ネットワーク設定などの無断変更を防止します</string>
+    <string name="op_write_settings_desc">画面の明るさ、スリープ時間、着信音、音量などのシステム共通設定を変更する権限を制御します。\nIGNORE 設定時：システム設定の変更要求を静かに無効化し、アプリを正常動作させたまま明るさや音量の勝手な変更を防ぎます。</string>
     <string name="op_access_notif_title">通知へのアクセス</string>
-    <string name="op_access_notif_desc">通知内容や SMS 認証コードの盗み見を監視・遮断します</string>
+    <string name="op_access_notif_desc">他のアプリが通知バーに表示した通知のタイトル・本文・送信者・操作ボタンを読み取る権限を制御します。\nIGNORE 設定時：アプリを強制終了させずに他アプリからの通知取得を遮断し、メッセージや認証コードなどの閲覧を防ぎます。</string>
     <string name="op_run_any_in_bg_title">任意のバックグラウンド動作</string>
     <string name="op_boot_completed_title">起動時の自動実行</string>
 

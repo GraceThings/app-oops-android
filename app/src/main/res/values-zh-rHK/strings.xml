@@ -36,13 +36,13 @@
 
     <!-- 分類 -->
     <string name="category_sensor">感應器與動態識別</string>
-    <string name="category_privacy">剪貼簿與私隱防追蹤</string>
-    <string name="category_background">背景抑制與流暢保護</string>
-    <string name="category_system">系統防護與防滋擾</string>
+    <string name="category_privacy">剪貼簿與私隱</string>
+    <string name="category_background">背景運行與喚醒鎖</string>
+    <string name="category_system">系統與安全</string>
 
     <!-- 模式 -->
     <string name="mode_allow">允許</string>
-    <string name="mode_ignore">忽略（推薦）</string>
+    <string name="mode_ignore">忽略</string>
     <string name="mode_deny">拒絕</string>
     <string name="mode_default">預設</string>
 
@@ -132,32 +132,32 @@
     <string name="audit_count_format">%1$d 次</string>
 
     <!-- 敏感權限詳細說明 -->
-    <string name="op_body_sensors_title">動態與身體感應器</string>
-    <string name="op_body_sensors_desc">設為 IGNORE 從底層靜默攔截加速計等感應器存取</string>
-    <string name="op_high_sampling_sensors_title">高取樣率動態感應器</string>
-    <string name="op_high_sampling_sensors_desc">限制陀螺儀及加速計超高頻更新率，防止細微晃動與高頻狀態偵測</string>
-    <string name="op_body_sensors_bg_title">背景動態感應器</string>
-    <string name="op_body_sensors_bg_desc">禁止退到背景後繼續讀取動態狀態</string>
-    <string name="op_activity_rec_title">健身與活動識別</string>
-    <string name="op_activity_rec_desc">防止應用程式偵測步行、跑步或手機晃動狀態</string>
+    <string name="op_body_sensors_title">身體與動態感應器</string>
+    <string name="op_body_sensors_desc">控制應用程式存取加速計、陀螺儀、心率等身體與動態感應器數據的權限。\n設為忽略：靜默攔截感應器存取並傳回空數據而不會導致應用程式閃退，可封鎖搖一搖觸發等動作偵測。</string>
+    <string name="op_high_sampling_sensors_title">高取樣率感應器</string>
+    <string name="op_high_sampling_sensors_desc">控制應用程式以高於 200Hz 的取樣頻率讀取陀螺儀、加速計等動態感應器數據的權限。\n設為忽略：將感應器取樣限制在常規頻率且不引發閃退，防止高頻細微晃動偵測。</string>
+    <string name="op_body_sensors_bg_title">背景身體感應器</string>
+    <string name="op_body_sensors_bg_desc">控制應用程式退至背景且無前景介面顯示時，繼續讀取身體與動態感應器數據的權限。\n設為忽略：應用程式切換至背景後無法繼續取得感應器數據，同時不影響前景正常使用。</string>
+    <string name="op_activity_rec_title">身體活動識別</string>
+    <string name="op_activity_rec_desc">控制應用程式取得系統識別的目前身體活動狀態（如步行、跑步、踩單車、乘車或步數統計）的權限。\n設為忽略：靜默攔截活動狀態與步數回報且不引發閃退，防止應用程式偵測目前動態狀態。</string>
     <string name="op_read_clipboard_title">讀取剪貼簿</string>
-    <string name="op_read_clipboard_desc">設為 IGNORE 後應用程式讀取剪貼簿將傳回空內容，徹底杜絕偷窺</string>
+    <string name="op_read_clipboard_desc">控制應用程式讀取系統剪貼簿中目前複製的文字、連結、圖片等內容的權限。\n設為忽略：讀取剪貼簿時靜默傳回空內容而不引發閃退，防止應用程式於背景偷讀複製內容。</string>
     <string name="op_write_clipboard_title">寫入剪貼簿</string>
-    <string name="op_write_clipboard_desc">禁止流氓 SDK 在背景靜默覆寫用戶目前的剪貼簿內容</string>
+    <string name="op_write_clipboard_desc">控制應用程式向系統剪貼簿寫入、修改或覆寫文字及其他資料的權限。\n設為忽略：靜默捨棄應用程式的剪貼簿寫入請求而不影響運行，防止原有剪貼簿內容被悄悄覆寫。</string>
     <string name="op_query_packages_title">讀取已安裝應用程式列表</string>
-    <string name="op_query_packages_desc">設為 IGNORE 切斷裝置畫像追蹤，禁止掃描銀行、遊戲或競爭對手應用</string>
+    <string name="op_query_packages_desc">控制應用程式查詢並取得目前裝置上其他已安裝應用的套件名稱、版本及元件資訊的權限。\n設為忽略：僅傳回空列表或最少系統資訊而不引起異常，防止應用程式掃描裝置已安裝軟件以建立用戶畫像。</string>
     <string name="op_usage_stats_title">使用情況統計</string>
-    <string name="op_usage_stats_desc">移除應用程式窺探你目前正在使用甚麼其他應用程式的能力</string>
-    <string name="op_run_in_bg_title">背景運行權限</string>
-    <string name="op_run_in_bg_desc">退到背景立即掛起凍結，杜絕隱蔽保活消耗電量與數據</string>
+    <string name="op_usage_stats_desc">控制應用程式檢視各應用的使用時長、啟動頻率以及目前正在使用之應用狀態的權限。\n設為忽略：查詢時傳回空使用紀錄而不報錯，防止應用程式監控你何時使用過其他應用。</string>
+    <string name="op_run_in_bg_title">背景運行</string>
+    <string name="op_run_in_bg_desc">控制應用程式在切換至背景後，繼續於背景執行服務、排程任務或進行網絡活動的權限。\n設為忽略：應用程式退至背景後限制其背景服務與網絡活動（或會延遲背景訊息推送），有助減少電量與數據消耗。</string>
     <string name="op_wake_lock_title">保持喚醒鎖 (WakeLock)</string>
-    <string name="op_wake_lock_desc">撤銷持有 CPU 喚醒鎖的能力，防止發熱與暗中耗電</string>
+    <string name="op_wake_lock_desc">控制應用程式申請電源喚醒鎖以阻止裝置進入休眠狀態（保持 CPU 運行或螢幕常亮）的權限。\n設為忽略：靜默忽略應用程式的喚醒鎖請求，使裝置可按系統策略正常休眠，減少待機耗電與發熱。</string>
     <string name="op_system_alert_title">顯示於其他應用程式上層（懸浮窗）</string>
-    <string name="op_system_alert_desc">徹底關閉流氓彈窗並防範透明點擊劫持 (Clickjacking)</string>
+    <string name="op_system_alert_desc">控制應用程式在其他應用介面或系統桌面之上繪製懸浮視窗、浮層控制項與互動介面的權限。\n設為忽略：禁止應用程式於其他介面上方顯示懸浮窗或覆蓋圖層且不引發閃退，避免遮擋畫面或誤觸。</string>
     <string name="op_write_settings_title">修改系統設定</string>
-    <string name="op_write_settings_desc">防止未經許可篡改系統音量、亮度、螢幕常亮或網絡設定</string>
-    <string name="op_access_notif_title">全域通知監聽</string>
-    <string name="op_access_notif_desc">審查並阻斷偷讀系統通知欄訊息（防止盜取短訊驗證碼）</string>
+    <string name="op_write_settings_desc">控制應用程式修改系統級全域設定（如螢幕亮度、休眠逾時、系統音量、鈴聲及顯示參數等）的權限。\n設為忽略：靜默攔截並捨棄修改系統全域設定的請求，防止應用程式未經確認擅自更改亮度或音量等偏好。</string>
+    <string name="op_access_notif_title">通知讀取權限</string>
+    <string name="op_access_notif_desc">控制應用程式讀取系統通知欄中所有應用發出的通知標題、內容、發送方及操作按鈕資訊的權限。\n設為忽略：阻止應用程式取得其他應用發出的系統通知內容（如聊天訊息或短訊驗證碼），保障通知私隱安全。</string>
     <string name="op_run_any_in_bg_title">任意背景活動</string>
     <string name="op_boot_completed_title">開機自動啟動</string>
 

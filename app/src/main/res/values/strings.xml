@@ -38,11 +38,11 @@
     <string name="category_sensor">Sensors &amp; Movement</string>
     <string name="category_privacy">Clipboard &amp; Privacy</string>
     <string name="category_background">Background &amp; WakeLock</string>
-    <string name="category_system">System Alert &amp; Security</string>
+    <string name="category_system">System &amp; Security</string>
 
     <!-- Modes -->
     <string name="mode_allow">Allow</string>
-    <string name="mode_ignore">Ignore (Safe)</string>
+    <string name="mode_ignore">Ignore</string>
     <string name="mode_deny">Deny</string>
     <string name="mode_default">Default</string>
 
@@ -133,31 +133,31 @@
 
     <!-- Target AppOps Details -->
     <string name="op_body_sensors_title">Body &amp; Motion Sensors</string>
-    <string name="op_body_sensors_desc">Set to IGNORE to silently intercept accelerometer and motion sensors</string>
+    <string name="op_body_sensors_desc">Controls access to device accelerometer, gyroscope, heart rate, and motion sensors.\nSet to IGNORE: Silently blocks sensor access and returns empty readings without crashing the app (e.g., stops shake-to-trigger actions).</string>
     <string name="op_high_sampling_sensors_title">High Sampling Rate Sensors</string>
-    <string name="op_high_sampling_sensors_desc">Limits gyroscope &amp; accelerometer refresh rate to prevent high-frequency motion tracking</string>
+    <string name="op_high_sampling_sensors_desc">Controls sampling motion sensors (such as the gyroscope and accelerometer) at frequencies above 200 Hz.\nSet to IGNORE: Caps sensor polling to normal frequencies without crashing the app, preventing fine-grained high-frequency motion tracking.</string>
     <string name="op_body_sensors_bg_title">Background Body Sensors</string>
-    <string name="op_body_sensors_bg_desc">Prevents reading motion state when app is in background</string>
+    <string name="op_body_sensors_bg_desc">Controls whether the app can continue reading body and motion sensor data while running in the background.\nSet to IGNORE: Stops background sensor data delivery once the app leaves the foreground while keeping foreground usage normal.</string>
     <string name="op_activity_rec_title">Activity Recognition</string>
-    <string name="op_activity_rec_desc">Prevents apps from detecting walking, running, or device shaking state</string>
+    <string name="op_activity_rec_desc">Controls access to physical activity state recognized by the system, such as walking, running, cycling, or step counts.\nSet to IGNORE: Returns no activity updates without crashing the app, preventing motion and step state tracking.</string>
     <string name="op_read_clipboard_title">Read Clipboard</string>
-    <string name="op_read_clipboard_desc">Returns empty content when set to IGNORE, eliminating clipboard snooping</string>
+    <string name="op_read_clipboard_desc">Controls reading text, links, images, and other content currently copied to the system clipboard.\nSet to IGNORE: Silently returns empty clipboard data without crashing the app, preventing background clipboard snooping.</string>
     <string name="op_write_clipboard_title">Write Clipboard</string>
-    <string name="op_write_clipboard_desc">Prevents rogue SDKs from overwriting current clipboard content silently</string>
+    <string name="op_write_clipboard_desc">Controls writing, modifying, or overwriting text and other data on the system clipboard.\nSet to IGNORE: Silently discards clipboard write requests from the app so your existing clipboard content stays intact.</string>
     <string name="op_query_packages_title">Read Installed Packages</string>
-    <string name="op_query_packages_desc">Cuts off device profiling; prevents scanning banking, gaming, or competitor apps</string>
+    <string name="op_query_packages_desc">Controls querying the list of installed applications, package names, and metadata on this device.\nSet to IGNORE: Hides other installed apps (returning only minimal or empty results) without crashing, reducing cross-app profiling.</string>
     <string name="op_usage_stats_title">Usage Statistics</string>
-    <string name="op_usage_stats_desc">Revokes ability to monitor what other apps you are currently using</string>
+    <string name="op_usage_stats_desc">Controls access to app usage history, launch frequency, and which applications are active on the device.\nSet to IGNORE: Returns empty usage history without errors, preventing the app from monitoring how and when you use other apps.</string>
     <string name="op_run_in_bg_title">Run in Background</string>
-    <string name="op_run_in_bg_desc">Suspends app immediately upon backgrounding to prevent battery and network drain</string>
+    <string name="op_run_in_bg_desc">Controls whether the app can execute background services, scheduled jobs, and network activity when not in the foreground.\nSet to IGNORE: Suppresses background services and network activity once the app leaves the foreground, saving battery and data.</string>
     <string name="op_wake_lock_title">Hold Wake Lock (WakeLock)</string>
-    <string name="op_wake_lock_desc">Revokes ability to hold CPU wake lock to stop background overheating and battery drain</string>
+    <string name="op_wake_lock_desc">Controls requesting power wake locks to keep the CPU running or prevent the screen from sleeping.\nSet to IGNORE: Silently ignores wake-lock requests so the device can enter normal sleep, reducing idle battery drain and heat.</string>
     <string name="op_system_alert_title">Display Over Other Apps (Overlay)</string>
-    <string name="op_system_alert_desc">Completely closes rogue popups and protects against clickjacking</string>
+    <string name="op_system_alert_desc">Controls drawing floating windows, overlay views, and interactive layers on top of other apps or the system UI.\nSet to IGNORE: Prevents the app from displaying floating overlays or popups over other apps without crashing.</string>
     <string name="op_write_settings_title">Modify System Settings</string>
-    <string name="op_write_settings_desc">Prevents unauthorized changes to system volume, screen brightness, or network</string>
-    <string name="op_access_notif_title">Notification Listener Access</string>
-    <string name="op_access_notif_desc">Inspects and blocks snooping on notification messages and SMS OTP codes</string>
+    <string name="op_write_settings_desc">Controls modifying global system settings such as screen brightness, screen timeout, ringtones, and system volume.\nSet to IGNORE: Silently discards attempts to alter global system settings while keeping the app running normally.</string>
+    <string name="op_access_notif_title">Notification Access</string>
+    <string name="op_access_notif_desc">Controls reading notifications posted by all apps, including notification titles, message text, and action buttons.\nSet to IGNORE: Blocks the app from receiving notifications posted by other apps without crashing, protecting sensitive notification content.</string>
     <string name="op_run_any_in_bg_title">Run Any in Background</string>
     <string name="op_boot_completed_title">Run at Startup</string>
 
