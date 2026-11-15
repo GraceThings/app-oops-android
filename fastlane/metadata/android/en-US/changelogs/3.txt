@@ -1,0 +1,5 @@
+<ul>
+<li>Add Community Rules subscriptions with mirror fallback and local installed-app matching.</li>
+<li>Add batch rule execution and one-click rule JSON contribution via GitHub Issues.</li>
+<li>Integrate community rule shortcuts into Rules and App Detail screens.</li>
+</ul>

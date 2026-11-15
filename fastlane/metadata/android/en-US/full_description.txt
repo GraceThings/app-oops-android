@@ -1,0 +1,25 @@
+<p>A <b>Material 3 Expressive</b> Android permission auditor and AppOps controller powered by <b>Shizuku</b>. Manage sensitive app permissions, block unauthorized motion and clipboard access, restrict background abuse, and sync community rules — all without Root.</p>
+
+<p><b>Features</b></p>
+<ul>
+<li><b>Rootless Low-Level Control:</b> Obtains privileged Shell (UID 2000) and <code>IAppOpsService</code> access via Shizuku to configure AppOps modes (Allow / Ignore / Deny / Default) and sync runtime permissions without Root.</li>
+<li><b>Four Sensitive Categories:</b>
+  <ul>
+  <li>Sensors &amp; Movement: Body sensors and activity recognition (blocks shake-to-trigger ad detection).</li>
+  <li>Clipboard &amp; Privacy: Read/write clipboard, read installed apps list, and usage statistics.</li>
+  <li>Background &amp; WakeLock: Run in background, run any in background, CPU WakeLock, and boot auto-start.</li>
+  <li>System &amp; Security: Display over other apps (overlay), modify system settings, and notification listener access.</li>
+  </ul>
+</li>
+<li><b>Real-time Interception Guard:</b> Background monitor watches both <code>opNoted</code> and <code>opStarted</code> events, logs hits in Audit Log, and alerts via Toast, Notifications, or Android 16+ Live Updates with timed Temporary Allow actions.</li>
+<li><b>Batch Presets &amp; Community Rules:</b> Apply built-in batch protection suites, subscribe to community rule repositories (such as GraceThings/app-oops-rules via GitHub or Gitee mirror), view applied rule badges in App Detail, and export custom rules to contribute back.</li>
+<li><b>Expressive UI &amp; Localization:</b> Dynamic Color (Monet), curated palettes, Light/Dark themes, and per-app support for English, Simplified/Traditional Chinese, Japanese, and Korean.</li>
+</ul>
+
+<p><b>How to use</b></p>
+<ol>
+<li>Start the Shizuku service on your device (via Wireless Debugging or Root).</li>
+<li>Open App Oops and tap Authorize to grant Shizuku permission.</li>
+<li>Browse Applications to tune individual AppOps modes, or open Rules to apply batch presets and community rule subscriptions.</li>
+<li>Enable Real-time Interception Guard on the Dashboard for live interception alerts and audit history.</li>
+</ol>

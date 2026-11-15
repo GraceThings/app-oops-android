@@ -1,0 +1,1 @@
+Rootless AppOps permission auditor and privacy controller powered by Shizuku

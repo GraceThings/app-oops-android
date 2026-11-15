@@ -1,0 +1,6 @@
+<ul>
+<li>Implement opStarted callback watching alongside opNoted for continuous operations.</li>
+<li>Add in-app language switcher (English, Simplified/Traditional Chinese, Japanese, Korean).</li>
+<li>Add BOOT_COMPLETED and RUN_ANY_IN_BACKGROUND controls, dedicated About screen, and bilingual READMEs.</li>
+<li>Optimize app icon caching and PullToRefreshBox list loading.</li>
+</ul>

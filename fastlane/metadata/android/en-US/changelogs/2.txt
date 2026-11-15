@@ -1,0 +1,5 @@
+<ul>
+<li>Optimize AppOps state querying with batch getPackagesForOps Binder calls.</li>
+<li>Split clipboard batch protection into distinct read and write options.</li>
+<li>Refactor interception alert settings, live updates toggle, and multi-select quick actions.</li>
+</ul>

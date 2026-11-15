@@ -1,0 +1,6 @@
+<ul>
+<li>Track applied community rules and display a clickable rule badge in the App Detail header card.</li>
+<li>Support runtime-permission-backed AppOps via Shizuku pm grant/revoke and post-change verification.</li>
+<li>Enhance UID-scoped AppOp resolution, refine RUN_ANY_IN_BACKGROUND, and remove obsolete sensor ops.</li>
+<li>Expand permission descriptions with exact Ignore-mode behavior and simplify subscription presets.</li>
+</ul>
