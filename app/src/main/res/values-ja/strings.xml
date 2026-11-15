@@ -200,7 +200,7 @@
     <string name="setting_temp_allow_title">権限の一時許可</string>
     <string name="setting_temp_allow_desc">遮断通知から一時的に許可し、期限切れ後に自動で再び遮断するクイック操作を提供します</string>
     <string name="setting_temp_duration_title">一時許可の期間</string>
-    <string name="monitor_notif_action_temp_allow">一時許可 (%1$d秒)</string>
+    <string name="monitor_notif_action_temp_allow">一時許可</string>
     <string name="monitor_notif_action_close">閉じる</string>
     <string name="toast_temp_allow_granted">【%1$s】の%2$sを一時許可しました（%3$d秒）</string>
     <string name="toast_temp_allow_expired">一時許可が終了したため、【%1$s】の%2$sを再び遮断しました</string>
@@ -231,10 +231,8 @@
     <string name="community_add_sub_url_label">購読リンク / リポジトリ URL</string>
     <string name="community_add_sub_url_placeholder">https://github.com/GraceThings/app-oops-rules</string>
     <string name="community_add_sub_name_label">表示名（任意）</string>
-    <string name="community_add_sub_quick_fill">公式リポジトリを自動入力 (GraceThings/app-oops-rules):</string>
     <string name="community_quick_github">GitHub 公式</string>
-    <string name="community_quick_jsdelivr">jsDelivr CDN</string>
-    <string name="community_quick_gitee">Gitee ミラー</string>
+    <string name="community_quick_gitee">Gitee 公式ミラー</string>
     <string name="community_btn_add_sync">追加して同期</string>
     <string name="community_sub_manager_title">購読の管理</string>
     <string name="community_sub_info">%1$d 件のルール • %2$s</string>

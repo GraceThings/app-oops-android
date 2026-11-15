@@ -200,7 +200,7 @@
     <string name="setting_temp_allow_title">臨時允許權限</string>
     <string name="setting_temp_allow_desc">攔截後於通知提供快捷按鈕，臨時放行並於到期後自動恢復攔截</string>
     <string name="setting_temp_duration_title">放行時長</string>
-    <string name="monitor_notif_action_temp_allow">臨時允許 (%1$d秒)</string>
+    <string name="monitor_notif_action_temp_allow">臨時允許</string>
     <string name="monitor_notif_action_close">關閉</string>
     <string name="toast_temp_allow_granted">已臨時放行【%1$s】%2$s（%3$d秒）</string>
     <string name="toast_temp_allow_expired">臨時允許已到期，已恢復攔截【%1$s】%2$s</string>
@@ -231,10 +231,8 @@
     <string name="community_add_sub_url_label">訂閱連結或倉庫網址</string>
     <string name="community_add_sub_url_placeholder">https://github.com/GraceThings/app-oops-rules</string>
     <string name="community_add_sub_name_label">顯示名稱（選填）</string>
-    <string name="community_add_sub_quick_fill">快速填入官方倉庫 (GraceThings/app-oops-rules)：</string>
     <string name="community_quick_github">GitHub 官方源</string>
-    <string name="community_quick_jsdelivr">jsDelivr 加速</string>
-    <string name="community_quick_gitee">Gitee 鏡像源</string>
+    <string name="community_quick_gitee">Gitee 官方鏡像</string>
     <string name="community_btn_add_sync">新增並同步</string>
     <string name="community_sub_manager_title">訂閱管理</string>
     <string name="community_sub_info">%1$d 條規則 • %2$s</string>

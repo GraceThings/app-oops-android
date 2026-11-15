@@ -200,7 +200,7 @@
     <string name="setting_temp_allow_title">Temporary Permission Allow</string>
     <string name="setting_temp_allow_desc">Provide quick action to temporarily allow permission and automatically re-block when timer expires</string>
     <string name="setting_temp_duration_title">Temporary Duration</string>
-    <string name="monitor_notif_action_temp_allow">Temp Allow (%1$ds)</string>
+    <string name="monitor_notif_action_temp_allow">Temp Allow</string>
     <string name="monitor_notif_action_close">Dismiss</string>
     <string name="toast_temp_allow_granted">Temporarily allowed [%1$s] %2$s (%3$ds)</string>
     <string name="toast_temp_allow_expired">Temporary access expired. Restored block on [%1$s] %2$s</string>
@@ -229,10 +229,8 @@
     <string name="community_add_sub_url_label">Subscription Link / Repo URL</string>
     <string name="community_add_sub_url_placeholder">https://github.com/GraceThings/app-oops-rules</string>
     <string name="community_add_sub_name_label">Display Name (Optional)</string>
-    <string name="community_add_sub_quick_fill">Quick-fill Official Repository (GraceThings/app-oops-rules):</string>
     <string name="community_quick_github">GitHub Official</string>
-    <string name="community_quick_jsdelivr">jsDelivr CDN</string>
-    <string name="community_quick_gitee">Gitee Mirror</string>
+    <string name="community_quick_gitee">Gitee Official Mirror</string>
     <string name="community_btn_add_sync">Add &amp; Sync</string>
     <string name="community_sub_manager_title">Manage Subscriptions</string>
     <string name="community_sub_info">%1$d rules • %2$s</string>

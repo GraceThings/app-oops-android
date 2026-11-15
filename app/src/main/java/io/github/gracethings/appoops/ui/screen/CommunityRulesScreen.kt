@@ -170,18 +170,10 @@ fun CommunityRulesScreen(
                 IconButton(
                     onClick = { showManageSubsSheet = true }
                 ) {
-                    BadgedBox(
-                        badge = {
-                            if (subscriptions.isNotEmpty()) {
-                                Badge { Text(subscriptions.size.toString()) }
-                            }
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Tune,
-                            contentDescription = stringResource(R.string.community_sub_manager_title)
-                        )
-                    }
+                    Icon(
+                        imageVector = Icons.Default.Tune,
+                        contentDescription = stringResource(R.string.community_sub_manager_title)
+                    )
                 }
                 IconButton(
                     enabled = !isRefreshing && subscriptions.isNotEmpty(),
@@ -630,8 +622,18 @@ private fun AddSubscriptionDialog(
 
     var urlInput by remember { mutableStateOf("") }
     var nameInput by remember { mutableStateOf("") }
+    var isNameManuallyEdited by remember { mutableStateOf(false) }
     var isSubmitting by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    fun applyPreset(url: String, defaultName: String) {
+        urlInput = url
+        if (!isNameManuallyEdited || nameInput.isBlank()) {
+            nameInput = defaultName
+            isNameManuallyEdited = false
+        }
+        errorMessage = null
+    }
 
     AlertDialog(
         onDismissRequest = { if (!isSubmitting) onDismiss() },
@@ -654,18 +656,15 @@ private fun AddSubscriptionDialog(
 
                 OutlinedTextField(
                     value = nameInput,
-                    onValueChange = { nameInput = it },
+                    onValueChange = {
+                        nameInput = it
+                        isNameManuallyEdited = it.isNotBlank()
+                    },
                     label = { Text(stringResource(R.string.community_add_sub_name_label)) },
                     singleLine = true,
                     enabled = !isSubmitting,
                     shape = RoundedCornerShape(14.dp),
                     modifier = Modifier.fillMaxWidth()
-                )
-
-                Text(
-                    text = stringResource(R.string.community_add_sub_quick_fill),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Row(
@@ -674,27 +673,20 @@ private fun AddSubscriptionDialog(
                 ) {
                     SuggestionChip(
                         onClick = {
-                            urlInput = SubscriptionPreferences.OFFICIAL_GITHUB_WEB
-                            if (nameInput.isBlank()) nameInput = "GraceThings Official (GitHub)"
-                            errorMessage = null
+                            applyPreset(
+                                url = SubscriptionPreferences.OFFICIAL_GITHUB_WEB,
+                                defaultName = "GraceThings Official (GitHub)"
+                            )
                         },
                         enabled = !isSubmitting,
                         label = { Text(stringResource(R.string.community_quick_github)) }
                     )
                     SuggestionChip(
                         onClick = {
-                            urlInput = SubscriptionPreferences.OFFICIAL_JSDELIVR_URL
-                            if (nameInput.isBlank()) nameInput = "GraceThings Official (jsDelivr)"
-                            errorMessage = null
-                        },
-                        enabled = !isSubmitting,
-                        label = { Text(stringResource(R.string.community_quick_jsdelivr)) }
-                    )
-                    SuggestionChip(
-                        onClick = {
-                            urlInput = SubscriptionPreferences.OFFICIAL_GITEE_WEB
-                            if (nameInput.isBlank()) nameInput = "GraceThings Mirror (Gitee)"
-                            errorMessage = null
+                            applyPreset(
+                                url = SubscriptionPreferences.OFFICIAL_GITEE_WEB,
+                                defaultName = "GraceThings Official (Gitee)"
+                            )
                         },
                         enabled = !isSubmitting,
                         label = { Text(stringResource(R.string.community_quick_gitee)) }
