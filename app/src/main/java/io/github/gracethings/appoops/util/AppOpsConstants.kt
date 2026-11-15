@@ -1,5 +1,9 @@
 package io.github.gracethings.appoops.util
 
+import android.Manifest
+import android.app.AppOpsManager
+import io.github.gracethings.appoops.data.model.OpMode
+
 object AppOpsConstants {
     const val OP_COARSE_LOCATION = 0
     const val OP_FINE_LOCATION = 1
@@ -26,8 +30,6 @@ object AppOpsConstants {
     const val OP_RUN_ANY_IN_BACKGROUND = 70
     const val OP_ACTIVITY_RECOGNITION = 79
     const val OP_QUERY_ALL_PACKAGES = 91
-    const val OP_BODY_SENSORS_BACKGROUND = 107
-    const val OP_HIGH_SAMPLING_RATE_SENSORS = 117
 
     // AppOps Modes
     const val MODE_ALLOWED = 0
@@ -35,12 +37,39 @@ object AppOpsConstants {
     const val MODE_ERRORED = 2
     const val MODE_DEFAULT = 3
 
+    private val defaultModeFallback = mapOf(
+        OP_COARSE_LOCATION to MODE_ALLOWED,
+        OP_FINE_LOCATION to MODE_ALLOWED,
+        OP_VIBRATE to MODE_ALLOWED,
+        OP_READ_CONTACTS to MODE_ALLOWED,
+        OP_WRITE_CONTACTS to MODE_ALLOWED,
+        OP_READ_CALL_LOG to MODE_ALLOWED,
+        OP_WRITE_CALL_LOG to MODE_ALLOWED,
+        OP_WRITE_SETTINGS to MODE_DEFAULT,
+        OP_SYSTEM_ALERT_WINDOW to MODE_DEFAULT,
+        OP_ACCESS_NOTIFICATIONS to MODE_DEFAULT,
+        OP_CAMERA to MODE_ALLOWED,
+        OP_RECORD_AUDIO to MODE_ALLOWED,
+        OP_READ_CLIPBOARD to MODE_ALLOWED,
+        OP_WRITE_CLIPBOARD to MODE_ALLOWED,
+        OP_WAKE_LOCK to MODE_ALLOWED,
+        OP_GET_USAGE_STATS to MODE_DEFAULT,
+        OP_BODY_SENSORS to MODE_ALLOWED,
+        OP_RUN_IN_BACKGROUND to MODE_ALLOWED,
+        OP_RUN_ANY_IN_BACKGROUND to MODE_ALLOWED,
+        OP_ACTIVITY_RECOGNITION to MODE_ALLOWED,
+        OP_QUERY_ALL_PACKAGES to MODE_DEFAULT
+    )
+
+    private val runtimePermissions = mapOf(
+        OP_BODY_SENSORS to Manifest.permission.BODY_SENSORS,
+        OP_ACTIVITY_RECOGNITION to Manifest.permission.ACTIVITY_RECOGNITION
+    )
+
     private val opNames = mapOf(
         OP_READ_CLIPBOARD to "READ_CLIPBOARD",
         OP_WRITE_CLIPBOARD to "WRITE_CLIPBOARD",
         OP_BODY_SENSORS to "BODY_SENSORS",
-        OP_BODY_SENSORS_BACKGROUND to "BODY_SENSORS_BACKGROUND",
-        OP_HIGH_SAMPLING_RATE_SENSORS to "HIGH_SAMPLING_RATE_SENSORS",
         OP_ACTIVITY_RECOGNITION to "ACTIVITY_RECOGNITION",
         OP_QUERY_ALL_PACKAGES to "QUERY_ALL_PACKAGES",
         OP_GET_USAGE_STATS to "GET_USAGE_STATS",
@@ -58,8 +87,6 @@ object AppOpsConstants {
         OP_READ_CLIPBOARD to "读取剪贴板",
         OP_WRITE_CLIPBOARD to "写入剪贴板",
         OP_BODY_SENSORS to "运动与身体传感器",
-        OP_BODY_SENSORS_BACKGROUND to "后台身体传感器",
-        OP_HIGH_SAMPLING_RATE_SENSORS to "高采样率运动传感器(陀螺仪/加速度)",
         OP_ACTIVITY_RECOGNITION to "健身与活动识别",
         OP_QUERY_ALL_PACKAGES to "读取已安装应用列表",
         OP_GET_USAGE_STATS to "获取应用使用情况统计",
@@ -75,8 +102,6 @@ object AppOpsConstants {
 
     val communityAllowedOps: Map<String, Int> = mapOf(
         "BODY_SENSORS" to OP_BODY_SENSORS,
-        "BODY_SENSORS_BACKGROUND" to OP_BODY_SENSORS_BACKGROUND,
-        "HIGH_SAMPLING_RATE_SENSORS" to OP_HIGH_SAMPLING_RATE_SENSORS,
         "ACTIVITY_RECOGNITION" to OP_ACTIVITY_RECOGNITION,
         "READ_CLIPBOARD" to OP_READ_CLIPBOARD,
         "WRITE_CLIPBOARD" to OP_WRITE_CLIPBOARD,
@@ -90,23 +115,49 @@ object AppOpsConstants {
         "ACCESS_NOTIFICATIONS" to OP_ACCESS_NOTIFICATIONS
     )
 
-    val opBootCompleted: Int? by lazy {
-        runCatching {
-            val m = android.app.AppOpsManager::class.java.getMethod("strOpToOp", String::class.java)
-            (m.invoke(null, "android:boot_completed") as? Int)?.takeIf { it >= 0 }
-        }.getOrNull()
-    }
-
     val allManagedOps: IntArray by lazy {
-        val base = communityAllowedOps.values.toMutableList()
-        opBootCompleted?.let { if (it !in base) base.add(it) }
-        base.distinct().toIntArray()
+        communityAllowedOps.values.distinct().toIntArray()
     }
 
-    fun getOpName(op: Int): String {
-        if (op == opBootCompleted) return "BOOT_COMPLETED"
-        return opNames[op] ?: "OP_$op"
+    /**
+     * Returns the OS default mode for [opCode]. Note that ops such as READ_CLIPBOARD or
+     * RUN_ANY_IN_BACKGROUND default to MODE_ALLOWED (0), whereas special-access ops default
+     * to MODE_DEFAULT (3).
+     */
+    fun getDefaultMode(opCode: Int): Int {
+        val reflected = runCatching {
+            val m = AppOpsManager::class.java.getMethod("opToDefaultMode", Int::class.javaPrimitiveType)
+            m.invoke(null, opCode) as? Int
+        }.getOrNull()
+        if (reflected != null && reflected in MODE_ALLOWED..4) {
+            return reflected
+        }
+        return defaultModeFallback[opCode] ?: MODE_DEFAULT
     }
+
+    /**
+     * Maps [OpMode.DEFAULT] to the actual system default mode for [opCode] so resetting an
+     * op whose default is MODE_ALLOWED (0) does not write literal MODE_DEFAULT (3).
+     */
+    fun resolveTargetModeValue(opCode: Int, requestedMode: OpMode): Int {
+        return if (requestedMode == OpMode.DEFAULT) {
+            getDefaultMode(opCode)
+        } else {
+            requestedMode.value
+        }
+    }
+
+    fun getRuntimePermissionName(opCode: Int): String? = runtimePermissions[opCode]
+
+    fun isRuntimePermissionOp(opCode: Int): Boolean {
+        if (runtimePermissions.containsKey(opCode)) return true
+        return runCatching {
+            val m = AppOpsManager::class.java.getMethod("opIsRuntimePermission", Int::class.javaPrimitiveType)
+            m.invoke(null, opCode) as? Boolean ?: false
+        }.getOrDefault(false)
+    }
+
+    fun getOpName(op: Int): String = opNames[op] ?: "OP_$op"
 
     fun getOpCode(opName: String): Int? =
         communityAllowedOps[opName.trim().uppercase()]
@@ -116,8 +167,6 @@ object AppOpsConstants {
     fun getOpReadableName(context: android.content.Context, op: Int): String {
         val resId = when (op) {
             OP_BODY_SENSORS -> io.github.gracethings.appoops.R.string.op_body_sensors_title
-            OP_HIGH_SAMPLING_RATE_SENSORS -> io.github.gracethings.appoops.R.string.op_high_sampling_sensors_title
-            OP_BODY_SENSORS_BACKGROUND -> io.github.gracethings.appoops.R.string.op_body_sensors_bg_title
             OP_ACTIVITY_RECOGNITION -> io.github.gracethings.appoops.R.string.op_activity_rec_title
             OP_READ_CLIPBOARD -> io.github.gracethings.appoops.R.string.op_read_clipboard_title
             OP_WRITE_CLIPBOARD -> io.github.gracethings.appoops.R.string.op_write_clipboard_title
@@ -129,10 +178,8 @@ object AppOpsConstants {
             OP_SYSTEM_ALERT_WINDOW -> io.github.gracethings.appoops.R.string.op_system_alert_title
             OP_WRITE_SETTINGS -> io.github.gracethings.appoops.R.string.op_write_settings_title
             OP_ACCESS_NOTIFICATIONS -> io.github.gracethings.appoops.R.string.op_access_notif_title
-            opBootCompleted -> io.github.gracethings.appoops.R.string.op_boot_completed_title
             else -> null
         }
         return resId?.let { context.getString(it) } ?: getOpName(op)
     }
 }
-

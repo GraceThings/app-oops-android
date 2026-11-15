@@ -82,6 +82,8 @@
     <string name="toast_applied_clipboard">已应用“剪贴板防护”</string>
     <string name="toast_applied_reset">已恢复系统默认</string>
     <string name="toast_set_failed">设置失败: %1$s</string>
+    <string name="err_runtime_deny_unsupported">运行时权限仅支持“允许”或“忽略（撤销）”，不支持“拒绝”模式</string>
+    <string name="err_appop_rejected_by_system">系统未应用该更改（目标应用可能未声明此权限或受系统策略限制）</string>
 
     <!-- 规则与批量预设 -->
     <string name="batch_desc">使用内置批量预设模板，或订阅社区规则一键应用具体应用策略。</string>
@@ -159,6 +161,7 @@
     <string name="op_access_notif_title">通知读取权限</string>
     <string name="op_access_notif_desc">控制应用读取系统通知栏中所有应用发出的通知标题、正文、发送方及操作按钮信息的权限。\n设为忽略：阻止应用获取其他应用发出的系统通知内容（如聊天消息或短信验证码），保障通知隐私安全。</string>
     <string name="op_run_any_in_bg_title">任意后台活动</string>
+    <string name="op_run_any_in_bg_desc">控制应用是否被允许不受限制地在后台运行（Android 9 及以上系统的核心后台限制策略，对应系统电池“受限”管理）。\n设为忽略：将应用置于后台受限状态，离开前台后限制其后台活动与后台启动服务，显著减少耗电与驻留。</string>
     <string name="op_boot_completed_title">开机自启</string>
 
     <!-- 设置 -->

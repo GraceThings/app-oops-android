@@ -10,6 +10,7 @@ object AppOpsBinderEngine {
     private var serviceInstance: Any? = null
     private var setModeMethod: Method? = null
     private var setUidModeMethod: Method? = null
+    private var getUidOpsMethod: Method? = null
     private var getOpsForPackageMethod: Method? = null
     private var getPackagesForOpsMethod: Method? = null
     private var unsafeCheckOpRawMethod: Method? = null
@@ -24,6 +25,7 @@ object AppOpsBinderEngine {
         serviceInstance = null
         setModeMethod = null
         setUidModeMethod = null
+        getUidOpsMethod = null
         getOpsForPackageMethod = null
         getPackagesForOpsMethod = null
         unsafeCheckOpRawMethod = null
@@ -53,6 +55,7 @@ object AppOpsBinderEngine {
         // Cache methods via reflection
         setModeMethod = sClass.methods.firstOrNull { it.name == "setMode" && it.parameterTypes.size >= 4 }
         setUidModeMethod = sClass.methods.firstOrNull { it.name == "setUidMode" && it.parameterTypes.size >= 3 }
+        getUidOpsMethod = sClass.methods.firstOrNull { it.name == "getUidOps" && it.parameterTypes.size == 2 }
         getOpsForPackageMethod = sClass.methods.firstOrNull { it.name == "getOpsForPackage" && it.parameterTypes.size == 3 }
         getPackagesForOpsMethod = sClass.methods.firstOrNull { it.name == "getPackagesForOps" && it.parameterTypes.size == 1 }
         unsafeCheckOpRawMethod = sClass.methods.firstOrNull { it.name == "unsafeCheckOpRaw" && it.parameterTypes.size >= 3 }
@@ -109,27 +112,44 @@ object AppOpsBinderEngine {
     }
 
     /**
-     * Queries the actual configured AppOp mode without being polluted by runtime permission checks.
+     * Queries the effective AppOp mode across UID-level and package-level overrides,
+     * falling back to the op's system default mode when no explicit override is set.
      * Returns null if unable to determine via Binder.
      */
     fun getOpMode(code: Int, uid: Int, packageName: String): Int? {
         val s = ensureService()
+        val defaultMode = io.github.gracethings.appoops.util.AppOpsConstants.getDefaultMode(code)
+        var queriedAny = false
 
-        // Strategy 1: getOpsForPackage (queries package-level explicit overrides only).
-        // DO NOT query getUidOps, because Android OS automatically sets Uid mode: ignore
-        // for any ungranted runtime permissions (e.g. BODY_SENSORS) across all apps!
-        getOpsForPackageMethod?.let { m ->
+        val uidMode = getUidOpsMethod?.let { m ->
+            val res = runCatching {
+                m.invoke(s, uid, intArrayOf(code)) as? List<*>
+            }.getOrNull()
+            if (res != null) {
+                queriedAny = true
+                extractModeFromPackageOps(res, code)
+            } else {
+                null
+            }
+        }
+
+        val pkgMode = getOpsForPackageMethod?.let { m ->
             val res = runCatching {
                 m.invoke(s, uid, packageName, intArrayOf(code)) as? List<*>
             }.getOrNull()
-
             if (res != null) {
-                val mode = extractModeFromPackageOps(res, code)
-                // If package ops has an explicit override, return it.
-                // If not found in package ops, the package has no override -> MODE_DEFAULT!
-                return mode ?: io.github.gracethings.appoops.util.AppOpsConstants.MODE_DEFAULT
+                queriedAny = true
+                extractModeFromPackageOps(res, code)
+            } else {
+                null
             }
         }
+
+        if (uidMode != null && uidMode != defaultMode) return uidMode
+        if (pkgMode != null && pkgMode != defaultMode) return pkgMode
+        if (uidMode != null) return uidMode
+        if (pkgMode != null) return pkgMode
+        if (queriedAny) return defaultMode
 
         // Strategy 2: unsafeCheckOpRaw (raw mode without permission checks)
         unsafeCheckOpRawMethod?.let { m ->

@@ -95,6 +95,7 @@ object AppRepository {
                     AppOpsConstants.OP_READ_CLIPBOARD,
                     AppOpsConstants.OP_WRITE_CLIPBOARD,
                     AppOpsConstants.OP_RUN_IN_BACKGROUND,
+                    AppOpsConstants.OP_RUN_ANY_IN_BACKGROUND,
                     AppOpsConstants.OP_QUERY_ALL_PACKAGES
                 )
                 val batchOverrides = AppOpsBinderEngine.getOverriddenOpsForPackages(targetOps)
@@ -110,13 +111,17 @@ object AppRepository {
                         val clipReadModeVal = appOps[AppOpsConstants.OP_READ_CLIPBOARD]
                         val clipWriteModeVal = appOps[AppOpsConstants.OP_WRITE_CLIPBOARD]
                         val bgModeVal = appOps[AppOpsConstants.OP_RUN_IN_BACKGROUND]
+                        val anyBgModeVal = appOps[AppOpsConstants.OP_RUN_ANY_IN_BACKGROUND]
                         val qModeVal = appOps[AppOpsConstants.OP_QUERY_ALL_PACKAGES]
 
                         val isShake = shakeModeVal == AppOpsConstants.MODE_IGNORED || shakeModeVal == AppOpsConstants.MODE_ERRORED
                         val isClipRead = clipReadModeVal == AppOpsConstants.MODE_IGNORED || clipReadModeVal == AppOpsConstants.MODE_ERRORED
                         val isClipWrite = clipWriteModeVal == AppOpsConstants.MODE_IGNORED || clipWriteModeVal == AppOpsConstants.MODE_ERRORED
                         val isClip = isClipRead || isClipWrite
-                        val isBg = bgModeVal == AppOpsConstants.MODE_IGNORED || bgModeVal == AppOpsConstants.MODE_ERRORED
+                        val isBg = bgModeVal == AppOpsConstants.MODE_IGNORED ||
+                            bgModeVal == AppOpsConstants.MODE_ERRORED ||
+                            anyBgModeVal == AppOpsConstants.MODE_IGNORED ||
+                            anyBgModeVal == AppOpsConstants.MODE_ERRORED
                         val isQ = qModeVal == AppOpsConstants.MODE_IGNORED || qModeVal == AppOpsConstants.MODE_ERRORED
 
                         if (isShake) shakeCount++
@@ -137,13 +142,15 @@ object AppRepository {
                         val clipReadMode = AppOpsController.getMode(app.packageName, app.uid, AppOpsConstants.OP_READ_CLIPBOARD)
                         val clipWriteMode = AppOpsController.getMode(app.packageName, app.uid, AppOpsConstants.OP_WRITE_CLIPBOARD)
                         val bgMode = AppOpsController.getMode(app.packageName, app.uid, AppOpsConstants.OP_RUN_IN_BACKGROUND)
+                        val anyBgMode = AppOpsController.getMode(app.packageName, app.uid, AppOpsConstants.OP_RUN_ANY_IN_BACKGROUND)
                         val qMode = AppOpsController.getMode(app.packageName, app.uid, AppOpsConstants.OP_QUERY_ALL_PACKAGES)
 
                         val isShake = shakeMode == OpMode.IGNORE || shakeMode == OpMode.DENY
                         val isClipRead = clipReadMode == OpMode.IGNORE || clipReadMode == OpMode.DENY
                         val isClipWrite = clipWriteMode == OpMode.IGNORE || clipWriteMode == OpMode.DENY
                         val isClip = isClipRead || isClipWrite
-                        val isBg = bgMode == OpMode.IGNORE || bgMode == OpMode.DENY
+                        val isBg = bgMode == OpMode.IGNORE || bgMode == OpMode.DENY ||
+                            anyBgMode == OpMode.IGNORE || anyBgMode == OpMode.DENY
                         val isQ = qMode == OpMode.IGNORE || qMode == OpMode.DENY
 
                         if (isShake) shakeCount++

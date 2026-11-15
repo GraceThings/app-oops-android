@@ -35,7 +35,9 @@ import io.github.gracethings.appoops.data.model.AppOpDef
 import io.github.gracethings.appoops.data.model.OpCategory
 import io.github.gracethings.appoops.data.model.OpMode
 import io.github.gracethings.appoops.data.repository.AppRepository
+import io.github.gracethings.appoops.data.shizuku.AppOpRejectedBySystemException
 import io.github.gracethings.appoops.data.shizuku.AppOpsController
+import io.github.gracethings.appoops.data.shizuku.RuntimePermissionDenyUnsupportedException
 import io.github.gracethings.appoops.ui.components.AppIcon
 import io.github.gracethings.appoops.ui.components.ContributeRuleDialog
 import io.github.gracethings.appoops.ui.components.OpModeSelector
@@ -76,24 +78,6 @@ fun AppDetailScreen(
                 category = OpCategory.SENSOR,
                 titleRes = R.string.op_body_sensors_title,
                 descRes = R.string.op_body_sensors_desc
-            ),
-            AppOpDef(
-                opCode = AppOpsConstants.OP_HIGH_SAMPLING_RATE_SENSORS,
-                opName = "HIGH_SAMPLING_RATE_SENSORS",
-                title = "High Sampling Rate Sensors",
-                description = "Limits gyroscope & accelerometer refresh rate to prevent high-frequency motion tracking",
-                category = OpCategory.SENSOR,
-                titleRes = R.string.op_high_sampling_sensors_title,
-                descRes = R.string.op_high_sampling_sensors_desc
-            ),
-            AppOpDef(
-                opCode = AppOpsConstants.OP_BODY_SENSORS_BACKGROUND,
-                opName = "BODY_SENSORS_BACKGROUND",
-                title = "Background Body Sensors",
-                description = "Prevents reading motion state when app is in background",
-                category = OpCategory.SENSOR,
-                titleRes = R.string.op_body_sensors_bg_title,
-                descRes = R.string.op_body_sensors_bg_desc
             ),
             AppOpDef(
                 opCode = AppOpsConstants.OP_ACTIVITY_RECOGNITION,
@@ -139,6 +123,15 @@ fun AppDetailScreen(
                 category = OpCategory.PRIVACY,
                 titleRes = R.string.op_usage_stats_title,
                 descRes = R.string.op_usage_stats_desc
+            ),
+            AppOpDef(
+                opCode = AppOpsConstants.OP_RUN_ANY_IN_BACKGROUND,
+                opName = "RUN_ANY_IN_BACKGROUND",
+                title = "Run Any in Background",
+                description = "Controls whether the app can run freely in the background",
+                category = OpCategory.BACKGROUND,
+                titleRes = R.string.op_run_any_in_bg_title,
+                descRes = R.string.op_run_any_in_bg_desc
             ),
             AppOpDef(
                 opCode = AppOpsConstants.OP_RUN_IN_BACKGROUND,
@@ -196,13 +189,15 @@ fun AppDetailScreen(
         val shakeMode = modeStates[AppOpsConstants.OP_BODY_SENSORS] ?: OpMode.DEFAULT
         val clipMode = modeStates[AppOpsConstants.OP_READ_CLIPBOARD] ?: OpMode.DEFAULT
         val bgMode = modeStates[AppOpsConstants.OP_RUN_IN_BACKGROUND] ?: OpMode.DEFAULT
+        val anyBgMode = modeStates[AppOpsConstants.OP_RUN_ANY_IN_BACKGROUND] ?: OpMode.DEFAULT
         val qMode = modeStates[AppOpsConstants.OP_QUERY_ALL_PACKAGES] ?: OpMode.DEFAULT
 
         AppRepository.updateAppItem(
             currentApp.copy(
                 isShakeImmunized = shakeMode == OpMode.IGNORE || shakeMode == OpMode.DENY,
                 isClipboardProtected = clipMode == OpMode.IGNORE || clipMode == OpMode.DENY,
-                isBgRestricted = bgMode == OpMode.IGNORE || bgMode == OpMode.DENY,
+                isBgRestricted = bgMode == OpMode.IGNORE || bgMode == OpMode.DENY ||
+                    anyBgMode == OpMode.IGNORE || anyBgMode == OpMode.DENY,
                 isQueryPackagesBlocked = qMode == OpMode.IGNORE || qMode == OpMode.DENY
             )
         )
@@ -483,12 +478,19 @@ fun AppDetailScreen(
                                                 opName = def.opName,
                                                 mode = newMode
                                             )
+                                            val actualMode = AppOpsController.getMode(packageName, uid, def.opCode)
+                                            modeStates[def.opCode] = actualMode
                                             if (res.isFailure) {
-                                                Toast.makeText(context, context.getString(R.string.toast_set_failed, res.exceptionOrNull()?.message), Toast.LENGTH_SHORT).show()
-                                                modeStates[def.opCode] = currentMode
-                                            } else {
-                                                syncRepositoryState()
+                                                val errMsg = when (res.exceptionOrNull()) {
+                                                    is RuntimePermissionDenyUnsupportedException ->
+                                                        context.getString(R.string.err_runtime_deny_unsupported)
+                                                    is AppOpRejectedBySystemException ->
+                                                        context.getString(R.string.err_appop_rejected_by_system)
+                                                    else -> res.exceptionOrNull()?.message ?: ""
+                                                }
+                                                Toast.makeText(context, context.getString(R.string.toast_set_failed, errMsg), Toast.LENGTH_SHORT).show()
                                             }
+                                            syncRepositoryState()
                                         }
                                     }
                                 )

@@ -82,6 +82,8 @@
     <string name="toast_applied_clipboard">Applied "Clipboard Shield"</string>
     <string name="toast_applied_reset">Restored to system defaults</string>
     <string name="toast_set_failed">Setting failed: %1$s</string>
+    <string name="err_runtime_deny_unsupported">Android only allows ALLOW or IGNORE (revoked) for runtime permissions</string>
+    <string name="err_appop_rejected_by_system">System rejected change (target app may not declare this permission)</string>
 
     <!-- Rules & Presets -->
     <string name="batch_desc">Apply built-in preset suites or subscribe to community rules for specific apps.</string>
@@ -159,6 +161,7 @@
     <string name="op_access_notif_title">Notification Access</string>
     <string name="op_access_notif_desc">Controls reading notifications posted by all apps, including notification titles, message text, and action buttons.\nSet to IGNORE: Blocks the app from receiving notifications posted by other apps without crashing, protecting sensitive notification content.</string>
     <string name="op_run_any_in_bg_title">Run Any in Background</string>
+    <string name="op_run_any_in_bg_desc">Controls whether the app can run freely in the background (Android 9+ primary background restriction policy, synced with system battery restriction).\nSet to IGNORE: Places the app into background-restricted state and limits off-screen background work and service starts, saving battery.</string>
     <string name="op_boot_completed_title">Run at Startup</string>
 
     <!-- Settings -->

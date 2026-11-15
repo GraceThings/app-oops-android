@@ -82,6 +82,8 @@
     <string name="toast_applied_clipboard">「クリップボード保護」を適用しました</string>
     <string name="toast_applied_reset">システムデフォルトに復元しました</string>
     <string name="toast_set_failed">設定に失敗しました: %1$s</string>
+    <string name="err_runtime_deny_unsupported">実行時権限は「許可」または「無視（取り消し）」のみ対応し、「拒否」は設定できません</string>
+    <string name="err_appop_rejected_by_system">システムが変更を適用しませんでした（対象アプリがこの権限を宣言していない可能性があります）</string>
 
     <!-- ルールとプリセット -->
     <string name="batch_desc">内蔵プリセットを一括適用するか、コミュニティルールを購読してアプリごとのルールを適用できます。</string>
@@ -159,6 +161,7 @@
     <string name="op_access_notif_title">通知へのアクセス</string>
     <string name="op_access_notif_desc">他のアプリが通知バーに表示した通知のタイトル・本文・送信者・操作ボタンを読み取る権限を制御します。\nIGNORE 設定時：アプリを強制終了させずに他アプリからの通知取得を遮断し、メッセージや認証コードなどの閲覧を防ぎます。</string>
     <string name="op_run_any_in_bg_title">任意のバックグラウンド動作</string>
+    <string name="op_run_any_in_bg_desc">アプリがバックグラウンドで制限なく動作できるかどうかを制御します（Android 9 以降の主要なバックグラウンド制限ポリシーで、バッテリー制限設定と連動します）。\nIGNORE 設定時：アプリをバックグラウンド制限状態にし、画面から離れた後のバックグラウンド処理やサービス起動を抑えて電池消費を減らします。</string>
     <string name="op_boot_completed_title">起動時の自動実行</string>
 
     <!-- 設定 -->

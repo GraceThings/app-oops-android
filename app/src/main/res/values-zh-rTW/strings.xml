@@ -82,6 +82,8 @@
     <string name="toast_applied_clipboard">已套用「剪貼簿防護」</string>
     <string name="toast_applied_reset">已還原為系統預設</string>
     <string name="toast_set_failed">設定失敗: %1$s</string>
+    <string name="err_runtime_deny_unsupported">執行階段權限僅支援「允許」或「忽略（撤銷）」，不支援「拒絕」模式</string>
+    <string name="err_appop_rejected_by_system">系統未套用此變更（目標應用程式可能未宣告此權限或受系統原則限制）</string>
 
     <!-- 規則與批次預設 -->
     <string name="batch_desc">使用內建批次預設範本，或訂閱社群規則一鍵套用指定應用程式原則。</string>
@@ -159,6 +161,7 @@
     <string name="op_access_notif_title">通知讀取權限</string>
     <string name="op_access_notif_desc">控制應用程式讀取系統通知欄中所有應用發出的通知標題、內容、寄件者及操作按鈕資訊的權限。\n設為忽略：阻止應用程式取得其他應用發出的系統通知內容（如聊天訊息或簡訊驗證碼），保障通知隱私安全。</string>
     <string name="op_run_any_in_bg_title">任意背景活動</string>
+    <string name="op_run_any_in_bg_desc">控制應用程式是否獲准不受限制地在背景執行（Android 9 及以上系統的核心背景限制原則，對應系統電池「受限」管理）。\n設為忽略：將應用程式置於背景受限狀態，離開前景後限制其背景活動與背景啟動服務，顯著減少耗電與常駐。</string>
     <string name="op_boot_completed_title">開機自動啟動</string>
 
     <!-- 設定 -->
