@@ -12,9 +12,11 @@ android {
         minSdk = 30
         targetSdk = 37
         versionCode = 5
-        versionName = providers.gradleProperty("versionName").orNull
-            ?.takeIf { it.isNotBlank() }
-            ?: "1.0.3"
+        versionName = "1.0.3"
+        providers.gradleProperty("versionName").orNull
+            ?.trim()
+            ?.takeIf { it.isNotEmpty() }
+            ?.let { versionName = it }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -47,8 +49,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            val releaseSigning = signingConfigs.getByName("release")
-            if (releaseSigning.storeFile?.exists() == true) {
+            val releaseSigning = signingConfigs.findByName("release")
+            if (releaseSigning?.storeFile?.exists() == true) {
                 signingConfig = releaseSigning
             }
         }
