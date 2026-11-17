@@ -25,7 +25,17 @@
   - 支持将已调整的权限配置导出为规则 JSON，并一键跳转 GitHub 提交 Issue，触发自动化工作流创建 PR 贡献社区规则。
 - **Material 3 Expressive 视觉与多语言体验**
   - 支持动态取色（Monet）、多套精选色彩方案（翡翠玉绿、深邃海蓝、活力幻紫、温暖日落）与浅色 / 深色 / 跟随系统主题。
-  - 原生支持 **跟随系统**、**English**、**简体中文**、**繁體中文（香港）**、**繁體中文（台灣）**、**日本語**、**한국어**（兼容 Android 13+ 系统级应用语言 `LocaleManager` 与 Android 11–12 应用内持久化切换）。
+  - 原生支持 **跟随系统**、**English**、**简体中文**、**繁體中文（香港）**、**繁體中文（台灣）**、**日本語**、**한국어**、**Español**、**Français**、**Deutsch**、**Italiano**（兼容 Android 13+ 系统级应用语言 `LocaleManager` 与 Android 11–12 应用内持久化切换）。
+
+---
+
+## 📥 下载引导（Google Play 封闭测试）
+
+App Oops 目前正在 **Google Play 封闭测试** 阶段，请使用**同一个 Google 账号**按以下步骤加入测试并下载安装：
+
+1. **加入 Google 测试群组**：[https://groups.google.com/g/gracethings-testing-group](https://groups.google.com/g/gracethings-testing-group)
+2. **在 Android 设备上参与测试并下载**：[https://play.google.com/store/apps/details?id=io.github.gracethings.appoops](https://play.google.com/store/apps/details?id=io.github.gracethings.appoops)
+3. **或在网页端加入测试**：[https://play.google.com/apps/testing/io.github.gracethings.appoops](https://play.google.com/apps/testing/io.github.gracethings.appoops)
 
 ---
 

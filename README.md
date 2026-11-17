@@ -25,7 +25,17 @@ A **Material 3 Expressive** Android permission auditor and AppOps controller pow
   - Export modified app permissions as rule JSON and submit directly via GitHub Issue to trigger automated PR creation.
 - **Material 3 Expressive UI & Localization**
   - Supports Dynamic Color (Monet), curated expressive palettes (Emerald Jade, Deep Cobalt, Radiant Purple, Sunset Amber), and Light / Dark / Follow System themes.
-  - Built-in support for **Follow System**, **English**, **简体中文**, **繁體中文（香港）**, **繁體中文（台灣）**, **日本語**, and **한국어** (using Android 13+ per-app `LocaleManager` and persisted fallback on Android 11–12).
+  - Built-in support for **Follow System**, **English**, **简体中文**, **繁體中文（香港）**, **繁體中文（台灣）**, **日本語**, **한국어**, **Español**, **Français**, **Deutsch**, and **Italiano** (using Android 13+ per-app `LocaleManager` and persisted fallback on Android 11–12).
+
+---
+
+## 📥 Download (Google Play Closed Testing)
+
+App Oops is currently in **Google Play Closed Testing**. Please follow the steps below using the **same Google account** to join the test and download the app:
+
+1. **Join the Google Testing Group**: [https://groups.google.com/g/gracethings-testing-group](https://groups.google.com/g/gracethings-testing-group)
+2. **Join the test on Android**: [https://play.google.com/store/apps/details?id=io.github.gracethings.appoops](https://play.google.com/store/apps/details?id=io.github.gracethings.appoops)
+3. **Or opt in via the Web**: [https://play.google.com/apps/testing/io.github.gracethings.appoops](https://play.google.com/apps/testing/io.github.gracethings.appoops)
 
 ---
 
