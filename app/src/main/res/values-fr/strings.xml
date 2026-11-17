@@ -1,0 +1,291 @@
+<resources>
+    <string name="app_name">App Oops</string>
+    <string name="dashboard">Tableau de bord</string>
+    <string name="apps">Applications</string>
+    <string name="batch_rules">Règles</string>
+    <string name="audit_log">Journal</string>
+    <string name="settings">Paramètres</string>
+
+    <!-- État Shizuku -->
+    <string name="shizuku_authorized">Shizuku connecté</string>
+    <string name="shizuku_authorized_desc">Shell privilégié UID : 2000 actif</string>
+    <string name="shizuku_needs_permission">Autorisation requise</string>
+    <string name="shizuku_needs_permission_desc">Appuyez pour accorder l\'autorisation à Shizuku</string>
+    <string name="shizuku_not_running">Shizuku n\'est pas démarré</string>
+    <string name="shizuku_not_running_desc">Veuillez démarrer le service Shizuku via le débogage sans fil ou Root</string>
+    <string name="shizuku_btn_grant">Autoriser</string>
+    <string name="shizuku_btn_refresh">Actualiser</string>
+
+    <!-- Service de surveillance et notifications -->
+    <string name="monitor_service_title">Garde d\'interception en temps réel</string>
+    <string name="monitor_service_running">Protection active en arrière-plan</string>
+    <string name="monitor_service_stopped">Protection inactive</string>
+    <string name="monitor_notif_channel">Service de surveillance App Oops</string>
+    <string name="monitor_notif_channel_desc">Surveillance en arrière-plan des autorisations sensibles AppOps</string>
+    <string name="monitor_notif_toast_channel">Alertes d\'interception</string>
+    <string name="monitor_notif_live_channel">Alertes en direct</string>
+    <string name="monitor_notif_initial_title">Garde App Oops actif</string>
+    <string name="monitor_notif_initial_text">Service d\'interception en cours d\'exécution</string>
+    <string name="monitor_notif_live_title">Mises à jour en direct App Oops</string>
+    <string name="monitor_notif_toast_mode_title">Alerte d\'interception</string>
+    <string name="monitor_notif_blocked_single">Bloqué [%1$s] %2$s</string>
+    <string name="monitor_notif_blocked_multi">Bloqué [%1$s] %2$s (%3$d fois au total)</string>
+    <string name="monitor_notif_action_inspect">Inspecter</string>
+    <string name="toast_blocked_single">🛡️ App Oops : [%1$s] %2$s bloqué</string>
+    <string name="toast_blocked_multi">🛡️ App Oops : [%1$s] %2$s bloqué (%3$d fois au total)</string>
+
+    <!-- Catégories -->
+    <string name="category_sensor">Capteurs et mouvement</string>
+    <string name="category_privacy">Presse-papiers et vie privée</string>
+    <string name="category_background">Arrière-plan et WakeLock</string>
+    <string name="category_system">Système et sécurité</string>
+
+    <!-- Modes -->
+    <string name="mode_allow">Autoriser</string>
+    <string name="mode_ignore">Ignorer</string>
+    <string name="mode_deny">Refuser</string>
+    <string name="mode_default">Par défaut</string>
+
+    <!-- Tableau de bord -->
+    <string name="latest_intercept_title">Dernière interception</string>
+    <string name="latest_intercept_format">Bloqué [%1$s] %2$s (%3$d fois)</string>
+    <string name="view_log">Voir le journal</string>
+    <string name="metric_shake_blocked">Capteurs restreints</string>
+    <string name="metric_clipboard_protected">Presse-papiers protégé</string>
+    <string name="metric_bg_frozen">Arrière-plan restreint</string>
+    <string name="metric_intercept_count">Total d\'interceptions</string>
+
+    <!-- Filtres et badges de la liste d\'applications -->
+    <string name="search_placeholder">Rechercher une app ou un nom de paquet...</string>
+    <string name="filter_all">Toutes (%1$d)</string>
+    <string name="filter_user">Apps utilisateur</string>
+    <string name="filter_sensor_disabled">Gyroscope/Accéléromètre désactivés</string>
+    <string name="filter_clipboard_protected">Presse-papiers protégé</string>
+    <string name="filter_background_restricted">Arrière-plan restreint</string>
+    <string name="filter_system">Apps système</string>
+    <string name="no_apps_found">Aucune application correspondante trouvée</string>
+    <string name="badge_sensor_disabled">Gyroscope/Accéléromètre désactivés</string>
+    <string name="badge_clipboard_protected">Presse-papiers protégé</string>
+    <string name="badge_bg_restricted">Arrière-plan restreint</string>
+    <string name="badge_system">Système</string>
+
+    <!-- Détails de l\'application -->
+    <string name="app_type_user">App utilisateur</string>
+    <string name="app_type_system">App système</string>
+    <string name="app_uid_format">UID : %1$d • %2$s</string>
+    <string name="applied_rule_badge">Règle appliquée : %1$s</string>
+    <string name="quick_recommendations">Protections recommandées</string>
+    <string name="immunize_shake_btn">Désactiver les capteurs</string>
+    <string name="shield_clipboard_btn">Protéger le presse-papiers</string>
+    <string name="reset_default_btn">Réinitialiser</string>
+    <string name="apply_btn">Appliquer la sélection</string>
+    <string name="toast_applied_sensors">« Désactiver accéléromètre/gyroscope » appliqué</string>
+    <string name="toast_applied_clipboard">« Protection du presse-papiers » appliquée</string>
+    <string name="toast_applied_reset">Valeurs par défaut du système restaurées</string>
+    <string name="toast_set_failed">Échec de la configuration : %1$s</string>
+    <string name="err_runtime_deny_unsupported">Android autorise uniquement ALLOW ou IGNORE (révoqué) pour les permissions d\'exécution</string>
+    <string name="err_appop_rejected_by_system">Le système a rejeté la modification (l\'app cible ne déclare peut-être pas cette permission)</string>
+
+    <!-- Règles et préréglages -->
+    <string name="batch_desc">Appliquez des préréglages intégrés ou abonnez-vous aux règles communautaires pour des applications spécifiques.</string>
+    <string name="rules_community_title">Règles de la communauté</string>
+    <string name="rules_community_desc">Abonnez-vous à GraceThings/app-oops-rules ou à des dépôts tiers pour appliquer et proposer des règles d\'applications.</string>
+    <string name="rules_community_status">%1$d abonnement(s) • %2$d règles chargées</string>
+    <string name="rules_community_empty_hint">Aucun abonnement ajouté — appuyez pour vous abonner</string>
+    <string name="rules_community_btn">Explorer les règles communautaires</string>
+    <string name="rules_presets_header">Préréglages par lot intégrés</string>
+    <string name="suite_sensor_title">Désactiver accéléromètre/gyroscope</string>
+    <string name="suite_sensor_desc">Bloque l\'accéléromètre et le gyroscope (IGNORE) pour éliminer le suivi de mouvement non autorisé</string>
+    <string name="suite_clipboard_title">Intercepter lecture/écriture du presse-papiers</string>
+    <string name="suite_clipboard_desc">Intercepte la lecture et l\'écriture du presse-papiers pour empêcher l\'espionnage et la modification par des tiers</string>
+    <string name="suite_read_clipboard_title">Intercepter la lecture du presse-papiers</string>
+    <string name="suite_read_clipboard_desc">Intercepte la lecture du presse-papiers (IGNORE) pour empêcher l\'espionnage en arrière-plan</string>
+    <string name="suite_write_clipboard_title">Intercepter l\'écriture du presse-papiers</string>
+    <string name="suite_write_clipboard_desc">Intercepte l\'écriture du presse-papiers (IGNORE) pour empêcher les apps tierces de l\'écraser</string>
+    <string name="suite_query_usage_title">Bloquer la liste des apps et stats d\'utilisation</string>
+    <string name="suite_query_usage_desc">Intercepte l\'analyse des apps installées et les statistiques d\'utilisation pour bloquer le profilage de l\'appareil</string>
+    <string name="suite_background_title">Restriction en arrière-plan</string>
+    <string name="suite_background_desc">Restreint l\'exécution en arrière-plan, les verrous de veille et le démarrage automatique au boot</string>
+    <string name="btn_apply_to_selected">Appliquer aux apps sélectionnées</string>
+
+    <!-- Écran de sélection par lot -->
+    <string name="select_apps_title">Sélectionner des applications</string>
+    <string name="apply_to_selected_fab">Appliquer à la sélection (%1$d)</string>
+    <string name="batch_processing_title">Application des règles par lot...</string>
+    <string name="batch_processing_msg">Traitement : %1$s (%2$d/%3$d)</string>
+    <string name="batch_success_toast">[%1$s] appliqué avec succès à %2$d apps</string>
+    <string name="select_at_least_one">Veuillez sélectionner au moins une application</string>
+    <string name="select_all_current">Tout sélectionner (%1$d)</string>
+    <string name="deselect_all">Tout désélectionner</string>
+    <string name="select_only_user">Applications tierces uniquement</string>
+    <string name="selected_count_hint">%1$d applications sélectionnées. Appuyez sur le bouton ci-dessous pour appliquer les règles.</string>
+
+    <!-- Journal d\'audit -->
+    <string name="audit_empty">Aucun enregistrement d\'interception\nLes opérations protégées seront enregistrées ici automatiquement lors de leur déclenchement</string>
+    <string name="audit_empty_desc">Les événements d\'interception s\'afficheront ici lorsque des apps déclencheront des opérations protégées</string>
+    <string name="audit_total_intercepts">Total des interceptions : %1$d</string>
+    <string name="audit_total_intercepts_desc">Interception silencieuse des lectures non autorisées et des permissions restreintes définies sur IGNORE</string>
+    <string name="audit_blocked_badge">Bloqué</string>
+    <string name="audit_times_badge">x%1$d fois</string>
+    <string name="audit_clear">Effacer le journal</string>
+    <string name="audit_clear_confirm">Effacer tous les journaux d\'interception ?</string>
+    <string name="audit_dialog_confirm">Effacer</string>
+    <string name="audit_dialog_cancel">Annuler</string>
+    <string name="audit_permission_format">Permission : %1$s (%2$s)</string>
+    <string name="audit_count_format">%1$d fois</string>
+
+    <!-- Détails AppOps cibles -->
+    <string name="op_body_sensors_title">Capteurs corporels et de mouvement</string>
+    <string name="op_body_sensors_desc">Contrôle l\'accès à l\'accéléromètre, au gyroscope, au rythme cardiaque et aux capteurs de mouvement.\nSur IGNORE : bloque silencieusement l\'accès et renvoie des valeurs vides sans faire planter l\'app (ex. empêche les déclencheurs par secousse).</string>
+    <string name="op_high_sampling_sensors_title">Capteurs à haute fréquence</string>
+    <string name="op_high_sampling_sensors_desc">Contrôle l\'échantillonnage des capteurs de mouvement (gyroscope, accéléromètre) au-delà de 200 Hz.\nSur IGNORE : limite l\'échantillonnage aux fréquences normales sans plantage, empêchant le suivi fin à haute fréquence.</string>
+    <string name="op_body_sensors_bg_title">Capteurs corporels en arrière-plan</string>
+    <string name="op_body_sensors_bg_desc">Contrôle si l\'app peut continuer à lire les capteurs corporels et de mouvement en arrière-plan.\nSur IGNORE : arrête l\'envoi des données dès que l\'app quitte le premier plan tout en préservant l\'usage au premier plan.</string>
+    <string name="op_activity_rec_title">Reconnaissance d\'activité</string>
+    <string name="op_activity_rec_desc">Contrôle l\'accès à l\'état d\'activité physique détecté par le système (marche, course, vélo, nombre de pas).\nSur IGNORE : ne renvoie aucune mise à jour d\'activité sans plantage, empêchant le suivi des mouvements et des pas.</string>
+    <string name="op_read_clipboard_title">Lire le presse-papiers</string>
+    <string name="op_read_clipboard_desc">Contrôle la lecture du texte, des liens, des images et d\'autres contenus copiés dans le presse-papiers système.\nSur IGNORE : renvoie silencieusement un presse-papiers vide sans plantage, empêchant l\'espionnage en arrière-plan.</string>
+    <string name="op_write_clipboard_title">Écrire dans le presse-papiers</string>
+    <string name="op_write_clipboard_desc">Contrôle l\'écriture, la modification ou l\'écrasement de données dans le presse-papiers système.\nSur IGNORE : ignore silencieusement les demandes d\'écriture afin de préserver votre contenu existant.</string>
+    <string name="op_query_packages_title">Lire les paquets installés</string>
+    <string name="op_query_packages_desc">Contrôle l\'interrogation de la liste des applications installées, noms de paquets et métadonnées.\nSur IGNORE : masque les autres apps installées (renvoie un résultat minimal ou vide) sans erreur, réduisant le profilage inter-apps.</string>
+    <string name="op_usage_stats_title">Statistiques d\'utilisation</string>
+    <string name="op_usage_stats_desc">Contrôle l\'accès à l\'historique d\'utilisation des apps, la fréquence de lancement et les apps actives.\nSur IGNORE : renvoie un historique vide sans erreur, empêchant l\'app de surveiller votre utilisation des autres apps.</string>
+    <string name="op_run_in_bg_title">Exécuter en arrière-plan</string>
+    <string name="op_run_in_bg_desc">Contrôle si l\'app peut exécuter des services en arrière-plan, des tâches planifiées et du trafic réseau hors premier plan.\nSur IGNORE : limite les services et le réseau en arrière-plan lorsque l\'app n\'est plus au premier plan, économisant batterie et données.</string>
+    <string name="op_wake_lock_title">Maintenir le verrou d\'éveil (WakeLock)</string>
+    <string name="op_wake_lock_desc">Contrôle les demandes de verrou d\'alimentation maintenant le CPU actif ou empêchant la mise en veille de l\'écran.\nSur IGNORE : ignore silencieusement les demandes de WakeLock pour laisser l\'appareil dormir normalement et réduire la chauffe.</string>
+    <string name="op_system_alert_title">Afficher par-dessus d\'autres apps (Superposition)</string>
+    <string name="op_system_alert_desc">Contrôle l\'affichage de fenêtres flottantes, superpositions et couches interactives au-dessus d\'autres apps ou du système.\nSur IGNORE : empêche l\'app d\'afficher des fenêtres flottantes par-dessus d\'autres apps sans provoquer de plantage.</string>
+    <string name="op_write_settings_title">Modifier les paramètres système</string>
+    <string name="op_write_settings_desc">Contrôle la modification des paramètres globaux du système (luminosité, délai de mise en veille, sonneries, volume).\nSur IGNORE : rejette silencieusement les tentatives de modification des paramètres globaux tout en laissant l\'app fonctionner.</string>
+    <string name="op_access_notif_title">Accès aux notifications</string>
+    <string name="op_access_notif_desc">Contrôle la lecture des notifications publiées par toutes les apps, y compris titres, textes et boutons d\'action.\nSur IGNORE : empêche l\'app de recevoir les notifications des autres apps sans plantage, protégeant vos messages sensibles.</string>
+    <string name="op_run_any_in_bg_title">Activité libre en arrière-plan</string>
+    <string name="op_run_any_in_bg_desc">Contrôle si l\'app peut fonctionner librement en arrière-plan (politique principale Android 9+, synchronisée avec la restriction de batterie).\nSur IGNORE : place l\'app en état restreint et limite le travail et le démarrage de services hors écran.</string>
+    <string name="op_boot_completed_title">Exécuter au démarrage</string>
+
+    <!-- Paramètres -->
+    <string name="setting_alert_title">Alerte d\'interception réussie</string>
+    <string name="setting_alert_on_desc">Avertir l\'utilisateur lorsqu\'une permission sensible est bloquée</string>
+    <string name="setting_alert_off_desc">Alertes désactivées (journalisation uniquement)</string>
+    <string name="setting_alert_toast">Notification Toast</string>
+    <string name="setting_alert_toast_desc">Afficher un message Toast lorsqu\'une permission est bloquée</string>
+    <string name="setting_alert_notification">Notification</string>
+    <string name="setting_alert_notification_desc">Publier une alerte dans le panneau de notifications lors d\'un blocage</string>
+    <string name="setting_alert_live_notification">Mises à jour en direct (Android 16+)</string>
+    <string name="setting_alert_live_desc_supported">Afficher une alerte continue en temps réel dans la barre d\'état et l\'écran de verrouillage</string>
+    <string name="setting_alert_live_desc_unsupported">Le système est inférieur à Android 16 ; cette fonctionnalité ne peut pas être activée</string>
+    <string name="test_alert_no_method_enabled">Aucun format d\'alerte activé (Toast et Notification sont désactivés)</string>
+    <string name="setting_theme_title">Apparence</string>
+    <string name="setting_theme_system">Suivre le système</string>
+    <string name="setting_theme_light">Mode clair</string>
+    <string name="setting_theme_dark">Mode sombre</string>
+    <string name="setting_color_title">Couleur du thème</string>
+    <string name="setting_color_dynamic">Dynamique (Monet)</string>
+    <string name="setting_color_jade">Jade émeraude</string>
+    <string name="setting_color_cobalt">Cobalt profond</string>
+    <string name="setting_color_amethyst">Violet radieux</string>
+    <string name="setting_color_amber">Ambre crépuscule</string>
+    <string name="setting_language_title">Langue</string>
+    <string name="setting_language_dialog_title">Choisir la langue</string>
+    <string name="setting_language_system">Suivre le système</string>
+    <string name="setting_language_en">English</string>
+    <string name="setting_language_zh_cn">简体中文</string>
+    <string name="setting_language_zh_hk">繁體中文（香港）</string>
+    <string name="setting_language_zh_tw">繁體中文（台灣）</string>
+    <string name="setting_language_ja">日本語</string>
+    <string name="setting_language_ko">한국어</string>
+    <string name="setting_language_es">Español</string>
+    <string name="setting_language_fr">Français</string>
+    <string name="setting_language_de">Deutsch</string>
+    <string name="setting_language_it">Italiano</string>
+    <string name="setting_shizuku_title">Guide Shizuku &amp; débogage</string>
+    <string name="setting_shizuku_desc">App Oops utilise Shizuku pour obtenir un shell privilégié (UID : 2000) et le proxy IAppOpsService afin de modifier les permissions sans root.\n\n• Émulateur : exécutez tools/setup_emulator_shizuku.ps1 pour démarrer le débogage\n• Appareil physique : activez le débogage sans fil dans les Options pour développeurs et associez Shizuku.</string>
+    <string name="btn_test_notification">Tester la notification</string>
+    <string name="test_notice_app_name">App exemple</string>
+    <string name="loading_apps">Chargement des applications...</string>
+    <string name="setting_temp_allow_title">Autorisation temporaire</string>
+    <string name="setting_temp_allow_desc">Propose une action rapide pour autoriser temporairement une permission puis la rebloquer automatiquement à expiration</string>
+    <string name="setting_temp_duration_title">Durée temporaire</string>
+    <string name="monitor_notif_action_temp_allow">Autoriser temp.</string>
+    <string name="monitor_notif_action_close">Ignorer</string>
+    <string name="toast_temp_allow_granted">Autorisé temporairement [%1$s] %2$s (%3$d s)</string>
+    <string name="toast_temp_allow_expired">Autorisation temporaire expirée. Blocage rétabli pour [%1$s] %2$s</string>
+    <string name="monitor_notif_temp_countdown">Autorisé temporairement [%1$s] : %2$d s restantes</string>
+    <string name="toast_need_notification_permission">Veuillez accorder l\'autorisation de notification pour recevoir les mises à jour en direct</string>
+    <string name="live_update_subtext">En direct</string>
+    <string name="status_bar_chip_blocked">Bloqué</string>
+
+    <!-- Règles communautaires et abonnements -->
+    <string name="community_title">Règles de la communauté</string>
+    <string name="community_search_hint">Rechercher une app, un paquet, une règle ou un auteur...</string>
+    <string name="community_matched_installed_apps">%1$d app(s) installée(s) correspondante(s) (%2$d règles synchronisées)</string>
+    <string name="community_empty_sub_title">Aucun abonnement aux règles</string>
+    <string name="community_empty_sub_desc">Appuyez sur le bouton + ci-dessous pour saisir le lien GraceThings/app-oops-rules (GitHub ou Gitee) ou toute URL d\'abonnement tierce.</string>
+    <string name="community_empty_rules_title">Aucune règle correspondante</string>
+    <string name="community_empty_rules_desc">Essayez d\'effacer votre recherche, d\'actualiser les abonnements ou d\'ajouter un autre dépôt de règles.</string>
+    <string name="community_empty_no_installed_match_title">Aucune règle pour les apps installées</string>
+    <string name="community_empty_no_installed_match_desc">%1$d règle(s) synchronisée(s), mais aucune ne correspond aux apps installées sur cet appareil (les règles des apps non installées sont masquées).</string>
+    <string name="community_badge_recommended">Recommandé</string>
+    <string name="community_rule_count">%1$d règle(s)</string>
+    <string name="community_level_gentle">Doux</string>
+    <string name="community_level_balanced">Équilibré</string>
+    <string name="community_level_strict">Strict</string>
+    <string name="community_add_sub_fab">Ajouter un abonnement</string>
+    <string name="community_add_sub_title">Ajouter un abonnement de règles</string>
+    <string name="community_add_sub_url_label">Lien d\'abonnement / URL du dépôt</string>
+    <string name="community_add_sub_url_placeholder">https://github.com/GraceThings/app-oops-rules</string>
+    <string name="community_add_sub_name_label">Nom affiché (facultatif)</string>
+    <string name="community_quick_github">Officiel GitHub</string>
+    <string name="community_quick_gitee">Miroir officiel Gitee</string>
+    <string name="community_btn_add_sync">Ajouter et synchroniser</string>
+    <string name="community_sub_manager_title">Gérer les abonnements</string>
+    <string name="community_sub_info">%1$d règles • %2$s</string>
+    <string name="community_sub_never_synced">Non synchronisé</string>
+    <string name="community_sub_added_toast">Abonné à [%1$s] (%2$d règles)</string>
+    <string name="community_sub_refresh_success">%1$d abonnement(s) synchronisé(s)</string>
+    <string name="community_sub_refresh_failed">Échec de la synchronisation : %1$s</string>
+    <string name="community_sub_empty_short">Aucun abonnement</string>
+    <string name="community_apply_reset_toggle">Réinitialiser d\'abord les autres permissions par défaut</string>
+    <string name="community_apply_rule_btn">Appliquer la règle (%1$d ops)</string>
+    <string name="community_apply_requires_shizuku">Veuillez d\'abord autoriser Shizuku avant d\'appliquer des règles</string>
+    <string name="community_apply_success">[%1$s] appliquée (%2$d permissions)</string>
+    <string name="community_unsupported_ops_hint">Note de sécurité : %1$d clé(s) de permission non prise(s) en charge dans cette règle ont été ignorée(s) en toute sécurité.</string>
+    <string name="community_author_format">Auteur : %1$s • Source : %2$s</string>
+    <string name="community_contribute_btn">Contribuer</string>
+    <string name="community_contribute_dialog_title">Contribuer une règle d\'app</string>
+    <string name="community_contribute_pick_app">Application cible</string>
+    <string name="community_contribute_no_changes">Toutes les permissions prises en charge de cette app sont actuellement par défaut. Configurez d\'abord au moins une permission sur IGNORE, ALLOW ou DENY dans sa page de détails.</string>
+    <string name="community_contribute_rule_title_label">Titre de la règle *</string>
+    <string name="community_contribute_rule_title_hint">ex. Bloquer les pubs par secousse et lecture du presse-papiers</string>
+    <string name="community_contribute_rule_id_label">Slug / ID de la règle *</string>
+    <string name="community_contribute_desc_label">Description et remarques</string>
+    <string name="community_contribute_author_label">Pseudonyme de l\'auteur</string>
+    <string name="community_contribute_level_label">Niveau de restriction</string>
+    <string name="community_contribute_ops_header">Permissions incluses (%1$d)</string>
+    <string name="community_contribute_submit_github">Soumettre via GitHub Issue</string>
+    <string name="community_contribute_copy_json">Copier le JSON de la règle</string>
+    <string name="community_contribute_hint_footer">Le JSON de la règle est automatiquement copié dans le presse-papiers en sauvegarde. Une fois soumis sur GitHub, Actions le valide et ouvre une PR pour fusion et synchronisation vers le miroir Gitee.</string>
+    <string name="community_contribute_copied">JSON de la règle copié dans le presse-papiers</string>
+    <string name="community_contribute_missing_title">Veuillez saisir un titre de règle</string>
+    <string name="community_detail_view_rules">Règles de la communauté</string>
+    <string name="community_detail_share_rule">Contribuer une règle</string>
+    <string name="common_cancel">Annuler</string>
+    <string name="common_close">Fermer</string>
+    <string name="common_delete">Supprimer</string>
+    <string name="setting_about_title">À propos d\'App Oops</string>
+    <string name="setting_about_version">Version : 1.0.0 (AGP 9.1.0 • Kotlin 2.1.10 • Compose M3E)\nObjectif principal : gérer pleinement les permissions sensibles, couper le pistage par profilage, protéger le presse-papiers et restreindre l\'arrière-plan.</string>
+    <string name="setting_about_entry_title">À propos</string>
+    <string name="setting_about_entry_desc">Guide et débogage Shizuku, version, développeur et page du projet</string>
+    <string name="about_description">Un auditeur et contrôleur de permissions Android Material 3 Expressive propulsé par Shizuku, vous aidant à gérer les permissions sensibles AppOps, bloquer l\'accès non autorisé aux capteurs et au presse-papiers, restreindre l\'arrière-plan et appliquer des règles communautaires sans Root.</string>
+    <string name="about_version_label">Version</string>
+    <string name="about_developer_label">Développeur</string>
+    <string name="about_developer_name">Grace Chan (GraceThings)</string>
+    <string name="about_tech_stack_label">Stack technique</string>
+    <string name="about_tech_stack_value">Kotlin 2.1.10 • Jetpack Compose (M3E) • Shizuku 13.1.5</string>
+    <string name="about_homepage_label">Page du projet</string>
+    <string name="about_homepage_url">https://github.com/GraceThings/app-oops-android</string>
+    <string name="about_rules_repo_label">Dépôt des règles communautaires</string>
+    <string name="about_rules_repo_url">https://github.com/GraceThings/app-oops-rules</string>
+</resources>

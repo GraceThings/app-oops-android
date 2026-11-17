@@ -25,7 +25,7 @@
     <string name="monitor_notif_toast_channel">차단 알림</string>
     <string name="monitor_notif_live_channel">실시간 업데이트 차단 알림</string>
     <string name="monitor_notif_initial_title">App Oops 가드 활성</string>
-    <string name="monitor_notif_initial_text">사용자 설정 권한 접근을 차단하는 중</string>
+    <string name="monitor_notif_initial_text">차단 서비스 실행 중</string>
     <string name="monitor_notif_live_title">App Oops 실시간 업데이트</string>
     <string name="monitor_notif_toast_mode_title">차단 알림</string>
     <string name="monitor_notif_blocked_single">[%1$s] %2$s 차단됨</string>
@@ -181,7 +181,7 @@
     <string name="setting_theme_system">시스템 설정 따르기</string>
     <string name="setting_theme_light">라이트 모드</string>
     <string name="setting_theme_dark">다크 모드</string>
-    <string name="setting_color_title">Expressive 색상 팔레트</string>
+    <string name="setting_color_title">테마 색상</string>
     <string name="setting_color_dynamic">다이나믹 컬러 (Monet)</string>
     <string name="setting_color_jade">에메랄드 제이드</string>
     <string name="setting_color_cobalt">딥 코발트</string>
@@ -196,6 +196,10 @@
     <string name="setting_language_zh_tw">繁體中文（台灣）</string>
     <string name="setting_language_ja">日本語</string>
     <string name="setting_language_ko">한국어</string>
+    <string name="setting_language_es">Español</string>
+    <string name="setting_language_fr">Français</string>
+    <string name="setting_language_de">Deutsch</string>
+    <string name="setting_language_it">Italiano</string>
     <string name="setting_shizuku_title">Shizuku 가이드 및 디버그</string>
     <string name="setting_shizuku_desc">App Oops는 Shizuku를 통해 권한 셸 (UID: 2000)과 IAppOpsService 프록시를 획득하여 Root 없이도 안전하게 AppOps 권한을 수정합니다.\n\n• 에뮬레이터: tools/setup_emulator_shizuku.ps1 스크립트를 실행해 디버그 시작\n• 실기기: 개발자 옵션에서 "무선 디버깅"을 켜고 Shizuku 공식 앱과 페어링하여 시작하세요.</string>
     <string name="btn_test_notification">알림 테스트</string>

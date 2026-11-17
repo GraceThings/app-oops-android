@@ -25,7 +25,7 @@
     <string name="monitor_notif_toast_channel">攔截提醒</string>
     <string name="monitor_notif_live_channel">即時動態攔截提醒</string>
     <string name="monitor_notif_initial_title">App Oops 即時守護中</string>
-    <string name="monitor_notif_initial_text">正在攔截使用者設定的權限</string>
+    <string name="monitor_notif_initial_text">正在執行攔截服務</string>
     <string name="monitor_notif_live_title">App Oops 即時動態</string>
     <string name="monitor_notif_toast_mode_title">App Oops 攔截提醒</string>
     <string name="monitor_notif_blocked_single">已阻止【%1$s】%2$s</string>
@@ -181,7 +181,7 @@
     <string name="setting_theme_system">跟隨系統</string>
     <string name="setting_theme_light">淺色模式</string>
     <string name="setting_theme_dark">深色模式</string>
-    <string name="setting_color_title">表現力主題色彩</string>
+    <string name="setting_color_title">主題色</string>
     <string name="setting_color_dynamic">動態取色 (Monet)</string>
     <string name="setting_color_jade">翡翠玉綠</string>
     <string name="setting_color_cobalt">深邃海藍</string>
@@ -196,6 +196,10 @@
     <string name="setting_language_zh_tw">繁體中文（台灣）</string>
     <string name="setting_language_ja">日本語</string>
     <string name="setting_language_ko">한국어</string>
+    <string name="setting_language_es">Español</string>
+    <string name="setting_language_fr">Français</string>
+    <string name="setting_language_de">Deutsch</string>
+    <string name="setting_language_it">Italiano</string>
     <string name="setting_shizuku_title">Shizuku 服務說明與除錯</string>
     <string name="setting_shizuku_desc">App Oops 透過 Shizuku 取得特權 Shell (UID: 2000) 與 IAppOpsService 服務代理，無需 Root 即可安全修改各應用程式的底層權限。\n\n• 模擬器除錯：在已啟動的模擬器中執行 tools/setup_emulator_shizuku.ps1 即可一鍵啟動除錯\n• 實機使用：於「開發人員選項」中開啟「無線偵錯」，並透過 Shizuku 官方應用配對啟動即可。</string>
     <string name="btn_test_notification">測試通知</string>

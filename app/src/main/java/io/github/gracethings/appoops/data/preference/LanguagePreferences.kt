@@ -21,7 +21,11 @@ enum class AppLanguage(val tag: String, @StringRes val labelRes: Int) {
     CHINESE_HK("zh-HK", R.string.setting_language_zh_hk),
     CHINESE_TW("zh-TW", R.string.setting_language_zh_tw),
     JAPANESE("ja", R.string.setting_language_ja),
-    KOREAN("ko", R.string.setting_language_ko);
+    KOREAN("ko", R.string.setting_language_ko),
+    SPANISH("es", R.string.setting_language_es),
+    FRENCH("fr", R.string.setting_language_fr),
+    GERMAN("de", R.string.setting_language_de),
+    ITALIAN("it", R.string.setting_language_it);
 
     companion object {
         fun fromTag(tag: String): AppLanguage {
@@ -35,6 +39,10 @@ enum class AppLanguage(val tag: String, @StringRes val labelRes: Int) {
                 }
                 normalized.startsWith("ja") -> JAPANESE
                 normalized.startsWith("ko") -> KOREAN
+                normalized.startsWith("es") -> SPANISH
+                normalized.startsWith("fr") -> FRENCH
+                normalized.startsWith("de") -> GERMAN
+                normalized.startsWith("it") -> ITALIAN
                 normalized.startsWith("en") -> ENGLISH
                 else -> SYSTEM
             }

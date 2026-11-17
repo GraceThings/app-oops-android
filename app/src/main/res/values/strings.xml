@@ -25,7 +25,7 @@
     <string name="monitor_notif_toast_channel">Interception Alerts</string>
     <string name="monitor_notif_live_channel">Live Updates Alerts</string>
     <string name="monitor_notif_initial_title">App Oops Guard Active</string>
-    <string name="monitor_notif_initial_text">Intercepting user-configured permissions</string>
+    <string name="monitor_notif_initial_text">Running interception service</string>
     <string name="monitor_notif_live_title">App Oops Live Updates</string>
     <string name="monitor_notif_toast_mode_title">Interception Alert</string>
     <string name="monitor_notif_blocked_single">Blocked [%1$s] %2$s</string>
@@ -181,7 +181,7 @@
     <string name="setting_theme_system">Follow System</string>
     <string name="setting_theme_light">Light Mode</string>
     <string name="setting_theme_dark">Dark Mode</string>
-    <string name="setting_color_title">Expressive Palette</string>
+    <string name="setting_color_title">Theme Color</string>
     <string name="setting_color_dynamic">Dynamic (Monet)</string>
     <string name="setting_color_jade">Emerald Jade</string>
     <string name="setting_color_cobalt">Deep Cobalt</string>
@@ -196,6 +196,10 @@
     <string name="setting_language_zh_tw">繁體中文（台灣）</string>
     <string name="setting_language_ja">日本語</string>
     <string name="setting_language_ko">한국어</string>
+    <string name="setting_language_es">Español</string>
+    <string name="setting_language_fr">Français</string>
+    <string name="setting_language_de">Deutsch</string>
+    <string name="setting_language_it">Italiano</string>
     <string name="setting_shizuku_title">Shizuku Guide &amp; Debug</string>
     <string name="setting_shizuku_desc">App Oops uses Shizuku to obtain privileged shell (UID: 2000) and IAppOpsService proxy to modify permissions without root.\n\n• Emulator: Run tools/setup_emulator_shizuku.ps1 to start debugging\n• Physical Device: Enable Wireless Debugging in Developer Options and pair with Shizuku.</string>
     <string name="btn_test_notification">Test Notification</string>
