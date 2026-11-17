@@ -288,4 +288,17 @@
     <string name="about_homepage_url">https://github.com/GraceThings/app-oops-android</string>
     <string name="about_rules_repo_label">コミュニティルールリポジトリ</string>
     <string name="about_rules_repo_url">https://github.com/GraceThings/app-oops-rules</string>
+
+    <!-- 遮断統計 -->
+    <string name="stats_section_title">遮断統計</string>
+    <string name="stats_total_badge">累計 %1$d 回</string>
+    <string name="stats_top_apps_title">遮断回数トップ 3 アプリ</string>
+    <string name="stats_top_apps_empty">まだ遮断統計がありません。ガード稼働後に上位アプリが表示されます</string>
+    <string name="stats_trend_title">総遮断数の推移</string>
+    <string name="stats_range_day">直近1日</string>
+    <string name="stats_range_week">1週間</string>
+    <string name="stats_range_month">1か月</string>
+    <string name="stats_range_total_format">期間計 %1$d 回</string>
+    <string name="stats_trend_empty">この期間の遮断記録はありません</string>
+    <string name="stats_audit_entry_desc">すべての権限遮断監査ログを表示</string>
 </resources>

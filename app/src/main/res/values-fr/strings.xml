@@ -288,4 +288,17 @@
     <string name="about_homepage_url">https://github.com/GraceThings/app-oops-android</string>
     <string name="about_rules_repo_label">Dépôt des règles communautaires</string>
     <string name="about_rules_repo_url">https://github.com/GraceThings/app-oops-rules</string>
+
+    <!-- Statistiques d\'interception -->
+    <string name="stats_section_title">Statistiques d\'interception</string>
+    <string name="stats_total_badge">%1$d au total</string>
+    <string name="stats_top_apps_title">Top 3 des apps interceptées</string>
+    <string name="stats_top_apps_empty">Aucune donnée pour l\'instant. Les apps les plus interceptées apparaîtront ici lorsque la protection est active.</string>
+    <string name="stats_trend_title">Tendance des interceptions</string>
+    <string name="stats_range_day">1 jour</string>
+    <string name="stats_range_week">1 sem.</string>
+    <string name="stats_range_month">1 mois</string>
+    <string name="stats_range_total_format">%1$d interceptions</string>
+    <string name="stats_trend_empty">Aucune interception sur cette période</string>
+    <string name="stats_audit_entry_desc">Voir le journal complet des interceptions</string>
 </resources>

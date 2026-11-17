@@ -26,7 +26,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.Layers
-import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -54,26 +53,30 @@ import io.github.gracethings.appoops.util.PackageUtils
 
 sealed class Screen {
     data object Dashboard : Screen()
+    data object Audit : Screen()
     data object Apps : Screen()
-    data class Detail(val packageName: String, val uid: Int) : Screen()
+    data class Detail(
+        val packageName: String,
+        val uid: Int,
+        val backTarget: String = "Apps"
+    ) : Screen()
     data object Batch : Screen()
     data class BatchSelect(val suite: io.github.gracethings.appoops.data.model.BatchSuiteType) : Screen()
     data class CommunityRules(
         val initialPackage: String? = null,
-        val returnToDetail: Pair<String, Int>? = null
+        val returnToDetail: Triple<String, Int, String>? = null
     ) : Screen()
-    data object Audit : Screen()
     data object Settings : Screen()
     data object About : Screen()
 
     fun getOrder(): Int = when (this) {
         Dashboard -> 0
-        Apps -> 1
-        is Detail -> 2
-        Batch -> 3
-        is BatchSelect -> 4
-        is CommunityRules -> 4
-        Audit -> 5
+        Audit -> 1
+        Apps -> 2
+        is Detail -> 3
+        Batch -> 4
+        is BatchSelect -> 5
+        is CommunityRules -> 5
         Settings -> 6
         About -> 7
     }
@@ -147,25 +150,31 @@ private val ScreenSaver: Saver<Screen, Any> = listSaver(
     save = { screen ->
         when (screen) {
             is Screen.Dashboard -> listOf("Dashboard")
+            is Screen.Audit -> listOf("Audit")
             is Screen.Apps -> listOf("Apps")
-            is Screen.Detail -> listOf("Detail", screen.packageName, screen.uid)
+            is Screen.Detail -> listOf("Detail", screen.packageName, screen.uid, screen.backTarget)
             is Screen.Batch -> listOf("Batch")
             is Screen.BatchSelect -> listOf("BatchSelect", screen.suite.name)
             is Screen.CommunityRules -> listOf(
                 "CommunityRules",
                 screen.initialPackage,
                 screen.returnToDetail?.first,
-                screen.returnToDetail?.second
+                screen.returnToDetail?.second,
+                screen.returnToDetail?.third
             )
-            is Screen.Audit -> listOf("Audit")
             is Screen.Settings -> listOf("Settings")
             is Screen.About -> listOf("About")
         }
     },
     restore = { list ->
         when (list.firstOrNull() as? String) {
+            "Audit" -> Screen.Audit
             "Apps" -> Screen.Apps
-            "Detail" -> Screen.Detail(list[1] as String, list[2] as Int)
+            "Detail" -> Screen.Detail(
+                packageName = list[1] as String,
+                uid = list[2] as Int,
+                backTarget = list.getOrNull(3) as? String ?: "Apps"
+            )
             "Batch" -> Screen.Batch
             "BatchSelect" -> Screen.BatchSelect(
                 io.github.gracethings.appoops.data.model.BatchSuiteType.valueOf(list[1] as String)
@@ -174,12 +183,12 @@ private val ScreenSaver: Saver<Screen, Any> = listSaver(
                 val initPkg = list[1] as? String
                 val retPkg = list[2] as? String
                 val retUid = list[3] as? Int
+                val retBack = list.getOrNull(4) as? String ?: "Apps"
                 Screen.CommunityRules(
                     initialPackage = initPkg,
-                    returnToDetail = if (retPkg != null && retUid != null) retPkg to retUid else null
+                    returnToDetail = if (retPkg != null && retUid != null) Triple(retPkg, retUid, retBack) else null
                 )
             }
-            "Audit" -> Screen.Audit
             "Settings" -> Screen.Settings
             "About" -> Screen.About
             else -> Screen.Dashboard
@@ -224,13 +233,23 @@ fun AppOopsMainApp(
         }
     }
 
-    val isFullScreen = currentScreen is Screen.Detail ||
+    val isFullScreen = currentScreen is Screen.Audit ||
+        currentScreen is Screen.Detail ||
         currentScreen is Screen.BatchSelect ||
         currentScreen is Screen.CommunityRules ||
         currentScreen is Screen.About
 
+    BackHandler(enabled = currentScreen is Screen.Audit) {
+        currentScreen = Screen.Dashboard
+    }
+
     BackHandler(enabled = currentScreen is Screen.Detail) {
-        currentScreen = Screen.Apps
+        val detail = currentScreen as? Screen.Detail
+        currentScreen = when (detail?.backTarget) {
+            "Dashboard" -> Screen.Dashboard
+            "Audit" -> Screen.Audit
+            else -> Screen.Apps
+        }
     }
 
     BackHandler(enabled = currentScreen is Screen.BatchSelect) {
@@ -240,7 +259,7 @@ fun AppOopsMainApp(
     BackHandler(enabled = currentScreen is Screen.CommunityRules) {
         val cs = currentScreen as? Screen.CommunityRules
         currentScreen = if (cs?.returnToDetail != null) {
-            Screen.Detail(cs.returnToDetail.first, cs.returnToDetail.second)
+            Screen.Detail(cs.returnToDetail.first, cs.returnToDetail.second, cs.returnToDetail.third)
         } else {
             Screen.Batch
         }
@@ -270,12 +289,6 @@ fun AppOopsMainApp(
                         selected = currentScreen is Screen.Batch,
                         onClick = { currentScreen = Screen.Batch },
                         icon = { Icon(Icons.Default.Layers, contentDescription = stringResource(R.string.batch_rules)) },
-                        alwaysShowLabel = false
-                    )
-                    NavigationBarItem(
-                        selected = currentScreen is Screen.Audit,
-                        onClick = { currentScreen = Screen.Audit },
-                        icon = { Icon(Icons.Default.Security, contentDescription = stringResource(R.string.audit_log)) },
                         alwaysShowLabel = false
                     )
                     NavigationBarItem(
@@ -326,13 +339,17 @@ fun AppOopsMainApp(
             ) { screen ->
                 when (screen) {
                     is Screen.Dashboard -> DashboardScreen(
-                        onNavigateToApps = { currentScreen = Screen.Apps },
-                        onNavigateToBatch = { currentScreen = Screen.Batch },
-                        onNavigateToAuditLog = { currentScreen = Screen.Audit }
+                        onNavigateToAuditLog = { currentScreen = Screen.Audit },
+                        onNavigateToAppDetail = { pkg ->
+                            val uid = runCatching {
+                                context.packageManager.getApplicationInfo(pkg, 0).uid
+                            }.getOrDefault(0)
+                            currentScreen = Screen.Detail(pkg, uid, backTarget = "Dashboard")
+                        }
                     )
                     is Screen.Apps -> AppListScreen(
                         onNavigateToDetail = { pkg, uid ->
-                            currentScreen = Screen.Detail(pkg, uid)
+                            currentScreen = Screen.Detail(pkg, uid, backTarget = "Apps")
                         }
                     )
                     is Screen.Batch -> BatchScreen(
@@ -352,18 +369,23 @@ fun AppOopsMainApp(
                         initialPackage = screen.initialPackage,
                         onBack = {
                             currentScreen = if (screen.returnToDetail != null) {
-                                Screen.Detail(screen.returnToDetail.first, screen.returnToDetail.second)
+                                Screen.Detail(
+                                    screen.returnToDetail.first,
+                                    screen.returnToDetail.second,
+                                    screen.returnToDetail.third
+                                )
                             } else {
                                 Screen.Batch
                             }
                         }
                     )
                     is Screen.Audit -> AuditLogScreen(
+                        onBack = { currentScreen = Screen.Dashboard },
                         onNavigateToDetail = { pkg ->
                             val uid = runCatching {
                                 context.packageManager.getApplicationInfo(pkg, 0).uid
                             }.getOrDefault(0)
-                            currentScreen = Screen.Detail(pkg, uid)
+                            currentScreen = Screen.Detail(pkg, uid, backTarget = "Audit")
                         }
                     )
                     is Screen.Settings -> SettingsScreen(
@@ -375,11 +397,17 @@ fun AppOopsMainApp(
                     is Screen.Detail -> AppDetailScreen(
                         packageName = screen.packageName,
                         uid = screen.uid,
-                        onBack = { currentScreen = Screen.Apps },
+                        onBack = {
+                            currentScreen = when (screen.backTarget) {
+                                "Dashboard" -> Screen.Dashboard
+                                "Audit" -> Screen.Audit
+                                else -> Screen.Apps
+                            }
+                        },
                         onNavigateToCommunityRules = { pkg ->
                             currentScreen = Screen.CommunityRules(
                                 initialPackage = pkg,
-                                returnToDetail = pkg to screen.uid
+                                returnToDetail = Triple(pkg, screen.uid, screen.backTarget)
                             )
                         }
                     )

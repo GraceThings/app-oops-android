@@ -288,4 +288,17 @@
     <string name="about_homepage_url">https://github.com/GraceThings/app-oops-android</string>
     <string name="about_rules_repo_label">Community-Regel-Repository</string>
     <string name="about_rules_repo_url">https://github.com/GraceThings/app-oops-rules</string>
+
+    <!-- Abfang-Statistiken -->
+    <string name="stats_section_title">Abfang-Statistiken</string>
+    <string name="stats_total_badge">%1$d gesamt</string>
+    <string name="stats_top_apps_title">Top 3 abgefangene Apps</string>
+    <string name="stats_top_apps_empty">Noch keine Daten. Häufig abgefangene Apps erscheinen hier, sobald der Schutz aktiv ist.</string>
+    <string name="stats_trend_title">Verlauf der Blockierungen</string>
+    <string name="stats_range_day">1 Tag</string>
+    <string name="stats_range_week">1 Woche</string>
+    <string name="stats_range_month">1 Monat</string>
+    <string name="stats_range_total_format">%1$d Blockierungen</string>
+    <string name="stats_trend_empty">Keine Blockierungen in diesem Zeitraum</string>
+    <string name="stats_audit_entry_desc">Vollständiges Protokoll der Berechtigungsblockierungen ansehen</string>
 </resources>

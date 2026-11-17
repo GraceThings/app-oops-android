@@ -11,3 +11,20 @@ data class AuditLogEntry(
     val mode: OpMode = OpMode.IGNORE
 )
 
+data class AppInterceptStat(
+    val packageName: String,
+    val appName: String,
+    val totalCount: Int
+)
+
+enum class InterceptTrendRange {
+    DAY,
+    WEEK,
+    MONTH
+}
+
+data class TrendBucket(
+    val startMillis: Long,
+    val endMillis: Long,
+    val count: Int
+)

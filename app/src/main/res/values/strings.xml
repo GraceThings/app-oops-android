@@ -288,4 +288,17 @@
     <string name="about_homepage_url">https://github.com/GraceThings/app-oops-android</string>
     <string name="about_rules_repo_label">Community Rules Repository</string>
     <string name="about_rules_repo_url">https://github.com/GraceThings/app-oops-rules</string>
+
+    <!-- Interception Statistics -->
+    <string name="stats_section_title">Interception Statistics</string>
+    <string name="stats_total_badge">%1$d total</string>
+    <string name="stats_top_apps_title">Top 3 Intercepted Apps</string>
+    <string name="stats_top_apps_empty">No interceptions yet. High-frequency apps will appear here once Guard is active.</string>
+    <string name="stats_trend_title">Interception Trend</string>
+    <string name="stats_range_day">1 Day</string>
+    <string name="stats_range_week">1 Week</string>
+    <string name="stats_range_month">1 Month</string>
+    <string name="stats_range_total_format">%1$d interceptions</string>
+    <string name="stats_trend_empty">No interceptions recorded in this period</string>
+    <string name="stats_audit_entry_desc">View complete permission interception audit records</string>
 </resources>

@@ -43,6 +43,7 @@ class AppOopsApplication : Application() {
         io.github.gracethings.appoops.data.preference.LanguagePreferences.init(this)
         io.github.gracethings.appoops.data.preference.AlertPreferences.init(this)
         io.github.gracethings.appoops.data.preference.SubscriptionPreferences.init(this)
+        io.github.gracethings.appoops.data.repository.AuditRepository.init(this)
         io.github.gracethings.appoops.data.repository.CommunityRuleRepository.loadCachedRules(this)
         InterceptionEventManager.init(this)
         ShizukuManager.init()

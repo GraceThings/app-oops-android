@@ -288,4 +288,17 @@
     <string name="about_homepage_url">https://github.com/GraceThings/app-oops-android</string>
     <string name="about_rules_repo_label">커뮤니티 규칙 저장소</string>
     <string name="about_rules_repo_url">https://github.com/GraceThings/app-oops-rules</string>
+
+    <!-- 차단 통계 -->
+    <string name="stats_section_title">차단 통계</string>
+    <string name="stats_total_badge">누적 %1$d회</string>
+    <string name="stats_top_apps_title">최다 차단 앱 Top 3</string>
+    <string name="stats_top_apps_empty">아직 차단 통계가 없습니다. 가드가 활성화되면 상위 앱이 표시됩니다</string>
+    <string name="stats_trend_title">총 차단 추이</string>
+    <string name="stats_range_day">최근 1일</string>
+    <string name="stats_range_week">1주일</string>
+    <string name="stats_range_month">1개월</string>
+    <string name="stats_range_total_format">기간 누적 %1$d회</string>
+    <string name="stats_trend_empty">이 기간에 차단 기록이 없습니다</string>
+    <string name="stats_audit_entry_desc">전체 권한 차단 감사 기록 보기</string>
 </resources>

@@ -288,4 +288,17 @@
     <string name="about_homepage_url">https://github.com/GraceThings/app-oops-android</string>
     <string name="about_rules_repo_label">社群規則倉庫</string>
     <string name="about_rules_repo_url">https://github.com/GraceThings/app-oops-rules</string>
+
+    <!-- 攔截統計 -->
+    <string name="stats_section_title">攔截統計</string>
+    <string name="stats_total_badge">累計 %1$d 次</string>
+    <string name="stats_top_apps_title">攔截排行 Top 3</string>
+    <string name="stats_top_apps_empty">暫無攔截統計，開啟守護後將自動統計高頻攔截應用</string>
+    <string name="stats_trend_title">總攔截趨勢</string>
+    <string name="stats_range_day">近1天</string>
+    <string name="stats_range_week">近1週</string>
+    <string name="stats_range_month">近1月</string>
+    <string name="stats_range_total_format">時段累計 %1$d 次</string>
+    <string name="stats_trend_empty">該時段暫無攔截記錄</string>
+    <string name="stats_audit_entry_desc">查看完整權限攔截審計記錄</string>
 </resources>
