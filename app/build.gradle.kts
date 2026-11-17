@@ -11,8 +11,8 @@ android {
         applicationId = "io.github.gracethings.appoops"
         minSdk = 30
         targetSdk = 37
-        versionCode = 5
-        versionName = "1.0.3"
+        versionCode = 6
+        versionName = "1.0.4"
         providers.gradleProperty("versionName").orNull
             ?.trim()
             ?.takeIf { it.isNotEmpty() }
